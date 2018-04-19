@@ -26,6 +26,8 @@ public class Board {
 		int n = Integer.parseInt(args[0]);
 		Board b = new Board(6);
 		b.printBoard();
+		Generator g = new Generator();
+		g.Generator1(6);
 	}
 	
 	public void printBoard() {
@@ -36,4 +38,25 @@ public class Board {
 			System.out.println("");
 		}
 	}
+	
+	public void placeVehicle(Vehicle v) { 
+		// set down the given car into matrix
+		int p = v.getPath(); 
+		int id = v.getId();
+		int start = v.getPosition()[0];
+		int end = v.getPosition()[v.getPosition().length-1];
+		
+		if (v.getOrient() == 1) { // horizontal; path represents row
+			//System.out.println("end: " + end);
+			for (int i = start; i <= end; i++) { 
+				matrix[p][i] = id;
+			}
+		} else { // vertical; path represents column 
+			for (int i = start; i <= end; i++) { 
+				matrix[i][p] = id;
+			}
+			
+		}
+	}
+	
 }
