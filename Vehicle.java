@@ -20,7 +20,7 @@ public class Vehicle {
 		int[] array = getArray(matrix);
 		
 		boolean startCounter = false;
-		for(int i = 0; i < array.length; i++)
+		for(int i = 0; i < array.length - 1; i++)
 		{
 			if(array[i] == id)
 			{
@@ -32,7 +32,7 @@ public class Vehicle {
 				counter++;
 			}
 		}
-		return counter; 
+		return counter - 1; 
 		// returns max no. of steps the car can move forward
 	}
 	
@@ -42,7 +42,7 @@ public class Vehicle {
 		int[] array = getArray(matrix);
 		
 		boolean startCounter = false;
-		for(int i = array.length; i > 0; i--)
+		for(int i = array.length - 1; i > 0; i--)
 		{
 			if(array[i] == id)
 			{
@@ -55,7 +55,7 @@ public class Vehicle {
 			}
 		}
 		
-		return counter;
+		return counter + 1;
 		// returns max no. of steps the car can move backward
 	}
 	
@@ -65,15 +65,17 @@ public class Vehicle {
 		
 		if(orient == 1)		// horizontal
 		{
-			array = matrix[position[1]];
+			array = matrix[path];
 		}
 		else if(orient == 2)		// vertical
 		{ 
 		    for(int i = 0; i < array.length; i++){
-		       array[i] = matrix[i][position[0]];
+		       array[i] = matrix[i][path];
 		    }
 		}
-		
+		for (int i = 0; i < array.length; i++) { 
+			System.out.print(array[i] + " ");
+		}
 		return array;
 	}
 

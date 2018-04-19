@@ -58,5 +58,53 @@ public class Board {
 			
 		}
 	}
+
+	public static int getBoardId() {
+		return boardId;
+	}
+
+	public static void setBoardId(int boardId) {
+		Board.boardId = boardId;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getVehicleIdCounter() {
+		return vehicleIdCounter;
+	}
+
+	public void setVehicleIdCounter(int vehicleIdCounter) {
+		this.vehicleIdCounter = vehicleIdCounter;
+	}
+
+	public int[][] getMatrix() {
+		return matrix;
+	}
+
+	public void setMatrix(int[][] matrix) {
+		this.matrix = matrix;
+	}
+
+	public int getN() {
+		return n;
+	}
+
+	public void setN(int n) {
+		this.n = n;
+	}
+
+	public ArrayList<Vehicle> getVehiclesList() {
+		return vehiclesList;
+	}
+
+	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
+		this.vehiclesList = vehiclesList;
+	}
 	
 }

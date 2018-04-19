@@ -24,6 +24,8 @@ public class Generator {
 		Vehicle v2 = new Vehicle(2, 2, 3, position2); 
 		b.placeVehicle(v2); 
 		
+		
+		
 		int[] position3 = new int[] {0,1}; 
 		Vehicle v3 = new Vehicle(3, 1, 0, position3); 
 		b.placeVehicle(v3); 
@@ -40,6 +42,18 @@ public class Generator {
 		Vehicle v6 = new Vehicle(6, 1, 4, position6); 
 		b.placeVehicle(v6); 
 		
+		System.out.println("this is board");
+		b.printBoard();
+		
+		int i = v1.movesBackward(b.getMatrix());
+		System.out.println("Moves backward: " + i);
+		
+		
+		System.out.println("this is board");
+		b.printBoard();
+		
+		int j = v3.movesForward(b.getMatrix());
+		System.out.println("Moves forward: " + j);
 		
 		System.out.println("this is board");
 		b.printBoard();
