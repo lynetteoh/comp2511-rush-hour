@@ -13,8 +13,8 @@ public class Board {
 		
 		this.n = n;
 		this.matrix = new int[n][n];
-		for(int i=0;i<n;i++) {
-			for (int j=0;j<n;j++) {
+		for(int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				this.matrix[i][j] = 0;
 			}
 		}
@@ -24,7 +24,7 @@ public class Board {
 	
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
-		Board b = new Board(6);
+		Board b = new Board(n);
 		b.printBoard();
 		Generator g = new Generator();
 		g.Generator1(6);
