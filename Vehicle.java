@@ -3,18 +3,20 @@ public class Vehicle {
 	private int orient;  	// 1 is horizontal, 2 is vertical
 	private int path; 		// the int corresponding to the index of col/row
 	private int[] position; 
+	private int length;
 
 	// horizontal, starting block = far left block of the vehicle
 	// vertical, starting block = most upward block of the vehicle
 	
-	public Vehicle(int id, int orient, int path, int[] position) { // pass in an integer array to tell which spaces they will occupy
+	public Vehicle(int id, int orient, int path, int[] position, int len) { // pass in an integer array to tell which spaces they will occupy
 		this.id = id; 
 		this.orient = orient; 
 		this.path = path;
 		this.position = position;
+		this.length = len;
 	}
 	
-	public int movesForward(int[][] matrix) {
+	public int canMoveForward(int[][] matrix) {
 		
 		int counter = 0;
 		int[] array = getArray(matrix);
@@ -36,7 +38,7 @@ public class Vehicle {
 		// returns max no. of steps the car can move forward
 	}
 	
-	public int movesBackward(int[][] matrix) {
+	public int canMoveBackward(int[][] matrix) {
 		
 		int counter = 0;
 		int[] array = getArray(matrix);
@@ -59,7 +61,8 @@ public class Vehicle {
 		// returns max no. of steps the car can move backward
 	}
 	
-	private int[] getArray(int[][] matrix)
+	
+	public int[] getArray(int[][] matrix)
 	{
 		int[] array = new int[matrix[0].length];
 		
@@ -91,6 +94,10 @@ public class Vehicle {
 
 	public int[] getPosition() {
 		return position;
+	}
+	public int getLength()
+	{
+		return length;
 	}
 	
 	
