@@ -16,6 +16,11 @@ public class GridLock extends Application {
 			primaryStage.setTitle("GridLock");
 			ui = new UI(screenWidth, screenHeight);
 			Scene scene = new Scene(ui.createMenu(), screenWidth, screenHeight);
+			primaryStage.setMinWidth(700);
+			primaryStage.setMinHeight(500);
+			primaryStage.setMaxHeight(1200);
+			primaryStage.setMaxWidth(1980);
+		    primaryStage.setOnCloseRequest(e->ui.closeProgram());
 			primaryStage.setScene(scene);
 		    primaryStage.show();
 		}catch(Exception e) {

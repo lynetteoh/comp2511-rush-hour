@@ -36,6 +36,7 @@ public class UI extends Pane {
 		Button mediumBtn = createBtn("MEDIUM");
 		Button hardBtn = createBtn("HARD");
 		Button exitBtn = createBtn("EXIT");
+		xitBtn.setOnAction(e->closeProgram());
 		menuBox.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
 		layout.getChildren().addAll(background, title, menuBox);
 		return layout;		
@@ -74,6 +75,16 @@ public class UI extends Pane {
 		Text title = new Text(name);
 		title.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 48));
 		return title;
+		
+	}
+
+	public void closeProgram() {
+		Alert alert = new Alert(AlertType.NONE, "Are you sure to exit " + " ?", 
+				 ButtonType.YES, ButtonType.NO);
+		alert.showAndWait();
+		if (alert.getResult() == ButtonType.YES) {
+			Platform.exit();
+		}
 		
 	}
 }
