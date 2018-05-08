@@ -24,15 +24,15 @@ public class Board {
 	
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
-		Board b = new Board(6);
+		Board b = new Board(n);
 		b.printBoard();
 		Generator g = new Generator();
 		g.Generator1(6);
 	}
 	
 	public void printBoard() {
-		for(int i=0;i<n;i++) {
-			for (int j=0;j<n;j++) {
+		for(int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
 			}
 			System.out.println("");
@@ -107,4 +107,49 @@ public class Board {
 		this.vehiclesList = vehiclesList;
 	}
 	
+	public boolean moveForward(Vehicle v)
+	{
+		int movesForwards = v.canMoveForward(this.matrix); 
+		if(movesForwards > 0)
+		{
+			int[] array = v.getArray(this.matrix);
+			
+			for(int i = 0; i < array.length; i++)
+			{
+				if(array[i] == id && v.getLength() > 0)
+				{
+					array[i] = 0;
+					for(int j = 1; j <= v.getLength(); j++)
+					{
+						array[i + j] = v.getId();
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean moveBackward(Vehicle v)
+	{
+		int movesBackwards = v.canMoveBackward(this.matrix); 
+		if(movesBackwards > 0)
+		{
+			int[] array = v.getArray(this.matrix);
+			
+			for(int i = array.length; i > 0; i--)
+			{
+				if(array[i] == id && v.getLength() > 0)
+				{
+					array[i] = 0;
+					for(int j = 1; j <= v.getLength(); j++)
+					{
+						array[i + j] = v.getId();
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
