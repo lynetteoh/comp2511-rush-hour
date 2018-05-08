@@ -31,7 +31,9 @@ public class GridLock extends Application {
 	}
 	
 	public static void main(String[] args) {
-		launch(args);
+		Generator g = new Generator();
+		g.GeneratorA1(6,3);
+		//launch(args);
 	}
 
 }

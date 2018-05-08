@@ -1,6 +1,9 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Vehicle {
 	private int id;
 	private int orient;  	// 1 is horizontal, 2 is vertical
+	private static final AtomicInteger count = new AtomicInteger(0); 
 	private int path; 		// the int corresponding to the index of col/row
 	private int[] position; 
 	private int length;
@@ -8,12 +11,14 @@ public class Vehicle {
 	// horizontal, starting block = far left block of the vehicle
 	// vertical, starting block = most upward block of the vehicle
 	
-	public Vehicle(int id, int orient, int path, int[] position, int len) { // pass in an integer array to tell which spaces they will occupy
-		this.id = id; 
+	public Vehicle(int orient, int path, int[] position) { 
+		// pass in an integer array to tell which spaces they will occupy
+		this.id = count.incrementAndGet(); 
+		//this.id = id; 
 		this.orient = orient; 
 		this.path = path;
 		this.position = position;
-		this.length = len;
+		this.length = position.length;
 	}
 	
 	public int canMoveForward(int[][] matrix) {
@@ -79,6 +84,7 @@ public class Vehicle {
 		for (int i = 0; i < array.length; i++) { 
 			System.out.print(array[i] + " ");
 		}
+		System.out.println("");
 		return array;
 	}
 
