@@ -100,6 +100,11 @@ public class Vehicle {
 		return path;
 	}
 
+	public void setPosition(int[] pos)
+	{
+		this.position = pos;
+	}
+	
 	public int[] getPosition() {
 		return position;
 	}
