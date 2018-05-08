@@ -110,45 +110,115 @@ public class Board {
 	public boolean moveForward(Vehicle v)
 	{
 		int movesForwards = v.canMoveForward(this.matrix); 
+		System.out.println("moves forward = " + movesForwards);
 		if(movesForwards > 0)
 		{
-			int[] array = v.getArray(this.matrix);
-			
-			for(int i = 0; i < array.length; i++)
+			if(v.getOrient() == 1)
 			{
-				if(array[i] == id && v.getLength() > 0)
+				int[] array = v.getArray(this.matrix);
+				
+				for(int i = 0; i < array.length; i++)
 				{
-					array[i] = 0;
-					for(int j = 1; j <= v.getLength(); j++)
+					
+					if(array[i] == v.getId() && v.getLength() > 0)
 					{
-						array[i + j] = v.getId();
+						array[i] = 0;
+						array[i + 1] = v.getId();
+						array[i + 2] = v.getId();
+						if(v.getLength() == 3)
+						{
+							array[i + 3] = v.getId();
+						}
+						return true;
 					}
-					return true;
 				}
+			} 
+			else if(v.getOrient() == 2)
+			{
+				int[] position = v.getPosition();
+				System.out.println(position);
+				int path = v.getPath();
+				int[][] matrix = this.getMatrix();
+
+				matrix[position[0] + 1][path] = v.getId();
+				matrix[position[1] + 1][path] = v.getId();
+				if(v.getLength() == 3)
+				{
+					matrix[position[2] + 1][path] = v.getId();
+				}
+				matrix[position[0] - 1][path] = 0;
+				
+				this.setMatrix(matrix);
+				
+				for(int j = 0; j < v.getLength(); j++)
+				{
+					position[j] = v.getPosition()[j] - 1;
+				}
+				v.setPosition(position);
+				return true;
 			}
+			
 		}
 		return false;
 	}
 	
 	public boolean moveBackward(Vehicle v)
 	{
-		int movesBackwards = v.canMoveBackward(this.matrix); 
+		int movesBackwards = v.canMoveBackward(this.matrix);
+		System.out.print("moves backward = " + movesBackwards + " ");
 		if(movesBackwards > 0)
 		{
-			int[] array = v.getArray(this.matrix);
-			
-			for(int i = array.length; i > 0; i--)
+			if(v.getOrient() == 1)
 			{
-				if(array[i] == id && v.getLength() > 0)
+				int[] array = v.getArray(this.matrix);
+				
+				for(int i = array.length - 1; i > 0; i--)
 				{
-					array[i] = 0;
-					for(int j = 1; j <= v.getLength(); j++)
+					if(array[i] == v.getId() && v.getLength() > 0)
 					{
-						array[i + j] = v.getId();
+						//System.out.println("array[i]")
+						array[i] = 0;
+						array[i - 1] = v.getId();
+						array[i - 2] = v.getId();
+						if(v.getLength() == 3)
+						{
+							array[i - 3] = v.getId();
+						}
+						int[] pos = v.getPosition();
+						for(int j = 0; j < v.getLength(); j++)
+						{
+							pos[j] = v.getPosition()[j] - 1;
+						}
+						v.setPosition(pos);
+						
+						return true;
 					}
-					return true;
 				}
 			}
+			else if(v.getOrient() == 2)
+			{
+				int[] position = v.getPosition();
+				int path = v.getPath();
+				int[][] matrix = this.getMatrix();
+
+				matrix[position[0] - 1][path] = v.getId();
+				matrix[position[1] - 1][path] = v.getId();
+				if(v.getLength() == 3)
+				{
+					matrix[position[2] - 1][path] = v.getId();
+				}
+				matrix[position[0] + 1][path] = 0;
+				
+				this.setMatrix(matrix);
+				
+				for(int j = 0; j < v.getLength(); j++)
+				{
+					position[j] = v.getPosition()[j] - 1;
+				}
+				v.setPosition(position);
+				return true;
+			}
+			
 		}
 		return false;
 	}
