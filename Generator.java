@@ -53,6 +53,32 @@ public class Generator {
 		System.out.println("Board:");
 		b.printBoard();
 		
+		System.out.println("can place vehicle at path: 1, pos: [3,4] = " + b.canPlaceVehicle(1, 1, new int[] {3, 4}));
+		System.out.println("can place vehicle at path: 1, pos: [2,3] = " + b.canPlaceVehicle(1, 1, new int[] {2,3}));
+		System.out.println("can place vehicle at path: 1, pos: [1,2] = " + b.canPlaceVehicle(1, 1, new int[] {1,2}));
+		
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 7 forwards = " + b.moveForward(v7));
+		b.printBoard();
+		
+		System.out.println("Move 7 forwards = " + b.moveForward(v7));
+		b.printBoard();
+		
+		System.out.println("Move 6 backwards = " + b.moveBackward(v6));
+		b.printBoard();
+		
+		System.out.println("Move 6 backwards = " + b.moveBackward(v6));
+		b.printBoard();
+		
 //		int i = v1.canMoveBackward(b.getMatrix());
 //		System.out.println("Vehicle 1 canMoveBackward: " + i);
 //		
@@ -251,5 +277,6 @@ public class Generator {
 		}
 		return false;
 	}
+
 
 }
