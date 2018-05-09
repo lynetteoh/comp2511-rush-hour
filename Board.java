@@ -27,7 +27,7 @@ public class Board {
 		Board b = new Board(n);
 		b.printBoard();
 		Generator g = new Generator();
-		g.Generator1(6);
+		//g.Generator1(6);
 	}
 	
 	public void printBoard() {
@@ -39,7 +39,12 @@ public class Board {
 		}
 	}
 	
-	public void placeVehicle(Vehicle v) { 
+	// creates a new vehicle from the data passed in 
+	// places the vehicle on current board 
+	public void placeVehicle(int orient, int path, int[] position) { 
+		// create the vehicle 
+		Vehicle v = new Vehicle(orient, path, position); 
+		
 		// set down the given car into matrix
 		int p = v.getPath(); 
 		int id = v.getId();
