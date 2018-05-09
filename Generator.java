@@ -219,6 +219,8 @@ public class Generator {
 		b.placeVehicle(v7); 
 		
 		System.out.println("Board:");
+		Solver s = new Solver(b);
+		s.solve();
 		b.printBoard();
 		
 		

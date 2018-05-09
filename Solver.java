@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 
@@ -20,30 +21,32 @@ public class Solver {
 		}
 	}
 	public boolean solution() {
-		return true;
+
+		/*if (car_coords[0] == door[0] && car_coords[1] == door[1] ) { 
+			System.out.println("Car is touching the door");
+			return true;
+		}*/
 	}
 	public void solve() {
-		
 		HashMap<Board, ArrayList<Move>> previousMoves = new HashMap<Board, ArrayList<Move>>();
 		Queue<Board> q = new LinkedList<Board>();
 		q.add(board);
 		ArrayList<Move> moves = new ArrayList<Move>();
 		previousMoves.put(board, moves);
 		LinkedList<Board> visited = new LinkedList<Board>();
+		Board b;
 		while (!q.isEmpty()) {
-			Board b = q.remove();
-			if (visited.contains(b)) {
+			b = q.remove();
+			if (previousMoves.containsKey(b));
 				continue;
 			}
 			
 			for (Vehicle v: b.getVehiclesList()) {
 				
 				if (b.moveForward(v)) {
-					if (!visited.contains(b)) {
-						ArrayList<Move> m = previousMoves.get(b);
-						m.add(new Move(v,1));
-						previousMoves.put(b, m);
-					}
+					ArrayList<Move> m = previousMoves.get(b);
+					m.add(new Move(v,1));
+					previousMoves.put(b, m);
 				}
 			}
 		}
