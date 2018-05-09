@@ -47,7 +47,7 @@ public class UI extends Pane {
 		Button mediumBtn = createBtn("MEDIUM");
 		Button hardBtn = createBtn("HARD");
 		Button exitBtn = createBtn("EXIT");
-		exitBtn.setOnAction(e->closeProgram());
+		exitBtn.setOnAction(e->closeProgram(stage));
 		menu.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
 		animation();
 		layout.getChildren().addAll(background, title, menu);
@@ -103,13 +103,11 @@ public class UI extends Pane {
 		} 
 	}
 	
-	public void closeProgram() {
-		Alert alert = new Alert(AlertType.NONE, "Are you sure to exit " + " ?", 
-				 ButtonType.YES, ButtonType.NO);
+	public void closeProgram(Stage stage) {
+		Alert alert = new Alert(AlertType.NONE, "Are you sure to exit " + " ?", ButtonType.YES, ButtonType.NO);
 		alert.showAndWait();
 		if (alert.getResult() == ButtonType.YES) {
-			Platform.exit();
+			stage.close();
 		}
-		
 	}
 }

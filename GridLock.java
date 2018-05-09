@@ -21,9 +21,12 @@ public class GridLock extends Application {
 			primaryStage.setMaxHeight(1200);
 			primaryStage.setMaxWidth(1980);
 			//scene.getStylesheets().add("style.css");
+			primaryStage.setOnCloseRequest(e -> {
+				e.consume();
+				ui.closeProgram(primaryStage);
+			});
 			primaryStage.setScene(scene);
 		    primaryStage.show();
-		    primaryStage.setOnCloseRequest(e->ui.closeProgram());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}	
