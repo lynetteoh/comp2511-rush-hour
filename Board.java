@@ -26,6 +26,7 @@ public class Board {
 		int n = Integer.parseInt(args[0]);
 		Board b = new Board(n);
 		b.printBoard();
+		
 		Generator g = new Generator();
 		//g.Generator1(6);
 	}
@@ -151,7 +152,7 @@ public class Board {
 				{
 					matrix[position[2] + 1][path] = v.getId();
 				}
-				matrix[position[0] - 1][path] = 0;
+				matrix[position[0]][path] = 0;
 				
 				this.setMatrix(matrix);
 				
@@ -211,8 +212,10 @@ public class Board {
 				if(v.getLength() == 3)
 				{
 					matrix[position[2] - 1][path] = v.getId();
+					matrix[position[0] + 2][path] = 0;
 				}
-				matrix[position[0] + 1][path] = 0;
+				else
+					matrix[position[0] + 1][path] = 0;
 				
 				this.setMatrix(matrix);
 				
@@ -225,6 +228,48 @@ public class Board {
 			}
 			
 		}
+		return false;
+	}
+	
+	public boolean canPlaceVehicle(int orient, int path, int[] position)
+	{
+		int[][] matrix = this.matrix;
+		
+		if(orient == 1)
+		{
+			for(int i : matrix[path])
+			{
+				System.out.print(i + " ");
+			}
+			if(matrix[path][position[0]] == 0 && matrix[path][position[1]] == 0)
+			{
+				if(position.length == 3)
+				{
+					if(matrix[path][position[2]] == 0)
+					{
+						return true;
+					}
+					return false;
+				}
+				return true;
+			}
+		}
+		else if(orient == 2)
+		{
+			if(matrix[position[0]][path] == 0 && matrix[position[1]][path] == 0)
+			{
+				if(position.length == 3)
+				{
+					if(matrix[position[2]][path] == 0)
+					{
+						return true;
+					}
+					return false;
+				}
+				return true;
+			}
+		}
+		
 		return false;
 	}
 }

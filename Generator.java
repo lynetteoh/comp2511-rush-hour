@@ -18,8 +18,75 @@ public class Generator {
 	// sets down matrix values for board 
 	// sets down coordinates for each car corresponding to board 
 
+
 //	public void Generator1(int n) {
 //		Board b = new Board(n);
+/*
+	public void Generator1(int n) {
+		Board b = new Board(n);
+		
+		// set down most important car 
+		int[] position1 = new int[] {0,1};
+		Vehicle v1 = new Vehicle(1, 2, position1); 
+		b.placeVehicle(v1); // v1 is created; put it on the board 
+		
+		// set down subsequent cars onto the board 
+		int[] position2 = new int[] {0,1}; 
+		Vehicle v2 = new Vehicle(2, 3, position2); 
+		b.placeVehicle(v2); 
+		
+		int[] position3 = new int[] {0,1}; 
+		Vehicle v3 = new Vehicle(1, 0, position3); 
+		b.placeVehicle(v3); 
+		
+		int[] position4 = new int[] {3,4}; 
+		Vehicle v4 = new Vehicle(2, 1, position4); 
+		b.placeVehicle(v4); 
+		
+		int[] position5 = new int[] {3,4,5}; 
+		Vehicle v5 = new Vehicle(1, 5, position5); 
+		b.placeVehicle(v5); 
+		
+		int[] position6 = new int[] {3,4}; 
+		Vehicle v6 = new Vehicle(1, 4, position6); 
+		b.placeVehicle(v6); 
+		
+		int[] position7 = new int[] {2,3,4}; 
+		Vehicle v7 = new Vehicle(2, 5, position7); 
+		b.placeVehicle(v7); 
+		
+		System.out.println("Board:");
+		b.printBoard();
+		
+		System.out.println("can place vehicle at path: 1, pos: [3,4] = " + b.canPlaceVehicle(1, 1, new int[] {3, 4}));
+		System.out.println("can place vehicle at path: 1, pos: [2,3] = " + b.canPlaceVehicle(1, 1, new int[] {2,3}));
+		System.out.println("can place vehicle at path: 1, pos: [1,2] = " + b.canPlaceVehicle(1, 1, new int[] {1,2}));
+		
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 5 backwards = " + b.moveBackward(v5));
+		b.printBoard();
+		
+		System.out.println("Move 7 forwards = " + b.moveForward(v7));
+		b.printBoard();
+		
+		System.out.println("Move 7 forwards = " + b.moveForward(v7));
+		b.printBoard();
+		
+		System.out.println("Move 6 backwards = " + b.moveBackward(v6));
+		b.printBoard();
+		
+		System.out.println("Move 6 backwards = " + b.moveBackward(v6));
+		b.printBoard();
+		*/
+		
+//		int i = v1.canMoveBackward(b.getMatrix());
+//		System.out.println("Vehicle 1 canMoveBackward: " + i);
 //		
 //		// set down most important car 
 //		int[] position1 = new int[] {0,1};
@@ -261,5 +328,6 @@ public class Generator {
 		}
 		return false;
 	}
+
 
 }
