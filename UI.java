@@ -1,5 +1,5 @@
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -18,40 +18,46 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class UI extends Pane {
 	private int screenWidth;
 	private int screenHeight;
 	private VBox menu;
-	private AnchorPane layout;
+	private AnchorPane menuLayout;
+	private Text gameTitle;
 	
 	public UI(int width, int height) {
 		this.screenWidth = width;
 		this.screenHeight = height;
-		this.layout = new AnchorPane();
-		this.menu = new VBox(20);
+		this.menuLayout = new AnchorPane();
+		this.menu = new VBox(30);
 	}
 	
-	public Parent createMenu() {
+	public Parent createMenu(Stage stage) {
 		//Pane layout = new Pane();
 		//VBox menu  = new VBox(20);
-		Text title = createTitle("G R I D L O C K");
-		double titleWidth = title.getLayoutBounds().getWidth();
-		title.setTranslateX(screenWidth/2 - titleWidth/2);
-		title.setTranslateY(screenHeight/4);
+		
+		gameTitle = createTitle("G R I D L O C K" , 48);
+		double titleWidth = gameTitle.getLayoutBounds().getWidth();
+		gameTitle.setTextAlignment(TextAlignment.CENTER);
+		gameTitle.setTranslateX(screenWidth/2 - titleWidth/2);
+		gameTitle.setTranslateY(screenHeight/4);
 		ImageView background = getBackground("file:resource/background.jpg");
 		menu.setTranslateX(screenWidth/2 - 100);
-        menu.setTranslateY(screenHeight/3 + 50);
+		menu.setTranslateY(screenHeight/3 + 50);
 		Button easyBtn = createBtn("EASY");
+		easyBtn.setOnAction(e->renderBoard("EASY"));
 		Button mediumBtn = createBtn("MEDIUM");
 		Button hardBtn = createBtn("HARD");
 		Button exitBtn = createBtn("EXIT");
 		exitBtn.setOnAction(e->closeProgram(stage));
 		menu.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
 		animation();
-		layout.getChildren().addAll(background, title, menu);
-		return layout;		
+		menuLayout.getChildren().addAll(background, gameTitle, menu);
+		return menuLayout;		
 	}
 	
 	private Button createBtn(String name) {
@@ -68,6 +74,7 @@ public class UI extends Pane {
 		button.setShape(polygon);
 		button.setPrefSize(btnWidth, btnHeight);
 		button.setStyle("-fx-background-color: -fx-body-color;");
+		button.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 18));
 		Effect shadow = new DropShadow(5, Color.GREY);
 		button.setEffect(shadow);
 		button.setTranslateX(-300);
@@ -86,9 +93,9 @@ public class UI extends Pane {
 		return background;		
 	}
 	
-	private Text createTitle(String name) { 
+	private Text createTitle(String name, int fontSize) { 
 		Text title = new Text(name);
-		title.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 48));
+		title.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, fontSize));
 		return title;
 		
 	}
@@ -96,7 +103,7 @@ public class UI extends Pane {
 	private void animation() {
 		for (int i = 0; i < menu.getChildren().size(); i++) {
             Button b = (Button) menu.getChildren().get(i);
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(1.25 + i*0.2), b);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(1.15 + i*0.2), b);
     		tt.setToX(0);
     		tt.setOnFinished(e->b.translateXProperty().negate());
     		tt.play();
@@ -109,5 +116,46 @@ public class UI extends Pane {
 		if (alert.getResult() == ButtonType.YES) {
 			stage.close();
 		}
+	}
+	
+	public void resizeScene(double width, double height) {
+		
+		if(width > 1000  && height  > 800) {
+			resizeBigger(width, height);
+	
+		}else {
+			resizeSmaller(width, height);
+		}	
+		
+	}
+	
+	public void resizeBigger(double width, double height) {
+		for (int i = 0; i < menu.getChildren().size(); i++) {
+            Button b = (Button) menu.getChildren().get(i);
+            b.setFont(Font.font(25));
+            b.setPrefSize(300, 40);
+		}
+		
+		gameTitle.setFont(Font.font(70));
+		double titleWidth = gameTitle.getLayoutBounds().getWidth();
+		gameTitle.setTranslateX(width/2 - titleWidth/2);
+		gameTitle.setTranslateY(height/4);
+		menu.setTranslateX(width/2 - titleWidth/2 + 100);
+		menu.setTranslateY(height/3 + 50);
+	}
+	
+	public void resizeSmaller(double width, double height) {
+		for (int i = 0; i < menu.getChildren().size(); i++) {
+            Button b = (Button) menu.getChildren().get(i);
+            b.setFont(Font.font(18));
+            b.setPrefSize(200, 30);
+		}
+		
+		gameTitle.setFont(Font.font(48));
+		double titleWidth = gameTitle.getLayoutBounds().getWidth();
+		gameTitle.setTranslateX(width/2 - titleWidth/2);
+		gameTitle.setTranslateY(height/4);
+		menu.setTranslateX(width/2 - 100);
+		menu.setTranslateY(height/3 + 50);
 	}
 }
