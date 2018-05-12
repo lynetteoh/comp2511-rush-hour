@@ -3,6 +3,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 
+/*
+	Just a dummy application class
+*/
+
 public class GridLock extends Application {
 
 	@Override

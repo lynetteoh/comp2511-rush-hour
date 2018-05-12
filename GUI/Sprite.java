@@ -5,6 +5,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 
+/*
+	*** Front-end equivalent of Vehicle.java ***
+	- planning to rename it
+
+==> Functions that might be in here?
+		canMoveForward()
+		canMoveBackward()
+*/
+
 public class Sprite extends Rectangle {
 	private String orientation = "";
 
@@ -13,7 +22,7 @@ public class Sprite extends Rectangle {
 		super.setArcHeight(5);
 		super.setArcWidth(5);
 		super.setFill(Color.color(Math.random(), Math.random(), Math.random()));
-		
+
 		if (width > height){
 			orientation += "HORIZONTAL";
 		}
