@@ -13,14 +13,12 @@ public class Sprite extends Rectangle {
 		super.setArcHeight(5);
 		super.setArcWidth(5);
 		super.setFill(Color.color(Math.random(), Math.random(), Math.random()));
-		System.out.println("width: " + width + " | height: " + height);
+		
 		if (width > height){
 			orientation += "HORIZONTAL";
-			System.out.println(">> H");
 		}
 		else {
 			orientation += "VERTICAL";
-			System.out.println(">> V");
 		}
 	}
 

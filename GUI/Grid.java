@@ -4,7 +4,6 @@ import javafx.stage.Screen;
 import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
-//import javafx.scene.paint.Paint;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -50,7 +49,6 @@ public class Grid {
 	}
 
 	public Group createSprite(int xPos, int yPos, int w, int h){
-		System.out.println("Wat");
 		Group dragNode = new Group();
 		Sprite s = new Sprite(xPos, yPos, w, h);
 		dragNode.getChildren().add(s);
@@ -87,8 +85,7 @@ public class Grid {
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
-				System.out.println("NEWTRX: " + newTranslateX + " | X: " + block.getX());
-				System.out.println(ANSI_BLUE + "\t[W]" + block.getWidth() + " | " + ANSI_RED + (newTranslateX + block.getWidth()) + ANSI_RESET);
+
 				if (block.getX() + newTranslateX < 0){ // if going out of left end of grid
 					if (block.getX() == 0){
 						newTranslateX = 0;
@@ -106,8 +103,7 @@ public class Grid {
 			else {
 				double offsetY = t.getSceneY() - orgSceneY;
 				double newTranslateY = orgTranslateY + offsetY;
-				System.out.println("NEWTRY: " + newTranslateY + " | Y: " + block.getY());
-				System.out.println(ANSI_BLUE + "\t[W]" + block.getHeight() + " | " + ANSI_RED + (newTranslateY + block.getHeight()) + ANSI_RESET);
+
 				if ((block.getY() + newTranslateY) < 0){ // if going out of left end of grid
 					if (block.getY() == 0){
 						newTranslateY = 0;
@@ -131,14 +127,11 @@ public class Grid {
 
 		@Override
 		public void handle(MouseEvent t) {
-			System.out.println(ANSI_BLUE + ">>Mouse released!" + ANSI_RESET);
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
 			if (block.getOrientation().equals("HORIZONTAL")){
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
-				System.out.println("NEWTRX: " + newTranslateX + " | X: " + block.getX());
-				System.out.println(ANSI_BLUE + "\t[W]" + block.getWidth() + " | " + ANSI_RED + (newTranslateX + block.getWidth()) + ANSI_RESET);
 
 				// can be potentially reduced to less nested if else statements
 				if ((block.getX() + newTranslateX) >= 0 && (block.getX() + newTranslateX + block.getWidth()) <= gridLength){ // if going out of left end of grid
@@ -166,8 +159,7 @@ public class Grid {
 			else {
 				double offsetY = t.getSceneY() - orgSceneY;
 				double newTranslateY = orgTranslateY + offsetY;
-				System.out.println("NEWTRY: " + newTranslateY + " | Y: " + block.getY());
-				System.out.println(ANSI_BLUE + "\t[W]" + block.getHeight() + " | " + ANSI_RED + (newTranslateY + block.getHeight()) + ANSI_RESET);
+
 				// can be potentially reduced to less nested if else statements
 				if ((block.getY() + newTranslateY) >= 0 && (block.getY() + newTranslateY + block.getHeight()) <= gridLength){ // if going out of left end of grid
 					double slideCorrection;
