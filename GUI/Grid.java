@@ -1,7 +1,6 @@
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Cursor;
 import javafx.stage.Screen;
-import javafx.geometry.Rectangle2D;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import javafx.application.Application;
@@ -9,7 +8,6 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.geometry.Bounds;
 
 public class Grid {
 
@@ -53,11 +51,16 @@ public class Grid {
 		Sprite s = new Sprite(xPos, yPos, w, h);
 		dragNode.getChildren().add(s);
 		dragNode.setOnMousePressed(OnMousePressedEventHandler);
+		// add canMove function here ...
 		dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
 		dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 		this.blocks.add(s);
 		return dragNode;
 	}
+
+
+
+
 
 	public ArrayList<Rectangle> getGridSquares(){
 		return this.gridSquares;
@@ -87,16 +90,15 @@ public class Grid {
 				double newTranslateX = orgTranslateX + offsetX;
 
 				if (block.getX() + newTranslateX < 0){ // if going out of left end of grid
-					if (block.getX() == 0){
+					if (block.getX() == 1){
 						newTranslateX = 0;
 					}
 					else {
-						newTranslateX += Math.abs(newTranslateX + block.getX());
+						newTranslateX += Math.abs(newTranslateX + block.getX() - 1);
 					}
 				}
-				else if ((block.getX() + newTranslateX + block.getWidth()) > gridLength){ // if going out of right end of grid
-					System.out.println(ANSI_GREEN + "..................." + ANSI_RESET);
-					newTranslateX -= (block.getX() + newTranslateX + block.getWidth()) - gridLength;
+				else if ((block.getX() + newTranslateX + block.getWidth()) > gridLength - 1){ // if going out of right end of grid
+					newTranslateX -= (block.getX() + newTranslateX + block.getWidth()) - gridLength + 1;
 				}
 				((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 			}
@@ -105,15 +107,15 @@ public class Grid {
 				double newTranslateY = orgTranslateY + offsetY;
 
 				if ((block.getY() + newTranslateY) < 0){ // if going out of left end of grid
-					if (block.getY() == 0){
+					if (block.getY() == 1){
 						newTranslateY = 0;
 					}
 					else {
-						newTranslateY += Math.abs(newTranslateY + block.getY());
+						newTranslateY += Math.abs(newTranslateY + block.getY() - 1);
 					}
 				}
-				else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength){ // if going out of right end of grid
-					newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength;
+				else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength - 1){ // if going out of right end of grid
+					newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength + 1;
 				}
 				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 			}
