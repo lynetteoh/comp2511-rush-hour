@@ -9,8 +9,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 
+/*
+	*** Front-end equivalent of Board.java ***
+
+==> Functions that might be in here?
+		placeVehicle()
+		moveForward()
+		moveBackward()
+		canMove()
+		canPlaceVehicle()
+*/
+
 public class Grid {
 
+	// colored text options for debugging purposes
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_RED = "\u001B[31m";
 	public static final String ANSI_GREEN = "\u001B[32m";
@@ -19,7 +31,7 @@ public class Grid {
 	public static final String ANSI_CYAN = "\u001B[36m";
 
 	private ArrayList<Rectangle> gridSquares = new ArrayList<Rectangle>();
-	private ArrayList<Sprite> blocks = new ArrayList<Sprite>();
+	// private ArrayList<Sprite> blocks = new ArrayList<Sprite>();
 	private double orgSceneX;
 	private double orgSceneY;
 	private double orgTranslateX;
@@ -54,13 +66,9 @@ public class Grid {
 		// add canMove function here ...
 		dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
 		dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
-		this.blocks.add(s);
+		// this.blocks.add(s);
 		return dragNode;
 	}
-
-
-
-
 
 	public ArrayList<Rectangle> getGridSquares(){
 		return this.gridSquares;
@@ -119,8 +127,6 @@ public class Grid {
 				}
 				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 			}
-
-
 		}
 	};
 
@@ -139,21 +145,14 @@ public class Grid {
 				if ((block.getX() + newTranslateX) >= 0 && (block.getX() + newTranslateX + block.getWidth()) <= gridLength){ // if going out of left end of grid
 					double slideCorrection;
 					slideCorrection = newTranslateX - (newTranslateX % sLength);
-					if (newTranslateX > 0){
-						if (newTranslateX % sLength >= (sLength/2)){
-							newTranslateX = slideCorrection + sLength;
-						}
-						else {
-							newTranslateX = slideCorrection;
-						}
+					if (newTranslateX % sLength >= (sLength/2)){
+						newTranslateX = slideCorrection + sLength;
+					}
+					else if (-(newTranslateX % sLength) >= (sLength/2)){
+						newTranslateX = slideCorrection - sLength;
 					}
 					else {
-						if (-(newTranslateX % sLength) >= (sLength/2)){
-							newTranslateX = slideCorrection - sLength;
-						}
-						else {
-							newTranslateX = slideCorrection;
-						}
+						newTranslateX = slideCorrection;
 					}
 					((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 				}
@@ -166,21 +165,14 @@ public class Grid {
 				if ((block.getY() + newTranslateY) >= 0 && (block.getY() + newTranslateY + block.getHeight()) <= gridLength){ // if going out of left end of grid
 					double slideCorrection;
 					slideCorrection = newTranslateY - (newTranslateY % sLength);
-					if (newTranslateY > 0){
-						if (newTranslateY % sLength >= (sLength/2)){
-							newTranslateY = slideCorrection + sLength;
-						}
-						else {
-							newTranslateY = slideCorrection;
-						}
+					if (newTranslateY % sLength >= (sLength/2)){
+						newTranslateY = slideCorrection + sLength;
+					}
+					else if (-(newTranslateY % sLength) >= (sLength/2)){
+						newTranslateY = slideCorrection - sLength;
 					}
 					else {
-						if (-(newTranslateY % sLength) >= (sLength/2)){
-							newTranslateY = slideCorrection - sLength;
-						}
-						else {
-							newTranslateY = slideCorrection;
-						}
+						newTranslateY = slideCorrection;
 					}
 					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 				}
