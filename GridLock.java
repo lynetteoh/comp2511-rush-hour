@@ -6,11 +6,11 @@ import javafx.stage.Stage;
 
 public class GridLock extends Application {
 
-	private UI ui; 
-	private int screenMinWidth;
-	private int screenMinHeight;
-	private int screenMaxWidth;
-	private int screenMaxHeight;
+	private SceneManager sceneManager; 
+	private double screenMinWidth;
+	private double screenMinHeight;
+	private double screenMaxWidth;
+	private double screenMaxHeight;
 	private Scene scene;
 	
 	@Override
@@ -22,34 +22,21 @@ public class GridLock extends Application {
 			screenMaxHeight = 1200;
 			
 			primaryStage.setTitle("GridLock");
-			ui = new UI(screenMinWidth, screenMinHeight);
-			scene = new Scene(ui.createMenu(primaryStage), screenMinWidth, screenMinHeight);
 			primaryStage.setMinWidth(screenMinWidth);
 			primaryStage.setMinHeight(screenMinHeight);
 			primaryStage.setMaxHeight(screenMaxHeight);
 			primaryStage.setMaxWidth(screenMaxWidth);
+			sceneManager = new SceneManager(screenMinWidth, screenMinHeight, primaryStage);
+			scene = sceneManager.createMenuScene();
 			//scene.getStylesheets().add("style.css");
 			primaryStage.setScene(scene);
+			stageListener(primaryStage);
 			primaryStage.show();
 			primaryStage.setOnCloseRequest(e -> {
 				e.consume();
-				ui.closeProgram(primaryStage);
+				sceneManager.closeProgram(primaryStage);
 			});
-			scene.widthProperty().addListener(new ChangeListener<Number>() {
-			    @Override 
-			    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
-			        double height = scene.getHeight();
-			        ui.resizeScene((double)newWidth, height);
-			    }
-			});
-		
-			scene.heightProperty().addListener(new ChangeListener<Number>() {
-			    @Override 
-			    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
-			        double width = scene.getWidth();
-			        ui.resizeScene(width, (double)newHeight);
-			    }
-			});
+			
 
 	    
 		}catch(Exception e) {
