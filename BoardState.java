@@ -7,9 +7,9 @@ public class BoardState {
 	private BoardState previousState;
 	//private ArrayList<Vehicle> vehicles;
 
-	public BoardState(Board board, int moves, BoardState prev)//, ArrayList<Vehicle> vehicles)
+	public BoardState(int[][] matrix, ArrayList<Vehicle> vehicles, int moves, BoardState prev)//, ArrayList<Vehicle> vehicles)
 	{
-		this.board = new Board(board);
+		this.board = new Board(matrix, vehicles, 6);
 		this.moves = moves;
 		this.previousState = prev;
 		//this.vehicles = vehicles;
