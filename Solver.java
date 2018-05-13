@@ -58,7 +58,7 @@ public class Solver {
 						queue.add(bs);
 					}
 					current.getBoard().moveBackward(v);
-					if(Solved(b.getMatrix()))
+					if(isSolved(b.getMatrix()))
 					{
 						b.printBoard();
 						return true;
@@ -87,7 +87,7 @@ public class Solver {
 						queue.add(as);
 					}
 					current.getBoard().moveBackward(v);
-					if(Solved(a.getMatrix()))
+					if(isSolved(a.getMatrix()))
 					{
 						a.printBoard();
 						return true;
@@ -132,7 +132,7 @@ public class Solver {
 		return copy;
 	}
 	
-	private boolean Solved(int[][] matrix)
+	private boolean isSolved(int[][] matrix)
 	{
 		if(matrix[2][5] == 1)		// position of door
 		{
