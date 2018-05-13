@@ -22,13 +22,26 @@ public class Board {
 		boardId += 1;
 	}
 	
+	public Board(Board other)
+	{
+		this.boardId = other.boardId;
+		this.id = other.id;
+		this.vehicleIdCounter = other.vehicleIdCounter;
+		this.matrix = other.matrix;
+		this.n = other.n;
+		this.vehiclesList = other.vehiclesList;
+	}
+	
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
 		Board b = new Board(n);
 		b.printBoard();
 		
 		Generator g = new Generator();
-		//g.Generator1(6);
+		b = g.GeneratorA1(6, 0);
+		
+		Solver s = new Solver(b);
+		System.out.println(s.Solve());
 	}
 	
 	public void printBoard() {
@@ -57,12 +70,13 @@ public class Board {
 			for (int i = start; i <= end; i++) { 
 				matrix[p][i] = id;
 			}
-		} else { // vertical; path represents column 
+		} 
+		else { // vertical; path represents column 
 			for (int i = start; i <= end; i++) { 
 				matrix[i][p] = id;
-			}
-			
+			}	
 		}
+		vehiclesList.add(v);
 	}
 
 	public static int getBoardId() {
@@ -115,13 +129,13 @@ public class Board {
 	
 	public boolean moveForward(Vehicle v)
 	{
-		int movesForwards = v.canMoveForward(this.matrix); 
+		int movesForwards = canMoveForward(v); 
 		System.out.println("moves forward = " + movesForwards);
 		if(movesForwards > 0)
 		{
 			if(v.getOrient() == 1)
 			{
-				int[] array = v.getArray(this.matrix);
+				int[] array = getArray(v);
 				
 				for(int i = 0; i < array.length; i++)
 				{
@@ -170,13 +184,13 @@ public class Board {
 	
 	public boolean moveBackward(Vehicle v)
 	{
-		int movesBackwards = v.canMoveBackward(this.matrix);
+		int movesBackwards = canMoveBackward(v);
 		System.out.print("moves backward = " + movesBackwards + " ");
 		if(movesBackwards > 0)
 		{
 			if(v.getOrient() == 1)
 			{
-				int[] array = v.getArray(this.matrix);
+				int[] array = getArray(v);
 				
 				for(int i = array.length - 1; i > 0; i--)
 				{
@@ -272,4 +286,71 @@ public class Board {
 		
 		return false;
 	}
+	
+public int canMoveForward(Vehicle v) {
+		
+		int counter = 0;
+		int[] array = getArray(v);
+		
+		boolean startCounter = false;
+		for(int i = 0; i < array.length; i++)
+		{
+			if(array[i] == id)
+			{
+				startCounter = true;
+			}
+			
+			if(startCounter && array[i] == 0)
+			{
+				counter++;
+			}
+		}
+		return counter; 
+		// returns max no. of steps the car can move forward
+	}
+	
+	public int canMoveBackward(Vehicle v) {
+		
+		int counter = 0;
+		int[] array = getArray(v);
+		
+		boolean startCounter = false;
+		for(int i = array.length - 1; i >= 0; i--)
+		{
+			if(array[i] == id)
+			{
+				startCounter = true;
+			}
+			
+			if(startCounter && array[i] == 0)
+			{
+				counter++;
+			}
+		}
+		
+		return counter;
+		// returns max no. of steps the car can move backward
+	}
+	
+	public int[] getArray(Vehicle v )
+	{
+		int[] array = new int[this.matrix[0].length];
+		
+		if(v.getOrient() == 1)		// horizontal
+		{
+			array = this.matrix[v.getPath()];
+		}
+		else if(v.getOrient() == 2)		// vertical
+		{ 
+		    for(int i = 0; i < array.length; i++){
+		       array[i] = this.matrix[i][v.getPath()];
+		    }
+		}
+		//for (int i = 0; i < array.length; i++) { 
+		//	System.out.print(array[i] + " ");
+		//}
+		//System.out.println("");
+		return array;
+	}
+	
 }

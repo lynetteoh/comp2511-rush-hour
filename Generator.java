@@ -247,7 +247,7 @@ public class Generator {
 	// Create a Board Backwards 
 	// the Reverse Generator for Board 1 
 	// Initially generates a solvable premise, then backtracks to 1. 
-	public void GeneratorA1(int n, int m) {
+	public Board GeneratorA1(int n, int m) {
 		// n is the dimension of board 
 		// m is how many moves backwards to move 
 		Board b = new Board(n);
@@ -266,6 +266,7 @@ public class Generator {
 		System.out.println("Board:");
 		b.printBoard();
 		
+		return b;
 		// Time to generate the board backwards
 		//fin(v1, door); // check if the board is in a finished position. 
 		//System.out.println("v1 can move backwards by: ");

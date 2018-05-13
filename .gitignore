@@ -7,3 +7,7 @@
 /GridLock.class
 /UI.class
 /Solver.class
+/Move.class
+/BoardState.class
+/Queue.class
+/SearchQueue.class
