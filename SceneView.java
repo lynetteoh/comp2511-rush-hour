@@ -138,4 +138,60 @@ public class SceneView extends Pane{
 		menuButtons.setTranslateX(width/2 - 100);
 		menuButtons.setTranslateY(height/3 + 50);
 	}
+
+	public Parent createGameLayout(String difficulty) {
+		int btnWidth = 100;
+		int btnHeight = 20;
+		int moves = 0;
+		int level = 0;
+		ImageView background = getBackground("file:resource/background.jpg", 0.1);
+		HBox gameButtonsHolder = new HBox(20);
+		HBox gameButtonsHolder1 = new HBox(20);
+		Polygon polygon = new Polygon(
+				0, 0,
+                200, 0,
+                200, 30,
+                0, 30
+        );
+		Button homeBtn = createBtn("HOME", polygon, btnWidth, btnHeight);
+		Button resetBtn = createBtn("RESET", polygon, btnWidth, btnHeight);
+		Button hintsBtn = createBtn("HINTS", polygon, btnWidth, btnHeight);
+		Button undoBtn = createBtn("UNDO", polygon, btnWidth, btnHeight);
+		gameButtonsHolder.getChildren().addAll(hintsBtn, undoBtn);
+		gameButtonsHolder1.getChildren().addAll(homeBtn, resetBtn);
+		String Level = "Level : " + level;
+		Text levelBoard = createText(Level, 24);
+		levelBoard.setTranslateX(50);
+		levelBoard.setTranslateY(sceneHeight/4 - 20);
+		String Moves = "Moves : " + moves;
+		Text scoreBoard = createText(Moves, 24);
+		scoreBoard.setTranslateX(50);
+		scoreBoard.setTranslateY(sceneHeight/4 + 50);
+		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1);
+		gameButtons.setTranslateX(sceneWidth/2);
+		gameButtons.setTranslateY(sceneHeight/2 + 50);
+		//AnchorPane gameLayout = new AnchorPane();
+		Group root = new Group();
+		gameLayout.setTopAnchor(root, 75.0);
+		gameLayout.setRightAnchor(root, 75.0);
+		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, root);
+		switch(difficulty) {
+			case("EASY"):
+				Grid grid = new Grid(6, gridLength );
+				root.getChildren().addAll(grid.getGridSquares());
+				root.getChildren().addAll(grid.createSprite(1, 1,rectLength-2, gridLength-2));
+				root.getChildren().addAll(grid.createSprite(201, 51,rectLength-2, gridLength-2));
+				root.getChildren().addAll(grid.createSprite(51, 201,rectLength-2, gridLength-2)); // this and above are horizontal blocks
+				//------------------------------------------------------------
+				root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));
+				break;
+			case("MEDIUM"):
+				break;
+			case("HARD"):
+				break;
+		}
+		
+		return gameLayout;
+	
+	}
 }
