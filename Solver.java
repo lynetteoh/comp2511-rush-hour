@@ -12,7 +12,7 @@ public class Solver  {
     
     public Solver (Board b) {
         this.board = b;
-        this.solver = new solverEasy();
+        this.solver = new SolverEasy();
     }
 
     private boolean solved(Board b)
@@ -44,7 +44,6 @@ public class Solver  {
 
            Move m = previousMoves.get(b.toString());
             if (solved(b)) {
-            	print(m.previousBoard);
             	ArrayList<Move> moves = new ArrayList<Move>();
             	while (m.previousBoard != board) {
             		moves.add(m);
