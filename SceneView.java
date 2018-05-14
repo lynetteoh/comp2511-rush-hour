@@ -25,6 +25,7 @@ public class SceneView extends Pane{
 	private Text gameTitle;
 	private double sceneWidth;
 	private double sceneHeight;
+	private VBox gameButtons;
 	private int gridLength;
 	private int rectLength;
 	private AnchorPane gameLayout;
@@ -33,11 +34,23 @@ public class SceneView extends Pane{
 	public SceneView (double width, double height) {
 		this.menuLayout = new AnchorPane();
 		this.menuButtons = new VBox(30);
+		this.gameButtons = new VBox(20);
 		this.sceneWidth = width;
 		this.sceneHeight = height;
+		this.gridLength = 50;
+		this.rectLength = gridLength*2;	
+		this.gameLayout = new AnchorPane();
 		
 	}
-		
+
+	public VBox getMenuButtons() {
+		return menuButtons;
+	}
+	
+	public VBox getGameButtons() {
+		return gameButtons;
+	}
+
 	public Parent createMenu() {
 		int btnWidth = 200;
 		int btnHeight = 30;

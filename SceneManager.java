@@ -83,6 +83,10 @@ public class SceneManager extends Pane {
 		
 	}
 
+	private void changeScene(String name) {
+		return;
+	}
+
 	public void closeProgram(Stage stage) {
 		Alert alert = new Alert(AlertType.NONE, "Are you sure to exit " + " ?", ButtonType.YES, ButtonType.NO);
 		alert.showAndWait();
