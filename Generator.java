@@ -209,29 +209,73 @@ public class Generator {
 	
 	// Generates a board that will place cars down randomly. 
 	// The red car will always be on the correct path 
-//	public Board RandomGenerator1(int n) { 
-//		Board b = new Board(n);
-//		
-//		// set down most important car 
-//		int[] position1 = new int[] {0,1};
-//		Vehicle v1 = new Vehicle(1, 2, position1); 
-//		b.placeVehicle(v1); // v1 is created; put it on the board 
-//		
-//		// create a whole bunch of cars
-//		int randNum = randomCarType();
-//		
-//		System.out.println("Board:");
-//		b.printBoard();
-//		
-//		
-//		return b;
-//	}
+	
+	public Board RandomGenerator1(int n) { 
+		Board b = new Board(n);
+		
+		// set down most important car 
+		b.placeVehicle(1,2, new int[] {0,1}); // v1 is created; put it on the board 
+		
+		// create a whole bunch of cars
+		genRandCar(b);
+		genRandCar(b);
+		genRandCar(b);
+		genRandCar(b);
+		
+		System.out.println("Board:");
+		b.printBoard();
+		
+		
+		return b;
+	}
+	
+	// calls the functoins below to generate a random car 
+	public boolean genRandCar(Board b) { 
+		int randOrient = randomCarOrient();
+		int randPath = randomCarPath(b.getN());
+		int randLen = randomCarLength();
+		int position[] = randomPosition(b.getN(), randLen);
+		b.placeVehicle(randOrient, randPath, position);
+		// check if putting down car is going to be allowed 
+		return true;
+	}
+		
+	// randomly generates 1 or 2 as ints (horizontal or vertical)
+	public int randomCarOrient() { 
+		int randomNum = ThreadLocalRandom.current().nextInt(1, 3);
+		System.out.println("The random Orient is: " + Integer.toString(randomNum));
+		return randomNum;
+	}
+	
+	// returns the index of the random row/column number for the car to be aligned on
+	public int randomCarPath(int n) { 
+		int randomNum = ThreadLocalRandom.current().nextInt(0, n);
+		System.out.println("The random Path is: " + Integer.toString(randomNum));
+		return randomNum;
+	}
 	
 	// randomly generates 2 or 3 as ints.
-	public int randomCarType() { 
+	public int randomCarLength() { 
 		int randomNum = ThreadLocalRandom.current().nextInt(2, 4);
-		System.out.println("The random number is: " + Integer.toString(randomNum));
+		System.out.println("The random Length is: " + Integer.toString(randomNum));
 		return randomNum;
+	}
+
+	// generates a random array of integers for car to lie on. 
+	// takes in arguments len = length of car; n = dimension of board
+	public int[] randomPosition(int n, int len) { 
+		int[] position = new int[len]; 
+		int i = 0; 
+		int rangeIndex = n-len;
+		System.out.println("beginIndex: " + Integer.toString(rangeIndex));
+		// e.g. n = 6; len = 2, so you are allowed to have beginIndex from 0..4
+		int beginIndex = ThreadLocalRandom.current().nextInt(0, rangeIndex+1);
+		for (i = 0; i < len; i ++) { 
+			position[i] = beginIndex;
+			beginIndex++;
+		}
+		System.out.println("position: " + Arrays.toString(position));
+		return position;
 	}
 	
 	// gives the coordinates of the door in (x,y)

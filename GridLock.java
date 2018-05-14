@@ -32,7 +32,7 @@ public class GridLock extends Application {
 	
 	public static void main(String[] args) {
 		Generator g = new Generator();
-		g.GeneratorA1(6,3);
+		g.RandomGenerator1(6);
 		//launch(args);
 	}
 
