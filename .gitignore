@@ -8,6 +8,7 @@
 /UI.class
 /Solver.class
 /Move.class
-/BoardState.class
 /Queue.class
 /SearchQueue.class
+/SolverMethod.class
+/SolverEasy.class

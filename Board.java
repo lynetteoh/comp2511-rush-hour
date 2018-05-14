@@ -5,16 +5,17 @@ public class Board {
 	public static int boardId = 1;
 	private int id;
 	private int vehicleIdCounter; 
+	private int moves;
 	private int[][] matrix;
-	private int n;
+	private int size;
 	private ArrayList<Vehicle> vehiclesList = new ArrayList<Vehicle>();
 	
-	public Board(int n) {
+	public Board(int size) {
 		
-		this.n = n;
-		this.matrix = new int[n][n];
-		for(int i=0;i<n;i++) {
-			for (int j=0;j<n;j++) {
+		this.size = size;
+		this.matrix = new int[size][size];
+		for(int i=0;i<size;i++) {
+			for (int j=0;j<size;j++) {
 				this.matrix[i][j] = 0;
 			}
 		}
@@ -22,16 +23,32 @@ public class Board {
 		boardId += 1;
 	}
 	
-	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int n)
+	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
 	{
 		this.matrix = matrix;
-		this.n = n;
+		this.size = size;
 		this.vehiclesList = vehicles;
+		this.moves = 0;
+	}
+	public Board(Board b)
+	{
+		this.size = b.getSize();
+		int [][] matrix = b.getMatrix();
+		this.matrix = new int[size][size];
+		for(int i=0;i<size;i++) {
+			for (int j=0;j<size;j++) {
+				this.matrix[i][j] = matrix[i][j];
+			}
+		}
+		this.id = b.getId();
+		this.vehicleIdCounter = b.getVehicleIdCounter();
+		this.moves = b.getMoves();
+		this.vehiclesList = b.getVehiclesList();
 	}
 	
 	public static void main(String[] args) {
-		int n = Integer.parseInt(args[0]);
-		Board b = new Board(n);
+		int size = Integer.parseInt(args[0]);
+		Board b = new Board(size);
 		b.printBoard();
 		
 		Generator g = new Generator();
@@ -43,8 +60,8 @@ public class Board {
 	
 	public void printBoard() {
 		System.out.println("Board:");
-		for(int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+		for(int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
 			}
 			System.out.println("");
@@ -88,6 +105,9 @@ public class Board {
 	public int getId() {
 		return id;
 	}
+	public int getMoves() {
+		return id;
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -110,11 +130,14 @@ public class Board {
 	}
 
 	public int getN() {
-		return n;
+		return size;
+	}
+	public int getSize() {
+		return size;
 	}
 
-	public void setN(int n) {
-		this.n = n;
+	public void setN(int size) {
+		this.size = size;
 	}
 
 	public ArrayList<Vehicle> getVehiclesList() {
@@ -157,7 +180,7 @@ public class Board {
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
 				
-				for(int i = 0; i < this.n; i++)
+				for(int i = 0; i < this.size; i++)
 				{
 					if(matrix[i][path] == id)
 					{
@@ -219,8 +242,8 @@ public class Board {
 				
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
-				
-				for(int i = 0; i < this.n; i++)
+        
+				for(int i = 0; i < this.size; i++)
 				{
 					if(matrix[i][path] == id)
 					{
@@ -369,6 +392,17 @@ public class Board {
 		//}
 		//System.out.println("");
 		return array;
+	}
+	@Override
+	public String toString() {
+		String str = "";
+		for(int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				str += this.matrix[i][j];
+			}
+			str += "\n";
+		}
+		return str;
 	}
 	
 }

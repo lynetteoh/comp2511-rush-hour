@@ -11,7 +11,7 @@ public class Generator {
 	}
 
 
-		
+
 	// Generates a board that will place cars down randomly. 
 	// The red car will always be on the correct path 
 	
