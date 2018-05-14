@@ -22,16 +22,27 @@ public class Board {
 		boardId += 1;
 	}
 	
+	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int n)
+	{
+		this.matrix = matrix;
+		this.n = n;
+		this.vehiclesList = vehicles;
+	}
+	
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
 		Board b = new Board(n);
 		b.printBoard();
 		
 		Generator g = new Generator();
-		//g.Generator1(6);
+		b = g.GeneratorA1(6, 0);
+		
+		Solver s = new Solver(b);
+		System.out.println("Solved: " + s.Solve());
 	}
 	
 	public void printBoard() {
+		System.out.println("Board:");
 		for(int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
@@ -57,12 +68,13 @@ public class Board {
 			for (int i = start; i <= end; i++) { 
 				matrix[p][i] = id;
 			}
-		} else { // vertical; path represents column 
+		} 
+		else { // vertical; path represents column 
 			for (int i = start; i <= end; i++) { 
 				matrix[i][p] = id;
-			}
-			
+			}	
 		}
+		vehiclesList.add(v);
 	}
 
 	public static int getBoardId() {
@@ -115,13 +127,13 @@ public class Board {
 	
 	public boolean moveForward(Vehicle v)
 	{
-		int movesForwards = v.canMoveForward(this.matrix); 
-		System.out.println("moves forward = " + movesForwards);
+		int movesForwards = canMoveForward(v); 
+		//System.out.println("moves forward = " + movesForwards);
 		if(movesForwards > 0)
 		{
 			if(v.getOrient() == 1)
 			{
-				int[] array = v.getArray(this.matrix);
+				int[] array = getArray(v);
 				
 				for(int i = 0; i < array.length; i++)
 				{
@@ -141,26 +153,26 @@ public class Board {
 			} 
 			else if(v.getOrient() == 2)
 			{
-				int[] position = v.getPosition();
-				System.out.println(position);
+				int id = v.getId();
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
-
-				matrix[position[0] + 1][path] = v.getId();
-				matrix[position[1] + 1][path] = v.getId();
-				if(v.getLength() == 3)
-				{
-					matrix[position[2] + 1][path] = v.getId();
-				}
-				matrix[position[0]][path] = 0;
 				
+				for(int i = 0; i < this.n; i++)
+				{
+					if(matrix[i][path] == id)
+					{
+						matrix[i][path] = 0;
+						matrix[i + 1][path] = id;
+						matrix[i + 2][path] = id;
+						if(v.getLength() == 3)
+						{
+							matrix[i + 3][path] = id;
+						}
+						break;
+					}
+				}
 				this.setMatrix(matrix);
 				
-				for(int j = 0; j < v.getLength(); j++)
-				{
-					position[j] = v.getPosition()[j] - 1;
-				}
-				v.setPosition(position);
 				return true;
 			}
 			
@@ -170,13 +182,13 @@ public class Board {
 	
 	public boolean moveBackward(Vehicle v)
 	{
-		int movesBackwards = v.canMoveBackward(this.matrix);
-		System.out.print("moves backward = " + movesBackwards + " ");
+		int movesBackwards = canMoveBackward(v);
+		//System.out.print("moves backward = " + movesBackwards + " ");
 		if(movesBackwards > 0)
 		{
 			if(v.getOrient() == 1)
 			{
-				int[] array = v.getArray(this.matrix);
+				int[] array = getArray(v);
 				
 				for(int i = array.length - 1; i > 0; i--)
 				{
@@ -190,12 +202,12 @@ public class Board {
 						{
 							array[i - 3] = v.getId();
 						}
-						int[] pos = v.getPosition();
+						/*int[] pos = v.getPosition();
 						for(int j = 0; j < v.getLength(); j++)
 						{
 							pos[j] = v.getPosition()[j] - 1;
 						}
-						v.setPosition(pos);
+						v.setPosition(pos); */
 						
 						return true;
 					}
@@ -203,27 +215,29 @@ public class Board {
 			}
 			else if(v.getOrient() == 2)
 			{
-				int[] position = v.getPosition();
+				int id = v.getId();
+				
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
-
-				matrix[position[0] - 1][path] = v.getId();
-				matrix[position[1] - 1][path] = v.getId();
-				if(v.getLength() == 3)
-				{
-					matrix[position[2] - 1][path] = v.getId();
-					matrix[position[0] + 2][path] = 0;
-				}
-				else
-					matrix[position[0] + 1][path] = 0;
 				
+				for(int i = 0; i < this.n; i++)
+				{
+					if(matrix[i][path] == id)
+					{
+						matrix[i - 1][path] = id;
+						if(v.getLength() == 3)
+						{
+							matrix[i + 2][path] = 0;
+						}
+						else if (v.getLength() == 2)
+						{
+							matrix[i + 1][path] = 0;
+						}
+						break;
+					}
+				}
 				this.setMatrix(matrix);
 				
-				for(int j = 0; j < v.getLength(); j++)
-				{
-					position[j] = v.getPosition()[j] - 1;
-				}
-				v.setPosition(position);
 				return true;
 			}
 			
@@ -272,4 +286,89 @@ public class Board {
 		
 		return false;
 	}
+	
+	public int canMoveForward(Vehicle v) {
+		
+		int counter = 0;
+		int[] array = getArray(v);
+		
+		//System.out.print("\tForward: ");
+		//for(int i : array)
+		//	System.out.print(i + ", ");
+		//System.out.println();
+		
+		boolean startCounter = false;
+		for(int i = 0; i < array.length; i++)
+		{
+			if(array[i] == v.getId() && !startCounter)
+			{
+				startCounter = true;
+			}
+			if(startCounter && array[i] == 0)
+			{
+				counter++;
+			}
+			if(startCounter && array[i] != 0 && array[i] != v.getId())
+			{
+				startCounter = false;
+			}
+		}
+		//System.out.println("\t\t\tSteps forward: " + counter);
+		return counter; 
+		// returns max no. of steps the car can move forward
+	}
+	
+	public int canMoveBackward(Vehicle v) {
+		
+		int counter = 0;
+		int[] array = getArray(v);
+		
+		//System.out.print("\tBackward: ");
+		//for(int i : array)
+		//	System.out.print(i + ", ");
+		//System.out.println();
+		
+		boolean startCounter = false;
+		for(int i = array.length - 1; i >= 0; i--)
+		{
+			if(array[i] == v.getId() && !startCounter)
+			{
+				startCounter = true;
+			}
+			
+			if(startCounter && array[i] == 0)
+			{
+				counter++;
+			}
+			if(startCounter && array[i] != 0 && array[i] != v.getId())
+			{
+				startCounter = false;
+			}
+		}
+		
+		return counter;
+		// returns max no. of steps the car can move backward
+	}
+	
+	public int[] getArray(Vehicle v )
+	{
+		int[] array = new int[this.matrix[0].length];
+		
+		if(v.getOrient() == 1)		// horizontal
+		{
+			array = this.matrix[v.getPath()];
+		}
+		else if(v.getOrient() == 2)		// vertical
+		{ 
+		    for(int i = 0; i < array.length; i++){
+		       array[i] = this.matrix[i][v.getPath()];
+		    }
+		}
+		//for (int i = 0; i < array.length; i++) { 
+		//	System.out.print(array[i] + " ");
+		//}
+		//System.out.println("");
+		return array;
+	}
+	
 }
