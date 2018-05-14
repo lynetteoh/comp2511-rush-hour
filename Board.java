@@ -52,10 +52,10 @@ public class Board {
 		b.printBoard();
 		
 		Generator g = new Generator();
-		b = g.GeneratorA1(6, 0);
+		b = g.RandomGenerator1(6);
 		
 		Solver s = new Solver(b);
-		System.out.println("Solved: " + s.solve());
+		System.out.println("Solved: " + s.Solve());
 	}
 	
 	public void printBoard() {
@@ -242,7 +242,7 @@ public class Board {
 				
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
-				
+        
 				for(int i = 0; i < this.size; i++)
 				{
 					if(matrix[i][path] == id)

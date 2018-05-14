@@ -1,3 +1,4 @@
+
 public class Move {
     private Vehicle v;
     private int direction;

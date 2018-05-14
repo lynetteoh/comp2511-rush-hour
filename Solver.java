@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -53,8 +54,6 @@ public class Solver  {
             	for (Move x : moves) {
             		print(x.previousBoard);
             	}
-            	
-            	b.toString();
             	return b.toString();
             }
 
