@@ -210,8 +210,23 @@ public class SceneView extends Pane{
 		gameButtons.setTranslateX(sceneWidth/2);
 		gameButtons.setTranslateY(sceneHeight/2 + 50);
 		//AnchorPane gameLayout = new AnchorPane();
-		//Group root = new Group();
-		Group root = createGrid(difficulty);
+		Group root = new Group();
+		//Group root = createGrid(difficulty);
+		switch(difficulty) {
+			case("EASY"):
+				Grid grid = new Grid(6, gridLength );
+				root.getChildren().addAll(grid.getGridSquares());
+				root.getChildren().addAll(grid.createSprite(1, 1,rectLength-2, gridLength-2));
+				root.getChildren().addAll(grid.createSprite(201, 51,rectLength-2, gridLength-2));
+				root.getChildren().addAll(grid.createSprite(51, 201,rectLength-2, gridLength-2)); // this and above are horizontal blocks
+				//------------------------------------------------------------
+				root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));
+				break;
+			case("MEDIUM"):
+				break;
+			case("HARD"):
+				break;
+		}
 		gameLayout.setTopAnchor(root, 75.0);
 		gameLayout.setRightAnchor(root, 75.0);
 		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, root);
@@ -219,24 +234,9 @@ public class SceneView extends Pane{
 	
 	}
 	
-	private Group  createGrid(String difficulty) {
-		Group root = new Group();
-		switch(difficulty) {
-		case("EASY"):
-			Grid grid = new Grid(6, gridLength );
-			root.getChildren().addAll(grid.getGridSquares());
-			root.getChildren().addAll(grid.createSprite(1, 1,rectLength-2, gridLength-2));
-			root.getChildren().addAll(grid.createSprite(201, 51,rectLength-2, gridLength-2));
-			root.getChildren().addAll(grid.createSprite(51, 201,rectLength-2, gridLength-2)); // this and above are horizontal blocks
-			//------------------------------------------------------------
-			root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));
-			break;
-		case("MEDIUM"):
-			break;
-		case("HARD"):
-			break;
-	}
-		return null;
-	}
-	
+//	private Group  createGrid(String difficulty) {
+//		Group root = new Group();
+//		
+//		return null;
+//	}
 }
