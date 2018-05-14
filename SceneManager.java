@@ -37,21 +37,36 @@ public class SceneManager extends Pane {
 		sceneListener(menuScene);
 		return menuScene;
 	}
+	
+	public void createGameScene(String difficulty) {
+		Parent gameLayout = sceneView.createGameLayout(difficulty);
+		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
+		VBox buttons = sceneView.getGameButtons();
+		for(int i = 0; i < buttons.getChildren().size(); i++) {
+			HBox gameButtons = (HBox) buttons.getChildren().get(i);
+			addGameButtonAction(gameButtons);
+			
+		}
+		stage.setScene(gameScene);
+		sceneListener(gameScene);
+		stage.show();
+		scenes.put(difficulty, gameScene);
+	}
 
 	
 	private void addMenuButtonAction(VBox buttons) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
-            Button b = (Button) buttons.getChildren().get(i);
-            String name = b.getText();
-            switch(name) {
+			Button b = (Button) buttons.getChildren().get(i);
+			String name = b.getText();
+			switch(name) {
 				case("EASY"):
-					b.setOnAction(e->sceneView.createGameLayout(name));
+					b.setOnAction(e->changeScene(name));
 					break;
 				case("MEDIUM"):
-					b.setOnAction(e->sceneView.createGameLayout(name));
+					b.setOnAction(e->changeScene(name));
 					break;
 				case("HARD"):
-					b.setOnAction(e->sceneView.createGameLayout(name));
+					b.setOnAction(e->changeScene(name));
 					break;
 				case("EXIT"):
 					b.setOnAction(e->closeProgram(stage));
@@ -60,11 +75,22 @@ public class SceneManager extends Pane {
 			
 		}
 	}
+	
+	public Scene getScene(String name) {
+		Scene scene = null;
+		for(Entry<String, Scene> entry: scenes.entrySet()){
+			if(entry.getKey().equals(name)) {
+				scene = entry.getValue();
+				break;
+			}
+		}
+		return scene;
+	}
 	public void addGameButtonAction(HBox buttons) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
-            Button b = (Button) buttons.getChildren().get(i);
-            String name = b.getText();
-            switch(name) {
+			Button b = (Button) buttons.getChildren().get(i);
+			String name = b.getText();
+			switch(name) {
 				case("UNDO"):
 				
 					break;
@@ -84,7 +110,22 @@ public class SceneManager extends Pane {
 	}
 
 	private void changeScene(String name) {
-		return;
+		Scene scene = getScene(name);
+		if(scene != null) {
+			stage.setScene(scene);
+		}else {
+			switch(name) {
+				case("EASY"):
+					createGameScene(name);
+					break;
+				case("MEDIUM"):
+					createGameScene(name);
+					break;
+				case("HARD"):
+					createGameScene(name);
+					break;
+			}
+		}	
 	}
 
 	public void closeProgram(Stage stage) {
@@ -107,7 +148,7 @@ public class SceneManager extends Pane {
 		if(width >= 1000  && height  >= 800) {
 			switch(key) {
 				case("EASY"):
-					
+					sceneView.resizeGameLayoutBigger(width, height);
 					break;
 				case("MEDIUM"):
 					
@@ -123,7 +164,7 @@ public class SceneManager extends Pane {
 		}else {
 			switch(key) {
 				case("EASY"):
-					
+					sceneView.resizeGameLayoutSmaller(width, height);
 					break;
 				case("MEDIUM"):
 					

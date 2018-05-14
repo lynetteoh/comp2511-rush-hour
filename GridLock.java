@@ -30,7 +30,7 @@ public class GridLock extends Application {
 			scene = sceneManager.createMenuScene();
 			//scene.getStylesheets().add("style.css");
 			primaryStage.setScene(scene);
-			//stageListener(primaryStage);
+			stageListener(primaryStage);
 			primaryStage.show();
 			primaryStage.setOnCloseRequest(e -> {
 				e.consume();
@@ -47,6 +47,22 @@ public class GridLock extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	public void stageListener(Stage stage) {
+		stage.widthProperty().addListener(new ChangeListener<Number>() {
+		    @Override 
+		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
+		        stage.setWidth((double) newWidth);
+		    }
+		});
+	
+		stage.heightProperty().addListener(new ChangeListener<Number>() {
+		    @Override 
+		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
+		    	stage.setHeight((double) newHeight);
+		    }
+		});
 	}
 
 }
