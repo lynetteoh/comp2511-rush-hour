@@ -45,13 +45,13 @@ public class SceneManager extends Pane {
             String name = b.getText();
             switch(name) {
 				case("EASY"):
-					b.setOnAction(e->createGameScene(name));
+					b.setOnAction(e->sceneView.createGameLayout(name));
 					break;
 				case("MEDIUM"):
-					b.setOnAction(e->createGameScene(name));
+					b.setOnAction(e->sceneView.createGameLayout(name));
 					break;
 				case("HARD"):
-					b.setOnAction(e->createGameScene(name));
+					b.setOnAction(e->sceneView.createGameLayout(name));
 					break;
 				case("EXIT"):
 					b.setOnAction(e->closeProgram(stage));

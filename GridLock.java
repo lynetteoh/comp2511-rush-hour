@@ -30,7 +30,7 @@ public class GridLock extends Application {
 			scene = sceneManager.createMenuScene();
 			//scene.getStylesheets().add("style.css");
 			primaryStage.setScene(scene);
-			stageListener(primaryStage);
+			//stageListener(primaryStage);
 			primaryStage.show();
 			primaryStage.setOnCloseRequest(e -> {
 				e.consume();
