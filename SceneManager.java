@@ -19,15 +19,15 @@ public class SceneManager extends Pane {
 	private Stage stage;
 	private HashMap<String, Scene> scenes;
 	private SceneView sceneView;
-	
+
 	public SceneManager(double width, double height, Stage stage) {
 		this.sceneWidth = width;
 		this.sceneHeight = height;
 		this.stage = stage;
 		this.scenes = new HashMap<String, Scene>();
-		this.sceneView = new SceneView(sceneWidth, sceneHeight);	
+		this.sceneView = new SceneView(sceneWidth, sceneHeight);
 	}
-	
+
 	public Scene createMenuScene() {
 		Parent menuLayout = sceneView.createMenu();
 		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
@@ -37,7 +37,7 @@ public class SceneManager extends Pane {
 		sceneListener(menuScene);
 		return menuScene;
 	}
-	
+
 	public void createGameScene(String difficulty) {
 		Parent gameLayout = sceneView.createGameLayout(difficulty);
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
@@ -45,7 +45,7 @@ public class SceneManager extends Pane {
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
 			HBox gameButtons = (HBox) buttons.getChildren().get(i);
 			addGameButtonAction(gameButtons);
-			
+
 		}
 		stage.setScene(gameScene);
 		sceneListener(gameScene);
@@ -53,7 +53,7 @@ public class SceneManager extends Pane {
 		scenes.put(difficulty, gameScene);
 	}
 
-	
+
 	private void addMenuButtonAction(VBox buttons) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
@@ -72,10 +72,10 @@ public class SceneManager extends Pane {
 					b.setOnAction(e->closeProgram(stage));
 					break;
             }
-			
+
 		}
 	}
-	
+
 	public Scene getScene(String name) {
 		Scene scene = null;
 		for(Entry<String, Scene> entry: scenes.entrySet()){
@@ -92,21 +92,21 @@ public class SceneManager extends Pane {
 			String name = b.getText();
 			switch(name) {
 				case("UNDO"):
-				
+
 					break;
 				case("RESET"):
-		
+
 					break;
 				case("HOME"):
 					b.setOnAction(e->changeScene("MENU"));
 					break;
 				case("HINTS"):
-					
+
 					break;
             }
-			
+
 		}
-		
+
 	}
 
 	private void changeScene(String name) {
@@ -125,7 +125,7 @@ public class SceneManager extends Pane {
 					createGameScene(name);
 					break;
 			}
-		}	
+		}
 	}
 
 	public void closeProgram(Stage stage) {
@@ -135,7 +135,7 @@ public class SceneManager extends Pane {
 			stage.close();
 		}
 	}
-	
+
 	public void resizeScene(Scene scene, double width, double height) {
 		String key = null;
 		for(Entry<String, Scene> entry: scenes.entrySet()){
@@ -144,55 +144,55 @@ public class SceneManager extends Pane {
 				break;
 			}
 		}
-		
+
 		if(width >= 1000  && height  >= 800) {
 			switch(key) {
 				case("EASY"):
 					sceneView.resizeGameLayoutBigger(width, height);
 					break;
 				case("MEDIUM"):
-					
+
 					break;
 				case("HARD"):
-					
+
 					break;
 				case("MENU"):
 					sceneView.resizeMenuBigger(width, height);
 					break;
 			}
-			
+
 		}else {
 			switch(key) {
 				case("EASY"):
 					sceneView.resizeGameLayoutSmaller(width, height);
 					break;
 				case("MEDIUM"):
-					
+
 					break;
 				case("HARD"):
-					
+
 					break;
 				case("MENU"):
 					sceneView.resizeMenuSmaller(width, height);
 					break;
 			}
-	
+
 		}
-		
+
 	}
-	
+
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
-		    @Override 
+		    @Override
 		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
 		    	sceneWidth = (double) newWidth;
 		    	sceneHeight = scene.getHeight();
 		        resizeScene(scene, sceneWidth, sceneHeight);
 		    }
 		});
-	
+
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
-		    @Override 
+		    @Override
 		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
 		    	sceneHeight = (double) newHeight;
 		        sceneWidth = scene.getWidth();

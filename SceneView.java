@@ -26,31 +26,31 @@ public class SceneView extends Pane{
 	private double sceneWidth;
 	private double sceneHeight;
 	private VBox gameButtons;
-	private int gridLength;
+	private int gridCellLength;
 	private int rectLength;
 	private AnchorPane gameLayout;
-	
-	
+
+
 	public SceneView (double width, double height) {
 		this.menuLayout = new AnchorPane();
 		this.menuButtons = new VBox(30);
 		this.gameButtons = new VBox(20);
 		this.sceneWidth = width;
 		this.sceneHeight = height;
-		this.gridLength = 50;
-		this.rectLength = gridLength*2;	
+		this.gridCellLength = 50; // cell size
+		this.rectLength = gridCellLength*2;
 		this.gameLayout = new AnchorPane();
-		
+
 	}
-	
+
 	public VBox getMenuButtons() {
 		return menuButtons;
 	}
-	
+
 	public VBox getGameButtons() {
 		return gameButtons;
 	}
-	
+
 	public Parent createMenu() {
 		int btnWidth = 200;
 		int btnHeight = 30;
@@ -77,9 +77,9 @@ public class SceneView extends Pane{
 		menuButtons.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
 		animation();
 		menuLayout.getChildren().addAll(background, gameTitle, menuButtons);
-		return menuLayout;		
+		return menuLayout;
 	}
-	
+
 	private ImageView getBackground(String path, double contrast) {
 		Image image = new Image(path);
 		ImageView background = new ImageView();
@@ -89,17 +89,17 @@ public class SceneView extends Pane{
 		ColorAdjust colorAdjust = new ColorAdjust();
 		colorAdjust.setContrast(contrast);
 		background.setEffect(colorAdjust);
-		return background;		
+		return background;
 	}
-	
-	
-	private Text createText(String name, int fontSize) { 
+
+
+	private Text createText(String name, int fontSize) {
 		Text title = new Text(name);
 		title.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, fontSize));
 		return title;
-		
+
 	}
-	
+
 	private Button createBtn(String name, Polygon polygon, int btnWidth, int btnHeight) {
 		Button button = new Button(name);
 		button.setShape(polygon);
@@ -111,7 +111,7 @@ public class SceneView extends Pane{
 		button.setTranslateX(-300);
 		return button;
 	}
-	
+
 	private void animation() {
 		for (int i = 0; i < menuButtons.getChildren().size(); i++) {
 			Button b = (Button) menuButtons.getChildren().get(i);
@@ -119,16 +119,16 @@ public class SceneView extends Pane{
     		tt.setToX(0);
     		tt.setOnFinished(e->b.translateXProperty().negate());
     		tt.play();
-		} 
+		}
 	}
-	
+
 	public void resizeMenuBigger(double width, double height) {
 		for (int i = 0; i < menuButtons.getChildren().size(); i++) {
 			Button b = (Button) menuButtons.getChildren().get(i);
 			b.setFont(Font.font(25));
 			b.setPrefSize(300, 40);
 		}
-		
+
 		gameTitle.setFont(Font.font(70));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		gameTitle.setTranslateX(width/2 - titleWidth/2);
@@ -136,14 +136,14 @@ public class SceneView extends Pane{
 		menuButtons.setTranslateX(width/2 - titleWidth/2 + 100);
 		menuButtons.setTranslateY(height/3 + 50);
 	}
-	
+
 	public void resizeMenuSmaller(double width, double height) {
 		for (int i = 0; i < menuButtons.getChildren().size(); i++) {
 			Button b = (Button) menuButtons.getChildren().get(i);
 			b.setFont(Font.font(18));
 			b.setPrefSize(200, 30);
 		}
-		
+
 		gameTitle.setFont(Font.font(48));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		gameTitle.setTranslateX(width/2 - titleWidth/2);
@@ -151,7 +151,7 @@ public class SceneView extends Pane{
 		menuButtons.setTranslateX(width/2 - 100);
 		menuButtons.setTranslateY(height/3 + 50);
 	}
-	
+
 	public void resizeGameLayoutBigger(double width, double height) {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
@@ -159,25 +159,25 @@ public class SceneView extends Pane{
 	            Button b = (Button) buttons.getChildren().get(j);
 	            b.setPrefSize(150,30);
 			}
-			
+
 		}
 		gameButtons.setTranslateX(sceneWidth/2 + 100);
 		gameButtons.setTranslateY(sceneHeight/2 + 50);
 	}
-	
+
 	public void resizeGameLayoutSmaller(double width, double height) {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
 	            Button b = (Button) buttons.getChildren().get(j);
-	            b.setPrefSize(100, 20);			
+	            b.setPrefSize(100, 20);
 			}
 		}
 		gameButtons.setTranslateX(sceneWidth/2);
 		gameButtons.setTranslateY(sceneHeight/2 + 50);
-		
+
 	}
-	
+
 	public Parent createGameLayout(String difficulty) {
 		int btnWidth = 100;
 		int btnHeight = 20;
@@ -212,15 +212,12 @@ public class SceneView extends Pane{
 		//AnchorPane gameLayout = new AnchorPane();
 		Group root = new Group();
 		//Group root = createGrid(difficulty);
+		Generator g = new Generator();
 		switch(difficulty) {
 			case("EASY"):
-				Grid grid = new Grid(6, gridLength );
+				Grid grid = new Grid(g.RandomGenerator1(6), gridCellLength);
 				root.getChildren().addAll(grid.getGridSquares());
-				root.getChildren().addAll(grid.createSprite(1, 1,rectLength-2, gridLength-2));
-				root.getChildren().addAll(grid.createSprite(201, 51,rectLength-2, gridLength-2));
-				root.getChildren().addAll(grid.createSprite(51, 201,rectLength-2, gridLength-2)); // this and above are horizontal blocks
-				//------------------------------------------------------------
-				root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));
+				root.getChildren().addAll(grid.getBlockGroups());
 				break;
 			case("MEDIUM"):
 				break;
@@ -231,12 +228,12 @@ public class SceneView extends Pane{
 		gameLayout.setRightAnchor(root, 75.0);
 		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, root);
 		return gameLayout;
-	
+
 	}
-	
+
 //	private Group  createGrid(String difficulty) {
 //		Group root = new Group();
-//		
+//
 //		return null;
 //	}
 }
