@@ -228,5 +228,9 @@ public class Grid {
 	        }
 		}
 	};
+	
+	public int getMoves() {
+		return board.getnMoves();
+	}
 
 }
