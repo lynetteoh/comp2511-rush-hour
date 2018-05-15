@@ -38,6 +38,29 @@ public class Generator {
 
 		return b;
 	}
+	
+	public Board DetGenerator1(int n) { 
+		Board b = new Board (n);
+		do {
+			b.clearVehicles();
+			b = new Board(n);
+			// set down most important car
+			
+			b.placeVehicle(1, 2, new int[] {2,3}); // v1 is created; put it on the board 
+			b.placeVehicle(2, 3, new int[] {0,1}); // v2
+			b.placeVehicle(1, 0, new int[] {0,1});  // v3
+			b.placeVehicle(2, 1, new int[] {3,4}); // v4 
+			b.placeVehicle(1, 5, new int[] {1,2,3});  //v5
+			b.placeVehicle(1, 4, new int[] {3,4}); // v6
+			b.placeVehicle(2, 5, new int[] {0,1,2});  //v7
+			
+			System.out.println("Deterministic Generator 1:");
+			b.printBoard();
+
+			b.printBoard();
+		} while (!b.solve());
+		return b;
+	}
 
 	// calls the functoins below to generate a random car
 	public boolean placeRandCar(Board b) {
