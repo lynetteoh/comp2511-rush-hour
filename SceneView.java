@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -15,6 +17,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -81,7 +85,7 @@ public class SceneView extends Pane{
 		gameTitle.setTextAlignment(TextAlignment.CENTER);
 		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
 		gameTitle.setTranslateY(sceneHeight/4);
-		ImageView background = getBackground("file:/resource/background.jpg", 1.0);
+		ImageView background = getBackground("file:resource/background.jpg", 1.0);
 		menuButtons.setTranslateX(sceneWidth/2 - 100);
 		menuButtons.setTranslateY(sceneHeight/3 + 50);
 		Button easyBtn = createBtn("EASY", polygon, btnWidth, btnHeight);
@@ -178,13 +182,15 @@ public class SceneView extends Pane{
 			}
 			
 		}
+		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
+		ArrayList<Group> vehicles = grid.getBlockGroups();
 		gameButtons.setTranslateX(sceneWidth/2 - 100);
 		gameButtons.setTranslateY(sceneHeight/2 + 100);
 		levelBoard.setFont(Font.font(36));
-		levelBoard.setTranslateX(sceneWidth/2 - 600);
+		levelBoard.setTranslateX(sceneWidth/2 - 500);
 		levelBoard.setTranslateY(sceneHeight/4);
 		scoreBoard.setFont(Font.font(36));
-		scoreBoard.setTranslateX(sceneWidth/2 - 600);
+		scoreBoard.setTranslateX(sceneWidth/2 - 500);
 		scoreBoard.setTranslateY(sceneHeight/4 + 100);
 		gameBoard.setTranslateX(sceneWidth/2 + 20);
 		gameBoard.setTranslateY(sceneHeight/5);
@@ -219,7 +225,7 @@ public class SceneView extends Pane{
 		int level = 0;
 		int btnWidth = 100;
 		int btnHeight = 20;
-		ImageView background = getBackground("file:/resource/background.jpg", 0.1);
+		ImageView background = getBackground("file:resource/background.jpg", 0.1);
 		HBox gameButtonsHolder = new HBox(20);
 		HBox gameButtonsHolder1 = new HBox(20);
 		Polygon polygon = new Polygon(
@@ -280,7 +286,6 @@ public class SceneView extends Pane{
 		}
 		gameBoard = root;
 		root.setTranslateX(sceneWidth/2 + 20);
-		System.out.println(sceneWidth/2 + 20);
 		root.setTranslateY(sceneHeight/5);
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		gameLayout.getChildren().add(root);
