@@ -31,5 +31,5 @@ public class BoardState {
 	public BoardState getPreviousState() {
 		return previousState;
 	}
-	
+
 }
