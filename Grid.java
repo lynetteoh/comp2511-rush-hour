@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.shape.Shape;
 
 /*
 	*** Front-end equivalent of Board.java ***
@@ -31,22 +32,26 @@ public class Grid {
 	public static final String ANSI_CYAN = "\u001B[36m";
 
 	private ArrayList<Rectangle> gridSquares = new ArrayList<Rectangle>();
-	// private ArrayList<Sprite> blocks = new ArrayList<Sprite>();
+	private ArrayList<Shape> blocks = new ArrayList<Shape>();
 	private double orgSceneX;
 	private double orgSceneY;
 	private double orgTranslateX;
 	private double orgTranslateY;
 	private int gridLength;
 	private int sLength;
+	private Board board;
+	private ArrayList<Group> g = new ArrayList<Group>();
 
-
-	public Grid(int size, int sLength){
+	public Grid(Board b, int sLength){
+		this.board = b;
 		this.sLength = sLength; // grid square side length
-		this.gridLength = size*sLength;
+		this.gridLength = b.getN()*sLength;
 		double xPos = 0;
 		double yPos = 0;
-		for (int i=0; i < size*size; i++){
-			if (i % size == 0 && i != 0){
+		// creates grid
+		int i = 0;
+		for (i=0; i < b.getN()*b.getN(); i++){
+			if (i % b.getN() == 0 && i != 0){
 				xPos = 0;
 				yPos += sLength;
 			}
@@ -56,22 +61,60 @@ public class Grid {
 			this.gridSquares.add(r);
 			xPos += sLength;
 		}
+		// creates sprites equivalent to their vehicle counterpart
+		for (i=0; i < b.getVehiclesList().size(); i++){
+			Vehicle curr = b.getVehiclesList().get(i);
+			Group dragNode = new Group(); // place sprite in a Group object so it can be added to root
+			Sprite newSprite;
+			if (curr.getOrient() == 1){ // horizontal
+				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
+				if (curr.getId() == 1){ // first vehicle - always the red car
+					newSprite.setFill(Color.RED);
+				}
+			}
+			else {
+				newSprite = this.createSprite(curr.getPath()*sLength+1, curr.getPosition()[0]*sLength+1, sLength-2, curr.getLength()*sLength-2);
+			}
+			dragNode.getChildren().add(newSprite);
+			dragNode.setOnMousePressed(OnMousePressedEventHandler);
+			System.out.println("newSprite: " + curr.getId());
+			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
+			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			this.g.add(dragNode);
+		}
+		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
 
-	public Group createSprite(int xPos, int yPos, int w, int h){
-		Group dragNode = new Group();
+	public Sprite createSprite(int xPos, int yPos, int w, int h){
 		Sprite s = new Sprite(xPos, yPos, w, h);
-		dragNode.getChildren().add(s);
-		dragNode.setOnMousePressed(OnMousePressedEventHandler);
-		// add canMove function here ...
-		dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-		dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
-		// this.blocks.add(s);
-		return dragNode;
+		this.blocks.add(s);
+		return s;
+	}
+
+	private Boolean checkShapeIntersection(Shape block) {
+	  boolean collisionDetected = false;
+	  for (Shape static_bloc : this.blocks) {
+		if (static_bloc != block) {
+		  Shape intersect = Shape.intersect(block, static_bloc);
+		  if (intersect.getBoundsInLocal().getWidth() != -1) {
+			collisionDetected = true;
+		  }
+		}
+	  }
+	  if (collisionDetected) {
+		System.out.println(ANSI_RED + "[Collision detected]" + ANSI_RESET);
+	  } else {
+		System.out.println(ANSI_BLUE + "[Empty]" + ANSI_RESET);
+	  }
+	  return collisionDetected;
 	}
 
 	public ArrayList<Rectangle> getGridSquares(){
 		return this.gridSquares;
+	}
+
+	public ArrayList<Group> getBlockGroups(){
+		return this.g;
 	}
 
 	EventHandler<MouseEvent> OnMousePressedEventHandler =
