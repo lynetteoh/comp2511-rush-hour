@@ -14,6 +14,6 @@ public interface SolverMethod extends Comparator<Board> {
     			d2 = i;
     		}
     	}
-        return b1.getMoves() - b2.getMoves() + d2 - d1;
+        return b1.getnMoves() - b2.getnMoves() + d2 - d1;
     }
 }
