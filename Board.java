@@ -1,20 +1,25 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Board {
 	// int[][] b = new int[6][6]
 	public static int boardId = 1;
 	private int id;
 	private int vehicleIdCounter;
+	private int nMoves;
 	private int[][] matrix;
-	private int n;
+	private int size;
 	private ArrayList<Vehicle> vehiclesList = new ArrayList<Vehicle>();
+	private ArrayList<Move> solution = new ArrayList<Move>();
+	private Stack<Move> moves = new Stack<Move>();
 
-	public Board(int n) {
 
-		this.n = n;
-		this.matrix = new int[n][n];
-		for(int i=0;i<n;i++) {
-			for (int j=0;j<n;j++) {
+	public Board(int size) {
+
+		this.size = size;
+		this.matrix = new int[size][size];
+		for(int i=0;i<size;i++) {
+			for (int j=0;j<size;j++) {
 				this.matrix[i][j] = 0;
 			}
 		}
@@ -22,33 +27,86 @@ public class Board {
 		boardId += 1;
 	}
 
-	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int n)
+	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
 	{
 		this.matrix = matrix;
-		this.n = n;
+		this.size = size;
 		this.vehiclesList = vehicles;
+		this.nMoves = 0;
+	}
+	public Board(Board b)
+	{
+		this.size = b.getSize();
+		int [][] matrix = b.getMatrix();
+		this.matrix = new int[size][size];
+		for(int i=0;i<size;i++) {
+			for (int j=0;j<size;j++) {
+				this.matrix[i][j] = matrix[i][j];
+			}
+		}
+		this.id = b.getId();
+		this.vehicleIdCounter = b.getVehicleIdCounter();
+		this.nMoves = b.getnMoves();
+		this.vehiclesList = b.getVehiclesList();
+		this.moves = (Stack<Move>) b.getMoves().clone();
 	}
 
-	// public static void main(String[] args) {
-	// 	int n = Integer.parseInt(args[0]);
-	// 	Board b = new Board(n);
-	// 	b.printBoard();
-	//
-	// 	Generator g = new Generator();
-	// 	b = g.RandomGenerator1(6);
-	//
-	// 	Solver s = new Solver(b);
-	// 	System.out.println("Solved: " + s.Solve());
-	// }
+	public static void main(String[] args) {
+		int size = Integer.parseInt(args[0]);
+		Board b = new Board(size);
+//		b.printBoard();
 
+		Generator g = new Generator();
+		b = g.RandomGenerator1(size);
+
+		b.solve();
+		System.out.println("Solved: \n" + b.getSolution());
+	}
+
+	public boolean solve() {
+		Solver s = new Solver(this);
+		ArrayList<Move> solution = s.solve();
+		if (solution != null) {
+			this.solution = solution;
+			return true;
+		}
+		return false;
+	}
 	public void printBoard() {
 		System.out.println("Board:");
-		for(int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
+		for(int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
 			}
 			System.out.println("");
 		}
+	}
+	public boolean clearVehicles() {
+		if (vehiclesList.isEmpty()) {
+			return false;
+		}
+		vehiclesList.get(0).resetCount();
+		return true;
+	}
+	// undo the last move taken by the board
+	public boolean undo () {
+		Move lastMove = moves.pop();
+		if (lastMove == null) {
+			return false;
+		}
+		Vehicle v = lastMove.getVehicle();
+		int direction = lastMove.getDirection();
+		if (direction == 1) {   // it moved forward hence move backward
+			moveBackward(v);
+			moves.pop();
+		} else if (direction == -1) { // it moved backward hence move forward
+			moveForward(v);
+			moves.pop();
+		} else {
+			return false;
+		}
+		nMoves-= 2;
+		return true;
 	}
 
 	// creates a new vehicle from the data passed in
@@ -77,6 +135,12 @@ public class Board {
 		vehiclesList.add(v);
 	}
 
+	public ArrayList<Move> getSolution() {
+		return solution;
+	}
+	public Stack<Move> getMoves() {
+		return moves;
+	}
 	public static int getBoardId() {
 		return boardId;
 	}
@@ -87,6 +151,9 @@ public class Board {
 
 	public int getId() {
 		return id;
+	}
+	public int getnMoves() {
+		return nMoves;
 	}
 
 	public void setId(int id) {
@@ -110,11 +177,14 @@ public class Board {
 	}
 
 	public int getN() {
-		return n;
+		return size;
+	}
+	public int getSize() {
+		return size;
 	}
 
-	public void setN(int n) {
-		this.n = n;
+	public void setN(int size) {
+		this.size = size;
 	}
 
 	public ArrayList<Vehicle> getVehiclesList() {
@@ -147,6 +217,8 @@ public class Board {
 						{
 							array[i + 3] = v.getId();
 						}
+						nMoves++;
+						moves.add(new Move(v,1));
 						return true;
 					}
 				}
@@ -157,7 +229,7 @@ public class Board {
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
 
-				for(int i = 0; i < this.n; i++)
+				for(int i = 0; i < this.size; i++)
 				{
 					if(matrix[i][path] == id)
 					{
@@ -173,6 +245,8 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
+				nMoves++;
+				moves.add(new Move(v,1));
 				return true;
 			}
 
@@ -208,7 +282,8 @@ public class Board {
 							pos[j] = v.getPosition()[j] - 1;
 						}
 						v.setPosition(pos); */
-
+						nMoves++;
+						moves.add(new Move(v,-1));
 						return true;
 					}
 				}
@@ -220,7 +295,7 @@ public class Board {
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
 
-				for(int i = 0; i < this.n; i++)
+				for(int i = 0; i < this.size; i++)
 				{
 					if(matrix[i][path] == id)
 					{
@@ -238,6 +313,8 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
+				moves.add(new Move(v,-1));
+				nMoves++;
 				return true;
 			}
 
@@ -322,7 +399,7 @@ public class Board {
 
 		int counter = 0;
 		int[] array = getArray(v);
-
+		
 		//System.out.print("\tBackward: ");
 		//for(int i : array)
 		//	System.out.print(i + ", ");
@@ -369,6 +446,22 @@ public class Board {
 		//}
 		//System.out.println("");
 		return array;
+	}
+	@Override
+	public String toString() {
+		String str = "";
+		for(int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				str += this.matrix[i][j];
+			}
+			str += "\n";
+		}
+		return str;
+	}
+
+	public void setnMoves(int i) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

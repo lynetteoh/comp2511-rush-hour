@@ -11,26 +11,30 @@ public class Generator {
 	}
 
 
-
 	// Generates a board that will place cars down randomly.
 	// The red car will always be on the correct path
 
 	public Board RandomGenerator1(int n) {
+
 		Board b = new Board(n);
-
-		// set down most important car
-		b.placeVehicle(1,2, new int[] {0,1}); // v1 is created; put it on the board
-
-		int k = 4; // number of random cars to set down
-		int set = 0; // the number of cars set down
-		while (set < k) {
-			if (placeRandCar(b)) {
-				set++;
+		do {
+			b.clearVehicles();
+			b = new Board(n);
+			// set down most important car
+			b.placeVehicle(1,2, new int[] {0,1}); // v1 is created; put it on the board
+			int k = 4; // number of random cars to set down
+			int set = 0; // the number of cars set down
+			while (set < k) {
+				if (placeRandCar(b)) {
+					set++;
+				}
 			}
-		}
-		System.out.println("Random Board:");
-		b.printBoard();
+			b.printBoard();
+		} while (!b.solve());
 
+		System.out.println("Random Board:");
+
+		b.printBoard();
 
 		return b;
 	}
@@ -41,6 +45,7 @@ public class Generator {
 		int randPath = randomCarPath(b.getN());
 		int randLen = randomCarLength();
 		int position[] = randomPosition(b.getN(), randLen);
+
 		if (b.canPlaceVehicle(randOrient, randPath, position)) {
 			b.placeVehicle(randOrient, randPath, position);
 			return true;
@@ -52,21 +57,21 @@ public class Generator {
 	// randomly generates 1 or 2 as ints (horizontal or vertical)
 	public int randomCarOrient() {
 		int randomNum = ThreadLocalRandom.current().nextInt(1, 3);
-		System.out.println("The random Orient is: " + Integer.toString(randomNum));
+//		System.out.println("The random Orient is: " + Integer.toString(randomNum));
 		return randomNum;
 	}
 
 	// returns the index of the random row/column number for the car to be aligned on
 	public int randomCarPath(int n) {
 		int randomNum = ThreadLocalRandom.current().nextInt(0, n);
-		System.out.println("The random Path is: " + Integer.toString(randomNum));
+//		System.out.println("The random Path is: " + Integer.toString(randomNum));
 		return randomNum;
 	}
 
 	// randomly generates 2 or 3 as ints.
 	public int randomCarLength() {
 		int randomNum = ThreadLocalRandom.current().nextInt(2, 4);
-		System.out.println("The random Length is: " + Integer.toString(randomNum));
+//		System.out.println("The random Length is: " + Integer.toString(randomNum));
 		return randomNum;
 	}
 
@@ -76,14 +81,14 @@ public class Generator {
 		int[] position = new int[len];
 		int i = 0;
 		int rangeIndex = n-len;
-		System.out.println("beginIndex: " + Integer.toString(rangeIndex));
+//		System.out.println("beginIndex: " + Integer.toString(rangeIndex));
 		// e.g. n = 6; len = 2, so you are allowed to have beginIndex from 0..4
 		int beginIndex = ThreadLocalRandom.current().nextInt(0, rangeIndex+1);
 		for (i = 0; i < len; i ++) {
 			position[i] = beginIndex;
 			beginIndex++;
 		}
-		System.out.println("position: " + Arrays.toString(position));
+//		System.out.println("position: " + Arrays.toString(position));
 		return position;
 	}
 
@@ -91,7 +96,7 @@ public class Generator {
 	public int[] getDoor(int n) { // n is the side of the board
 		int x = n-1;
 		int y = (n-1)/2;
-		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
+//		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
 		int[] coord = new int[] {x,y};
 		return coord;
 	}
@@ -103,9 +108,9 @@ public class Generator {
 		if (v.getOrient() == 1) { //horizontal car
 			int[] x_coord = v.getPosition();
 			int[] car_coords = {x_coord[1], v.getPath()};
-			System.out.println("car coords: " + Arrays.toString(car_coords));
+//			System.out.println("car coords: " + Arrays.toString(car_coords));
 			if (car_coords[0] == door[0] && car_coords[1] == door[1] ) {
-				System.out.println("Car is touching the door");
+//				System.out.println("Car is touching the door");
 				return true;
 			}
 
@@ -114,5 +119,4 @@ public class Generator {
 		}
 		return false;
 	}
-
 }

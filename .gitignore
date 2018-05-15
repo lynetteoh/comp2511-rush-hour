@@ -4,6 +4,16 @@
 /Vehicle.class
 /orientation.class
 /orient.class
+<<<<<<< HEAD
+/GridLock.class
+/UI.class
+/Solver.class
+/Move.class
+/Queue.class
+/SearchQueue.class
+/SolverMethod.class
+/SolverEasy.class
+=======
 /Grid$1.class
 /Grid$2.class
 /Grid$3.class
@@ -22,3 +32,4 @@
 /SolverEasy.class
 /SolverHard.class
 /SolverMethod.class
+>>>>>>> lynn
