@@ -32,7 +32,11 @@ public class Grid {
 	public static final String ANSI_CYAN = "\u001B[36m";
 
 	private ArrayList<Rectangle> gridSquares = new ArrayList<Rectangle>();
+<<<<<<< HEAD
     private ArrayList<Shape> blocks = new ArrayList<Shape>();
+=======
+	private ArrayList<Shape> blocks = new ArrayList<Shape>();
+>>>>>>> e38d7825283fa9df178964fcb06591e2e2fa2a81
 	private double orgSceneX;
 	private double orgSceneY;
 	private double orgTranslateX;
@@ -42,7 +46,10 @@ public class Grid {
 	private Board board;
 	private ArrayList<Group> g = new ArrayList<Group>();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e38d7825283fa9df178964fcb06591e2e2fa2a81
 	public Grid(Board b, int sLength){
 		this.board = b;
 		this.sLength = sLength; // grid square side length
@@ -69,7 +76,11 @@ public class Grid {
 			Sprite newSprite;
 			if (curr.getOrient() == 1){ // horizontal
 				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
+<<<<<<< HEAD
 				if (curr.getId() == 1){ // first vehicle - always the red car
+=======
+				if (i == 0){ // first vehicle - always the red car
+>>>>>>> e38d7825283fa9df178964fcb06591e2e2fa2a81
 					newSprite.setFill(Color.RED);
 				}
 			}
@@ -138,7 +149,11 @@ public class Grid {
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
 			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
 
+<<<<<<< HEAD
 			if (v.getOrient() == 1){ // horizontal vehicle
+=======
+			if (v.getOrient() == 1){
+>>>>>>> e38d7825283fa9df178964fcb06591e2e2fa2a81
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;

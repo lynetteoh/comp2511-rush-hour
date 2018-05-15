@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 public class Solver  {
     private Board board;
     private SolverMethod solver;
-    
+
     public Solver (Board b) {
         this.board = b;
         this.solver = new SolverEasy();
@@ -27,18 +27,18 @@ public class Solver  {
         HashMap<String, Board> previousMoves = new HashMap<String, Board>();
         q.add(board);
         previousMoves.put(board.toString(), board);
-        
+
         Board b;
         while (!q.isEmpty()) {
             b = q.remove();
 
 
             if (solved(b)) {
-            	
+
             	return new ArrayList<Move>(b.getMoves());
             }
 
-            
+
             for (Vehicle v: b.getVehiclesList()) {
                 if (b.moveForward(v)) {
                     if (!previousMoves.containsKey(b.toString())) {
@@ -50,7 +50,7 @@ public class Solver  {
 	                    }
                     }
                     b.undo();
-                } 
+                }
                 if (b.moveBackward(v)) {
                     if (!previousMoves.containsKey(b.toString())) {
 	                    Board newBoard = new Board(b);
@@ -62,11 +62,11 @@ public class Solver  {
                     }
                     b.undo();
                 }
-                
+
             }
         }
         return null;
-    }            
+    }
 
     private void print(Object x) {
     	System.out.println(x.toString());
