@@ -80,7 +80,7 @@ public class Grid {
 			dragNode.getChildren().add(newSprite);
 			dragNode.setOnMousePressed(OnMousePressedEventHandler);
 			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-			 dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			// dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
 		//System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
