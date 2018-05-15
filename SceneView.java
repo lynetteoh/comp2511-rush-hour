@@ -29,6 +29,9 @@ public class SceneView extends Pane{
 	private int gridLength;
 	private int rectLength;
 	private AnchorPane gameLayout;
+	private Text levelBoard;
+	private Text scoreBoard;
+	private Group gameBoard;
 	
 	
 	public SceneView (double width, double height) {
@@ -39,8 +42,8 @@ public class SceneView extends Pane{
 		this.sceneHeight = height;
 		this.gridLength = 50;
 		this.rectLength = gridLength*2;	
-		this.gameLayout = new AnchorPane();
-		
+		this.gameBoard = new Group();
+		this.gameLayout = new AnchorPane();		
 	}
 	
 	public VBox getMenuButtons() {
@@ -51,10 +54,18 @@ public class SceneView extends Pane{
 		return gameButtons;
 	}
 	
+	
+	public void setSceneWidth(double sceneWidth) {
+		this.sceneWidth = sceneWidth;
+	}
+
+	public void setSceneHeight(double sceneHeight) {
+		this.sceneHeight = sceneHeight;
+	}
+
 	public Parent createMenu() {
 		int btnWidth = 200;
 		int btnHeight = 30;
-		VBox buttons = new VBox(30);
 		Polygon polygon = new Polygon(
 				0, 0,
 				200, 0,
@@ -75,6 +86,7 @@ public class SceneView extends Pane{
 		Button hardBtn = createBtn("HARD", polygon, btnWidth, btnHeight);
 		Button exitBtn = createBtn("EXIT", polygon, btnWidth, btnHeight);
 		menuButtons.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
+		//smallMenuLayout(sceneWidth, sceneHeight);
 		animation();
 		menuLayout.getChildren().addAll(background, gameTitle, menuButtons);
 		return menuLayout;		
@@ -122,7 +134,7 @@ public class SceneView extends Pane{
 		} 
 	}
 	
-	public void resizeMenuBigger(double width, double height) {
+	public void bigMenuLayout() {
 		for (int i = 0; i < menuButtons.getChildren().size(); i++) {
 			Button b = (Button) menuButtons.getChildren().get(i);
 			b.setFont(Font.font(25));
@@ -131,13 +143,13 @@ public class SceneView extends Pane{
 		
 		gameTitle.setFont(Font.font(70));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
-		gameTitle.setTranslateX(width/2 - titleWidth/2);
-		gameTitle.setTranslateY(height/4);
-		menuButtons.setTranslateX(width/2 - titleWidth/2 + 100);
-		menuButtons.setTranslateY(height/3 + 50);
+		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
+		gameTitle.setTranslateY(sceneHeight/4);
+		menuButtons.setTranslateX(sceneWidth/2 - titleWidth/2 + 100);
+		menuButtons.setTranslateY(sceneHeight/3 + 50);
 	}
 	
-	public void resizeMenuSmaller(double width, double height) {
+	public void smallMenuLayout() {
 		for (int i = 0; i < menuButtons.getChildren().size(); i++) {
 			Button b = (Button) menuButtons.getChildren().get(i);
 			b.setFont(Font.font(18));
@@ -146,36 +158,56 @@ public class SceneView extends Pane{
 		
 		gameTitle.setFont(Font.font(48));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
-		gameTitle.setTranslateX(width/2 - titleWidth/2);
-		gameTitle.setTranslateY(height/4);
-		menuButtons.setTranslateX(width/2 - 100);
-		menuButtons.setTranslateY(height/3 + 50);
+		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
+		gameTitle.setTranslateY(sceneHeight/4);
+		menuButtons.setTranslateX(sceneWidth/2 - 100);
+		menuButtons.setTranslateY(sceneHeight/3 + 50);
 	}
 	
-	public void resizeGameLayoutBigger(double width, double height) {
+	public void bigGameLayout() {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
 	            Button b = (Button) buttons.getChildren().get(j);
+	            b.setFont(Font.font(18));
 	            b.setPrefSize(150,30);
 			}
 			
 		}
-		gameButtons.setTranslateX(sceneWidth/2 + 100);
-		gameButtons.setTranslateY(sceneHeight/2 + 50);
+		gameButtons.setTranslateX(sceneWidth/2 - 100);
+		gameButtons.setTranslateY(sceneHeight/2 + 100);
+		levelBoard.setFont(Font.font(36));
+		levelBoard.setTranslateX(sceneWidth/2 - 400);
+		levelBoard.setTranslateY(sceneHeight/4);
+		scoreBoard.setFont(Font.font(36));
+		scoreBoard.setTranslateX(sceneWidth/2 - 400);
+		scoreBoard.setTranslateY(sceneHeight/4 + 100);
+		gameBoard.setTranslateX(sceneWidth/2 + 20);
+		gameBoard.setTranslateY(sceneHeight/5);
+		//root.setTranslateX(sceneWidth/2 + 50);
+		//System.out.println("big");
 	}
 	
-	public void resizeGameLayoutSmaller(double width, double height) {
+	public void smallGameLayout() {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
 	            Button b = (Button) buttons.getChildren().get(j);
+	            b.setFont(Font.font(16));
 	            b.setPrefSize(100, 20);			
 			}
 		}
 		gameButtons.setTranslateX(sceneWidth/2);
 		gameButtons.setTranslateY(sceneHeight/2 + 50);
-		
+		levelBoard.setFont(Font.font(24));
+		levelBoard.setTranslateX(sceneWidth/2 - 300);
+		levelBoard.setTranslateY(sceneHeight/4 - 20);
+		scoreBoard.setFont(Font.font(24));
+		scoreBoard.setTranslateX(sceneWidth/2 - 300);
+		scoreBoard.setTranslateY(sceneHeight/4 + 50);
+		gameBoard.setTranslateX(sceneWidth/2 + 20);
+		gameBoard.setTranslateY(sceneHeight/5);
+		//System.out.println("small");
 	}
 	
 	public Parent createGameLayout(String difficulty) {
@@ -198,45 +230,57 @@ public class SceneView extends Pane{
 		Button undoBtn = createBtn("UNDO", polygon, btnWidth, btnHeight);
 		gameButtonsHolder.getChildren().addAll(hintsBtn, undoBtn);
 		gameButtonsHolder1.getChildren().addAll(homeBtn, resetBtn);
-		String Level = "Level : " + level;
-		Text levelBoard = createText(Level, 24);
-		levelBoard.setTranslateX(50);
-		levelBoard.setTranslateY(sceneHeight/4 - 20);
-		String Moves = "Moves : " + moves;
-		Text scoreBoard = createText(Moves, 24);
-		scoreBoard.setTranslateX(50);
-		scoreBoard.setTranslateY(sceneHeight/4 + 50);
 		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1);
-		gameButtons.setTranslateX(sceneWidth/2);
-		gameButtons.setTranslateY(sceneHeight/2 + 50);
-		//AnchorPane gameLayout = new AnchorPane();
+		String Level = "Level : " + level;
+		String Moves = "Moves : " + moves;
+		levelBoard = createText(Level, 24);
+		scoreBoard = createText(Moves, 24);
+//		//Text levelBoard = createText(Level, 24);
+//		levelBoard.setTranslateX(sceneWidth/2 - 300);
+//		//levelBoard.setTranslateX(50);
+//		levelBoard.setTranslateY(sceneHeight/4 - 20);
+//		//Text scoreBoard = createText(Moves, 24);
+//		scoreBoard.setTranslateY(sceneHeight/4 + 50);
+//		scoreBoard.setTranslateX(sceneWidth/2 - 300);
+//		gameButtons.setTranslateX(sceneWidth/2);
+//		gameButtons.setTranslateY(sceneHeight/2 + 50);
+		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons);
+		if(sceneWidth >= 1000  && sceneHeight  >= 800) {
+			bigGameLayout();
+		}else {
+			smallGameLayout();
+		}
+		
+		return gameLayout;
+	
+	}
+	
+	public void createPuzzle(String difficulty) {
+		if(gameBoard != null) {
+			gameLayout.getChildren().remove(gameBoard);
+		}
 		Group root = new Group();
-		//Group root = createGrid(difficulty);
+		Grid grid = new Grid(6, gridLength );
 		switch(difficulty) {
 			case("EASY"):
-				Grid grid = new Grid(6, gridLength );
 				root.getChildren().addAll(grid.getGridSquares());
 				root.getChildren().addAll(grid.createSprite(1, 1,rectLength-2, gridLength-2));
 				root.getChildren().addAll(grid.createSprite(201, 51,rectLength-2, gridLength-2));
 				root.getChildren().addAll(grid.createSprite(51, 201,rectLength-2, gridLength-2)); // this and above are horizontal blocks
 				//------------------------------------------------------------
-				root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));
+				root.getChildren().addAll(grid.createSprite(201, 101, gridLength-2, rectLength-2));	
 				break;
 			case("MEDIUM"):
+				root.getChildren().addAll(grid.getGridSquares());
 				break;
 			case("HARD"):
+				root.getChildren().addAll(grid.getGridSquares());
 				break;
 		}
-		gameLayout.setTopAnchor(root, 75.0);
-		gameLayout.setRightAnchor(root, 75.0);
-		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, root);
-		return gameLayout;
-	
+		gameBoard = root;
+		root.setTranslateX(sceneWidth/2 + 20);
+		root.setTranslateY(sceneHeight/5);
+		gameLayout.getChildren().add(root);
 	}
 	
-//	private Group  createGrid(String difficulty) {
-//		Group root = new Group();
-//		
-//		return null;
-//	}
 }

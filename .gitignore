@@ -16,3 +16,9 @@
 /Sprite.class
 /GridLock$1.class
 /GridLock$2.class
+/BoardState.class
+/Move.class
+/Solver.class
+/SolverEasy.class
+/SolverHard.class
+/SolverMethod.class
