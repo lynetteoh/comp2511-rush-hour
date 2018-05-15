@@ -68,7 +68,7 @@ public class Grid {
 			Sprite newSprite;
 			if (curr.getOrient() == 1){ // horizontal
 				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
-				if (curr.getId() == 1){ // first vehicle - always the red car
+				if (i == 0){ // first vehicle - always the red car
 					newSprite.setFill(Color.RED);
 				}
 			}
@@ -135,7 +135,9 @@ public class Grid {
 		@Override
 		public void handle(MouseEvent t) {
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
-			if (block.getOrientation().equals("HORIZONTAL")){
+			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
+
+			if (v.getOrient() == 1){
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
@@ -179,7 +181,8 @@ public class Grid {
 		@Override
 		public void handle(MouseEvent t) {
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
-			if (block.getOrientation().equals("HORIZONTAL")){
+			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
+			if (v.getOrient() == 1){
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
