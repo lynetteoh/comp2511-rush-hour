@@ -96,11 +96,11 @@ public class Board {
 		}
 		Vehicle v = lastMove.getVehicle();
 		int direction = lastMove.getDirection();
-		if (direction == 1) {   // it moved forward hence move backward
-			moveBackward(v);
+		if (direction > 0) {   // it moved forward hence move backward
+			moveNSpaces(v, -1*direction);
 			moves.pop();
-		} else if (direction == -1) { // it moved backward hence move forward
-			moveForward(v);
+		} else if (direction < 0) { // it moved backward hence move forward
+			moveNSpaces(v, -1*direction);
 			moves.pop();
 		} else {
 			return false;
@@ -194,7 +194,29 @@ public class Board {
 	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
 		this.vehiclesList = vehiclesList;
 	}
-
+	public int moveNSpaces(Vehicle v, int nSpaces) {
+		if (nSpaces > 0) {
+			for (int i = 0; i < nSpaces; i++) {
+				if (!moveForward(v)) {
+					nMoves++;
+					moves.add(new Move(v,i+1));
+					return i+1;
+				}
+			}
+			return nSpaces;
+		} else if (nSpaces < 0) {
+			for (int i = 0; i < -1*nSpaces; i++) {
+				if (!moveBackward(v)) {
+					nMoves++;
+					moves.add(new Move(v,-(i+1)));
+					return -(i+1);
+				}
+			}			
+			return nSpaces;
+		} else {
+			return 0;
+		}
+	}
 	public boolean moveForward(Vehicle v)
 	{
 		int movesForwards = canMoveForward(v);
