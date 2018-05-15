@@ -39,6 +39,9 @@ public class SceneView extends Pane{
 	private Text scoreBoard;
 	private Group gameBoard;
 	private Grid grid;
+	private int easyLevel;
+	private int mediumLevel;
+	private int hardLevel;
 	
 	
 	public SceneView (double width, double height) {
@@ -50,7 +53,10 @@ public class SceneView extends Pane{
 		this.gridLength = 50;
 		this.rectLength = gridLength*2;	
 		this.gameBoard = new Group();
-		this.gameLayout = new AnchorPane();	
+		this.gameLayout = new AnchorPane();
+		this.easyLevel = 0; 
+		this.mediumLevel = 0; 
+		this.hardLevel = 0;
 	}
 	
 	public VBox getMenuButtons() {
@@ -184,7 +190,7 @@ public class SceneView extends Pane{
 		}
 		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
 		ArrayList<Group> vehicles = grid.getBlockGroups();
-		gameButtons.setTranslateX(sceneWidth/2 - 100);
+		gameButtons.setTranslateX(sceneWidth/2 - 200);
 		gameButtons.setTranslateY(sceneHeight/2 + 100);
 		levelBoard.setFont(Font.font(36));
 		levelBoard.setTranslateX(sceneWidth/2 - 500);
@@ -194,8 +200,6 @@ public class SceneView extends Pane{
 		scoreBoard.setTranslateY(sceneHeight/4 + 100);
 		gameBoard.setTranslateX(sceneWidth/2 + 20);
 		gameBoard.setTranslateY(sceneHeight/5);
-		//root.setTranslateX(sceneWidth/2 + 50);
-		//System.out.println("big");
 	}
 	
 	public void smallGameLayout() {
@@ -217,12 +221,9 @@ public class SceneView extends Pane{
 		scoreBoard.setTranslateY(sceneHeight/4 + 50);
 		gameBoard.setTranslateX(sceneWidth/2 + 20);
 		gameBoard.setTranslateY(sceneHeight/5);
-		//System.out.println("small");
 	}
 	
 	public Parent createGameLayout(String difficulty) {
-		int moves = 0;
-		int level = 0;
 		int btnWidth = 100;
 		int btnHeight = 20;
 		ImageView background = getBackground("file:resource/background.jpg", 0.1);
@@ -238,22 +239,15 @@ public class SceneView extends Pane{
 		Button resetBtn = createBtn("RESET", polygon, btnWidth, btnHeight);
 		Button hintsBtn = createBtn("HINTS", polygon, btnWidth, btnHeight);
 		Button undoBtn = createBtn("UNDO", polygon, btnWidth, btnHeight);
+		Button nextBtn = createBtn("NEXT", polygon, btnWidth, btnHeight);
+		Button previousBtn = createBtn("PREVIOUS", polygon, btnWidth, btnHeight);
 		gameButtonsHolder.getChildren().addAll(hintsBtn, undoBtn);
 		gameButtonsHolder1.getChildren().addAll(homeBtn, resetBtn);
 		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1);
-		String Level = "Level : " + level;
-		String Moves = "Moves : " + moves;
+		String Level = "Level : 0";
+		String Moves = "Moves : 0";
 		levelBoard = createText(Level, 24);
 		scoreBoard = createText(Moves, 24);
-//		//Text levelBoard = createText(Level, 24);
-//		levelBoard.setTranslateX(sceneWidth/2 - 300);
-//		//levelBoard.setTranslateX(50);
-//		levelBoard.setTranslateY(sceneHeight/4 - 20);
-//		//Text scoreBoard = createText(Moves, 24);
-//		scoreBoard.setTranslateY(sceneHeight/4 + 50);
-//		scoreBoard.setTranslateX(sceneWidth/2 - 300);
-//		gameButtons.setTranslateX(sceneWidth/2);
-//		gameButtons.setTranslateY(sceneHeight/2 + 50);
 		gameLayout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons);
 		if(sceneWidth >= 1000  && sceneHeight  >= 800) {
 			bigGameLayout();
@@ -266,6 +260,8 @@ public class SceneView extends Pane{
 	}
 	
 	public void createPuzzle(String difficulty) {
+		
+		String level = "Level : ";
 		if(gameBoard != null) {
 			gameLayout.getChildren().remove(gameBoard);
 		}
@@ -276,11 +272,21 @@ public class SceneView extends Pane{
 				grid = new Grid(g.RandomGenerator1(6), gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
 				root.getChildren().addAll(grid.getBlockGroups());
+				easyLevel++;
+				level = level + easyLevel;
+				levelBoard.setText(level);
 				break;
 			case("MEDIUM"):
+				mediumLevel++; 
+				level = level + mediumLevel;
+				levelBoard.setText(level);
 				//root.getChildren().addAll(grid.getGridSquares());
+			
 				break;
 			case("HARD"):
+				hardLevel++;
+				level = level + hardLevel;
+				levelBoard.setText(level);
 				//root.getChildren().addAll(grid.getGridSquares());
 				break;
 		}

@@ -144,7 +144,7 @@ public class SceneManager extends Pane {
 			}
 		}
 		
-		if(sceneWidth >= 1000  && sceneHeight  >= 800) {
+		if(sceneWidth >= 900  && sceneHeight  >= 800) {
 			switch(key) {
 				case("GAME"):
 					sceneView.bigGameLayout();

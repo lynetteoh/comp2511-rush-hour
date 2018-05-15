@@ -3,11 +3,13 @@ import javafx.scene.Cursor;
 import javafx.stage.Screen;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 
 /*
@@ -57,7 +59,9 @@ public class Grid {
 				yPos += sLength;
 			}
 			Rectangle r = new Rectangle(xPos, yPos, this.sLength, this.sLength);
-			r.setFill(Color.WHITE);
+			//Image background = new Image("file:resource/background.jpg");
+			//r.setFill(new ImagePattern(background));
+			r.setFill(Color.web("rgba(0,0,255, 0.1)"));
 			r.setStroke(Color.BLACK);
 			this.gridSquares.add(r);
 			xPos += sLength;
@@ -232,5 +236,4 @@ public class Grid {
 	public int getMoves() {
 		return board.getnMoves();
 	}
-
 }
