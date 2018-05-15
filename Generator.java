@@ -30,11 +30,11 @@ public class Generator {
 				}
 			}
 			b.printBoard();
+			System.out.println("Random Board:");
+
+			b.printBoard();
 		} while (!b.solve());
 
-		System.out.println("Random Board:");
-
-		b.printBoard();
 
 		return b;
 	}

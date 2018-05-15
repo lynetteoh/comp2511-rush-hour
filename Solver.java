@@ -40,28 +40,34 @@ public class Solver  {
 
 
             for (Vehicle v: b.getVehiclesList()) {
-                if (b.moveForward(v)) {
-                    if (!previousMoves.containsKey(b.toString())) {
-	                    Board newBoard = new Board(b);
-	                    newBoard.setnMoves(b.getnMoves() + 1);
-	                    if (solver.compare(b,newBoard) >= 0) {
-		                    q.add(newBoard);
-		                    previousMoves.put(newBoard.toString(), newBoard);
-	                    }
+            	for (int i = 1; i <= b.canMoveForward(v); i++) {
+            		if (b.moveNSpaces(v, i) > 0) {
+                        if (!previousMoves.containsKey(b.toString())) {
+    	                    Board newBoard = new Board(b);
+    	                    if (solver.compare(b,newBoard) >= 0) {
+    		                    q.add(newBoard);
+    		                    previousMoves.put(newBoard.toString(), newBoard);
+    	                    }
+                        }
+            		}
+            		b.undo();
+            		
+            	}
+            	for (int i = 1; i <= b.canMoveBackward(v); i++) {
+            		if (b.moveNSpaces(v, -i) > 0) {
+                        if (!previousMoves.containsKey(b.toString())) {
+    	                    Board newBoard = new Board(b);
+    	                    if (solver.compare(b,newBoard) >= 0) {
+    		                    q.add(newBoard);
+    		                    previousMoves.put(newBoard.toString(), newBoard);
+    	                    }
+                        }
                     }
                     b.undo();
-                }
-                if (b.moveBackward(v)) {
-                    if (!previousMoves.containsKey(b.toString())) {
-	                    Board newBoard = new Board(b);
-	                    newBoard.setnMoves(b.getnMoves() + 1);
-	                    if (solver.compare(b,newBoard) >= 0) {
-		                    q.add(newBoard);
-		                    previousMoves.put(newBoard.toString(), newBoard);
-	                    }
-                    }
-                    b.undo();
-                }
+            	}
+            		
+            		
+            	
 
             }
         }

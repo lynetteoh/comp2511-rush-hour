@@ -88,26 +88,7 @@ public class Board {
 		vehiclesList.get(0).resetCount();
 		return true;
 	}
-	// undo the last move taken by the board
-	public boolean undo () {
-		Move lastMove = moves.pop();
-		if (lastMove == null) {
-			return false;
-		}
-		Vehicle v = lastMove.getVehicle();
-		int direction = lastMove.getDirection();
-		if (direction > 0) {   // it moved forward hence move backward
-			moveNSpaces(v, -1*direction);
-			moves.pop();
-		} else if (direction < 0) { // it moved backward hence move forward
-			moveNSpaces(v, -1*direction);
-			moves.pop();
-		} else {
-			return false;
-		}
-		nMoves-= 2;
-		return true;
-	}
+
 
 	// creates a new vehicle from the data passed in
 	// places the vehicle on current board
@@ -194,28 +175,50 @@ public class Board {
 	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
 		this.vehiclesList = vehiclesList;
 	}
+	// undo the last move taken by the board
+	public boolean undo () {
+		Move lastMove = moves.pop();
+		if (lastMove == null) {
+			return false;
+		}
+		Vehicle v = lastMove.getVehicle();
+		int direction = lastMove.getDirection();
+//		System.out.println("lastMove: " + lastMove + "\n" + direction);
+//		printBoard();
+		if (direction > 0) {   // it moved forward hence move backward
+			moveNSpaces(v, -direction);
+			moves.pop();
+		} else if (direction < 0) { // it moved backward hence move forward
+			moveNSpaces(v, -1*direction);
+			moves.pop();
+		} else {
+			return false;
+		}
+//		printBoard();
+		nMoves-= 2;
+		return true;
+	}
 	public int moveNSpaces(Vehicle v, int nSpaces) {
-		if (nSpaces > 0) {
-			for (int i = 0; i < nSpaces; i++) {
-				if (!moveForward(v)) {
-					nMoves++;
-					moves.add(new Move(v,i+1));
-					return i+1;
-				}
+		if (nSpaces == 0) {
+			return 0;
+		} else if (nSpaces > 0) {
+			int max = Math.min(this.canMoveForward(v),nSpaces);
+			for (int i = 1; i <= max; i++) {
+				moveForward(v);
 			}
-			return nSpaces;
-		} else if (nSpaces < 0) {
-			for (int i = 0; i < -1*nSpaces; i++) {
-				if (!moveBackward(v)) {
-					nMoves++;
-					moves.add(new Move(v,-(i+1)));
-					return -(i+1);
-				}
-			}			
+			nMoves++;
+			moves.add(new Move(v,max));
 			return nSpaces;
 		} else {
-			return 0;
-		}
+
+			int max = Math.min(this.canMoveBackward(v),-nSpaces);
+			for (int i = 1; i <= max; i++) {
+				this.moveBackward(v);
+			}
+			nMoves++;
+			moves.add(new Move(v,-max));
+			return -nSpaces;
+		} 
 	}
 	public boolean moveForward(Vehicle v)
 	{
@@ -239,8 +242,8 @@ public class Board {
 						{
 							array[i + 3] = v.getId();
 						}
-						nMoves++;
-						moves.add(new Move(v,1));
+//						nMoves++;
+//						moves.add(new Move(v,1));
 						return true;
 					}
 				}
@@ -267,8 +270,8 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
-				nMoves++;
-				moves.add(new Move(v,1));
+//				nMoves++;
+//				moves.add(new Move(v,1));
 				return true;
 			}
 
@@ -304,8 +307,8 @@ public class Board {
 							pos[j] = v.getPosition()[j] - 1;
 						}
 						v.setPosition(pos); */
-						nMoves++;
-						moves.add(new Move(v,-1));
+//						nMoves++;
+//						moves.add(new Move(v,-1));
 						return true;
 					}
 				}
@@ -335,8 +338,8 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
-				moves.add(new Move(v,-1));
-				nMoves++;
+//				moves.add(new Move(v,-1));
+//				nMoves++;
 				return true;
 			}
 
