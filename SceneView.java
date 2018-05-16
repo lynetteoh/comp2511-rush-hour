@@ -287,11 +287,11 @@ public class SceneView extends Pane{
 	
 	public void createPuzzle(String difficulty) {
 		String level = "Level: ";
-		String move = "Moves: ";
-		int moves = 0;
+		String move = "Moves: 0";
 		AnchorPane layout = gameLayout.get(difficulty);	
 		Text levelBoard = (Text) layout.getChildren().get(1);
 		score = (Text) layout.getChildren().get(2);
+		score.setText(move);
 		Group root = new Group();
 		Generator g = new Generator();
 		if(gameBoard != null) {
@@ -433,8 +433,6 @@ public class SceneView extends Pane{
 			new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent t) {
-				//AnchorPane layout = gameLayout.get(difficulty);	
-				//Text scoreBoard = (Text) layout.getChildren().get(2);
 				//int moves = grid.getMoves();
 				moves++;
 				String Moves = "Moves : " + moves;
