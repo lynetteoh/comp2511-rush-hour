@@ -1,16 +1,13 @@
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 
 
 public class Solver  {
     private Board board;
     private SolverMethod solver;
-    
+
     public Solver (Board b) {
         this.board = b;
         this.solver = new SolverEasy();
@@ -19,77 +16,63 @@ public class Solver  {
     private boolean solved(Board b)
     {
     	int [][] matrix = b.getMatrix();
-        if(matrix[2][5] == 1)       // position of door
-        {
-            return true;
-        }
-        if(matrix[2][4] == 1 && matrix[2][5] == 0)
-        {
-            return true;
-        }
-        if(matrix[2][3] == 1 && matrix[2][4] == 0 && matrix[2][5] == 0)
+        if(matrix[2][b.getSize()-1] == 1)       // position of door
         {
             return true;
         }
         return false;
     }
-    public String solve() {
+    public ArrayList<Move> solve() {
         PriorityQueue<Board> q = new PriorityQueue<Board>(10, solver);
-        HashMap<String, Move> previousMoves = new HashMap<String, Move>();
+        HashMap<String, Board> previousMoves = new HashMap<String, Board>();
         q.add(board);
-        previousMoves.put(board.toString(), new Move(null,0,board));
+        previousMoves.put(board.toString(), board);
+
         Board b;
         while (!q.isEmpty()) {
             b = q.remove();
 
 
-           Move m = previousMoves.get(b.toString());
             if (solved(b)) {
-            	ArrayList<Move> moves = new ArrayList<Move>();
-            	while (m.previousBoard != board) {
-            		moves.add(m);
-            		m = previousMoves.get(m.previousBoard.toString());
-            	}
-            	moves.add(m);
-            	for (Move x : moves) {
-            		print(x.previousBoard);
-            	}
-            	return b.toString();
+
+            	return new ArrayList<Move>(b.getMoves());
             }
 
+
             for (Vehicle v: b.getVehiclesList()) {
-                if (b.moveForward(v)) {
-                    if (previousMoves.containsKey(b.toString()) && board != b) {
-                    	b.moveBackward(v);
-                    } else {
-                    	
-	                    Board newBoard = new Board(b);
-	                    b.moveBackward(v);
-	                    Move newMoves = new Move(v,1, b);
-	                    if (solver.compare(b,newBoard) >= 0) {
-		                    q.add(newBoard);
-		                    previousMoves.put(newBoard.toString(), newMoves);
-	                    }
+            	for (int i = 1; i <= b.canMoveForward(v); i++) {
+            		if (b.moveNSpaces(v, i) > 0) {
+                        if (!previousMoves.containsKey(b.toString())) {
+    	                    Board newBoard = new Board(b);
+    	                    if (solver.compare(b,newBoard) >= 0) {
+    		                    q.add(newBoard);
+    		                    previousMoves.put(newBoard.toString(), newBoard);
+    	                    }
+                        }
+            		}
+            		b.undo();
+            		
+            	}
+            	for (int i = 1; i <= b.canMoveBackward(v); i++) {
+            		if (b.moveNSpaces(v, -i) > 0) {
+                        if (!previousMoves.containsKey(b.toString())) {
+    	                    Board newBoard = new Board(b);
+    	                    if (solver.compare(b,newBoard) >= 0) {
+    		                    q.add(newBoard);
+    		                    previousMoves.put(newBoard.toString(), newBoard);
+    	                    }
+                        }
                     }
-                } 
-                if (b.moveBackward(v)) {
-                    if (previousMoves.containsKey(b.toString()) && board != b) {
-                    	b.moveForward(v);
-                    	continue;
-                    } 
-                    Board newBoard = new Board(b);
-                    b.moveForward(v);
-                    Move newMoves = new Move(v,1, b);
-                    if (solver.compare(b,newBoard) >= 0) {
-	                    q.add(newBoard);
-	                    previousMoves.put(newBoard.toString(), newMoves);
-                    }
-                }
-                
+                    b.undo();
+            	}
+            		
+            		
+            	
+
             }
         }
         return null;
-    }            
+    }
 
     private void print(Object x) {
     	System.out.println(x.toString());
