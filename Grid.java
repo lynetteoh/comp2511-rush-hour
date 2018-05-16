@@ -80,7 +80,7 @@ public class Grid {
 			dragNode.getChildren().add(newSprite);
 			dragNode.setOnMousePressed(OnMousePressedEventHandler);
 			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-			// dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
 		//System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
@@ -130,80 +130,32 @@ public class Grid {
 		public void handle(MouseEvent t) {
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
 			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
-//int i = 0;
+
 			if (v.getOrient() == 1){ // horizontal vehicle
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
-				//System.out.println(ANSI_RED + "getSceneX: " + t.getSceneX() + "| " + orgSceneX + "OF: " + offsetX  + " | " + orgTranslateX + ANSI_RESET);
 
 				if (offsetX > 0){
 					if (board.canMoveForward(v) > 0) {
-						//System.out.println(ANSI_BLUE + " Can move forward!!" + ANSI_RESET);
-						double c = (block.getX() + newTranslateX + block.getWidth());
-						double g = (c - (c % sLength) + sLength);
-						//System.out.println(ANSI_BLUE + "newTR: " + c + " | nextEdge: " + g);
-						if (c >= g - 1){ // now works, just need to ensure it is not the current block it resides in!
-							//System.out.println(ANSI_GREEN + "\t [MOVED FORWARD]" + ANSI_RESET);
-							newTranslateX -= c - g + 1;
-							((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
-							board.moveForward(v);
-							if (isGoalState(v)) System.exit(0);
-
-						 	board.printBoard();
-						}
-						else {
-							//System.out.println("FORWARD");
-							if (block.getX() + newTranslateX < 0){ // if going out of left end of grid
-								if (block.getX() == 1){
-									newTranslateX = 0;
-								}
-								else {
-									newTranslateX += Math.abs(newTranslateX + block.getX() - 1);
-								}
-							}
-							else if ((block.getX() + newTranslateX + block.getWidth()) > gridLength - 1){ // if going out of right end of grid
-								newTranslateX -= (block.getX() + newTranslateX + block.getWidth()) - gridLength + 1;
+						int maxMove = board.canMoveForward(v);
+							if (maxMove * sLength < newTranslateX) {
+								newTranslateX = maxMove * sLength;
 							}
 							((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+							// System.out.println(ANSI_BLUE + "MOVE " + maxMove + ANSI_RESET);
+							// board.moveNSpaces(v, maxMove);
+							// board.printBoard();
 						}
 					}
-					else {
-						//System.out.println(ANSI_RED + " Can't move forward!!" + ANSI_RESET);
-					}
-				}
 				else if (offsetX < 0){
 					if (board.canMoveBackward(v) > 0) {
-						//System.out.println(ANSI_RED + " Can move backward!!" + ANSI_RESET);
-						double c = (block.getX() + newTranslateX + block.getWidth());
-						double g = (c + (c % sLength) - sLength);
-						//System.out.println(ANSI_PURPLE + "newTR: " + c + " | nextEdge: " + g);
-						if (c <= g + 1){ // now works, just need to ensure it is not the current block it resides in!
-							//System.out.println(ANSI_GREEN + "\t [MOVED BACKWARD]" + ANSI_RESET);
-							//newTranslateX += c - g - 1;
-							((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
-							// (offsetX - (offsetX % sLength)) + sLength
-							board.moveBackward(v);
-						 	board.printBoard();
+						int maxMove = board.canMoveBackward(v);
+
+						if (maxMove * sLength < -newTranslateX) {
+							newTranslateX = -maxMove * sLength;
 						}
-						else {
-							//System.out.println(ANSI_GREEN + "PRINT" + ANSI_RESET);
-							if (block.getX() + newTranslateX < 0){ // if going out of left end of grid
-								if (block.getX() == 1){
-									newTranslateX = 0;
-								}
-								else {
-									newTranslateX += Math.abs(newTranslateX + block.getX() - 1);
-								}
-							}
-							else if ((block.getX() + newTranslateX + block.getWidth()) > gridLength - 1){ // if going out of right end of grid
-								newTranslateX -= (block.getX() + newTranslateX + block.getWidth()) - gridLength + 1;
-							}
-							((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
-						}
-					}
-					else {
-						//System.out.println(ANSI_RED + " Can't move backward!!" + ANSI_RESET);
+						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					}
 				}
 			}
@@ -213,68 +165,28 @@ public class Grid {
 
 				if (offsetY > 0){
 					if (board.canMoveForward(v) > 0) {
-						//System.out.println(ANSI_BLUE + " Can move forward!!" + ANSI_RESET);
-						double c = (block.getY() + newTranslateY + block.getHeight());
-						double g = (c - (c % sLength) + sLength);
-						//System.out.println(ANSI_BLUE + "newTR: " + c + " | nextEdge: " + g);
-						if (c >= g - 1){ // now works, just need to ensure it is not the current block it resides in!
-							//System.out.println(ANSI_GREEN + "\t [MOVED FORWARD]" + ANSI_RESET);
-							newTranslateY -= c - g + 1;
-							((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
-							board.moveForward(v);
-							board.printBoard();
-						}
-						else {
-							if (block.getY() + newTranslateY < 0){ // if going out of left end of grid
-								if (block.getY() == 1){
-									newTranslateY = 0;
-								}
-								else {
-									newTranslateY += Math.abs(newTranslateY + block.getY() - 1);
-								}
-							}
-							else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength - 1){ // if going out of right end of grid
-								newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength + 1;
+						int maxMove = board.canMoveForward(v);
+							if (maxMove * sLength < newTranslateY) {
+								newTranslateY = maxMove * sLength;
 							}
 							((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
-						}
-					}
-					else {
-						//System.out.println(ANSI_RED + " Can't move forward!!" + ANSI_RESET);
 					}
 				}
-				else {
+					// else {
+					// 	//System.out.println(ANSI_RED + " Can't move forward!!" + ANSI_RESET);
+					// }
+
+				else if (offsetY < 0){
 					if (board.canMoveBackward(v) > 0) {
-						//System.out.println(ANSI_RED + " Can move backward!!" + ANSI_RESET);
-						double c = (block.getY() + newTranslateY + block.getHeight());
-						double g = (c + (c % sLength) - sLength);
-						//System.out.println(ANSI_PURPLE + "newTR: " + c + " | nextEdge: " + g);
-						if (c <= g + 1){ // now works, just need to ensure it is not the current block it resides in!
-							//System.out.println(ANSI_GREEN + "\t [MOVED BACKWARD]" + ANSI_RESET);
-							//newTranslateX += c - g - 1;
-							((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
-							// (offsetX - (offsetX % sLength)) + sLength
-							board.moveBackward(v);
-							board.printBoard();
-						}
-						else {
-							if (block.getY() + newTranslateY < 0){ // if going out of left end of grid
-								if (block.getY() == 1){
-									newTranslateY = 0;
-								}
-								else {
-									newTranslateY += Math.abs(newTranslateY + block.getY() - 1);
-								}
+int maxMove = board.canMoveBackward(v);
+
+							if (maxMove * sLength < -newTranslateY) {
+								newTranslateY = -maxMove * sLength;
 							}
-							else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength - 1){ // if going out of right end of grid
-								newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength + 1;
-							}
+
 							((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 						}
-					}
-					else {
-						//System.out.println(ANSI_RED + " Can't move backward!!" + ANSI_RESET);
-					}
+
 				}
 			}
 		}
@@ -292,70 +204,36 @@ public class Grid {
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
-				//System.out.println(ANSI_GREEN + "[NX: " + newTranslateX + ANSI_RED + " | OFF: " + offsetX + ANSI_RESET);
-				// can be potentially reduced to less nested if else statements
-				if ((block.getX() + newTranslateX) >= 2 && (block.getX() + newTranslateX + block.getWidth()) <= gridLength-2){ // if going out of left end of grid
-					double slideCorrection;
-					slideCorrection = newTranslateX - (newTranslateX % sLength);
-					//System.out.println("|||||" + (offsetX % sLength) + " | sL: " + sLength);
-					if (Math.abs(offsetX % sLength) >= (sLength/2)){ // moving forwards
-						if (offsetX > 0){
-							//System.out.println(ANSI_PURPLE + (offsetX % sLength) + "| " + (sLength/2));
-							//System.out.println(ANSI_BLUE + "S+L" + ANSI_RESET); // moveForward
-							newTranslateX = slideCorrection + sLength;
-							board.moveForward(v);
-							if (isGoalState(v)) System.exit(0);
-							board.printBoard();
-						}
-						else if (offsetX < 0) {
-								//System.out.println(ANSI_RED + "S-L" + ANSI_RESET); // moveBackwards
-								newTranslateX = slideCorrection - sLength;
-								board.moveBackward(v);
-								board.printBoard();
-						}
-						// else {
-						// 	newTranslateX = slideCorrection;
-						// }
+
+				if (offsetX >= 0){
+					if (Math.abs(offsetX % sLength) >= sLength / 2) {
+						newTranslateX += sLength - Math.abs(offsetX % sLength);
+					}  else {
+							newTranslateX -= Math.abs(offsetX % sLength);
 					}
-					// else if (-(newTranslateX % sLength) >= (sLength/2) && offsetX < 0){ // moving backwards
-					// 	System.out.println(ANSI_RED + "S-L" + ANSI_RESET); // moveBackwards
-					// 	newTranslateX = slideCorrection - sLength;
-					// 	board.moveBackward(v);
-					// 	board.printBoard();
-					// }
-					else { // when it does not reach the halfway point of either adjacent cells ie/ it slides back to its original position
-						//System.out.println(":(");
-						// if (offsetX > 0){
-						// 	newTranslateX -= newTranslateX % sLength;
-						// }
-						// else if (offsetX < 0){
-						// 	newTranslateX += newTranslateX % sLength;
-						// }
-						newTranslateX = slideCorrection;
-						board.printBoard();
+				} else if (offsetX < 0) {
+					if (Math.abs(offsetX % sLength) >= sLength / 2) {
+						newTranslateX -= sLength - Math.abs(offsetX % sLength);
+					}  else {
+							newTranslateX += Math.abs(offsetX % sLength);
 					}
-					((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+
 				}
+				((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 			}
 			else {
 				double offsetY = t.getSceneY() - orgSceneY;
 				double newTranslateY = orgTranslateY + offsetY;
 
-				// can be potentially reduced to less nested if else statements
-				if ((block.getY() + newTranslateY) >= 0 && (block.getY() + newTranslateY + block.getHeight()) <= gridLength){ // if going out of left end of grid
-					double slideCorrection;
-					slideCorrection = newTranslateY - (newTranslateY % sLength);
-					if (newTranslateY % sLength >= (sLength/2)){
-						newTranslateY = slideCorrection + sLength;
-					}
-					else if (-(newTranslateY % sLength) >= (sLength/2)){
-						newTranslateY = slideCorrection - sLength;
-					}
-					else {
-						newTranslateY = slideCorrection;
-					}
-					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
-				}
+				// if ((offsetY > 0 && board.canMoveForward(v) > 0) || (offsetX > 0 && board.canMoveForward(v) > 0)){
+				// 	if (newTranslateY % sLength >= sLength / 2) {
+				// 		newTranslateY += sLength - (newTranslateY % sLength);
+				// 	}  else {
+				// 		newTranslateY -= (newTranslateY % sLength);
+				// 	}
+				// }
+			((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+
 	        }
 		}
 	};
