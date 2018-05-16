@@ -44,10 +44,10 @@ public class SceneManager extends Pane {
 		VBox buttons = sceneView.getGameButtons();
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
 			HBox gameButtons = (HBox) buttons.getChildren().get(i);
-			addGameButtonAction(gameButtons);
+			addGameButtonAction(gameButtons, difficulty);
 			
 		}
-		scenes.put("GAME", gameScene);
+		scenes.put(difficulty, gameScene);
 		sceneListener(gameScene);
 		return gameScene;
 	}
@@ -85,7 +85,7 @@ public class SceneManager extends Pane {
 		}
 		return scene;
 	}
-	public void addGameButtonAction(HBox buttons) {
+	public void addGameButtonAction(HBox buttons, String difficulty) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
@@ -102,6 +102,13 @@ public class SceneManager extends Pane {
 				case("HINTS"):
 					
 					break;
+				case("NEXT"):
+					b.setOnAction(e->changeScene(difficulty));
+					break;
+				case("PREVIOUS"):
+					b.setOnAction(e->changeScene(difficulty));
+					break;
+				
             }
 			
 		}
@@ -109,20 +116,33 @@ public class SceneManager extends Pane {
 	}
 
 	private void changeScene(String name) {
-		String sceneName = null;
-		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-			sceneName = "GAME";
-		}else {
-			sceneName = "MENU";
-		}
-		Scene scene = getScene(sceneName);
+		System.out.println("scene " +name);
+//		String sceneName = null;
+		
+//		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+//			sceneName = "GAME";
+//		}else {
+//			sceneName = "MENU";
+//		}
+//		
+//		Scene scene = getScene(sceneName);
+		//Scene scene = getScene(name);
+		Scene scene = scenes.get(name);
 		if(scene != null) {
-			sceneView.createPuzzle(name);
-			//stage.setScene(scene);
+			if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+				sceneView.createPuzzle(name);
+			}		
 		}else {
 			scene = createGameScene(name);
 			sceneView.createPuzzle(name);
 		}
+		
+		if(sceneWidth >= 900  && sceneHeight  >= 700) {
+			sceneView.bigGrid();
+		}else {
+			sceneView.smallGrid();
+		}
+		
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -144,10 +164,20 @@ public class SceneManager extends Pane {
 			}
 		}
 		
-		if(sceneWidth >= 900  && sceneHeight  >= 800) {
+		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			switch(key) {
-				case("GAME"):
-					sceneView.bigGameLayout();
+				case("EASY"):
+					//sceneView.bigGrid();
+					sceneView.bigGameLayout(key);
+					sceneView.bigGrid();
+					break;
+				case("MEDIUM"):
+					sceneView.bigGameLayout(key);
+					sceneView.bigGrid();
+					break;
+				case("HARD"):
+					sceneView.bigGameLayout(key);
+					sceneView.bigGrid();
 					break;
 				case("MENU"):
 					sceneView.bigMenuLayout();
@@ -156,8 +186,18 @@ public class SceneManager extends Pane {
 			
 		}else {
 			switch(key) {
-				case("GAME"):
-					sceneView.smallGameLayout();
+				case("EASY"):
+					//sceneView.smallGrid();
+					sceneView.smallGameLayout(key);	
+					sceneView.smallGrid();
+					break;
+				case("MEDIUM"):
+					sceneView.smallGameLayout(key);	
+					sceneView.smallGrid();
+					break;
+				case("HARD"):
+					sceneView.smallGameLayout(key);	
+					sceneView.smallGrid();
 					break;
 				case("MENU"):
 					sceneView.smallMenuLayout();
