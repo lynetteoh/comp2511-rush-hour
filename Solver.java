@@ -22,6 +22,7 @@ public class Solver  {
         }
         return false;
     }
+    
     public ArrayList<Move> solve() {
         PriorityQueue<Board> q = new PriorityQueue<Board>(10, solver);
         HashMap<String, Board> previousMoves = new HashMap<String, Board>();
@@ -75,7 +76,7 @@ public class Solver  {
     }
 
     private void print(Object x) {
-    	System.out.println(x.toString());
+    		System.out.println(x.toString());
     }
 
 

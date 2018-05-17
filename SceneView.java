@@ -39,6 +39,7 @@ public class SceneView extends Pane{
 	private Text scoreBoard;
 	private Group gameBoard;
 	private Grid grid;
+	
 	private int easyLevel;
 	private int mediumLevel;
 	private int hardLevel;
@@ -61,7 +62,7 @@ public class SceneView extends Pane{
 	
 	public VBox getMenuButtons() {
 		return menuButtons;
-	}
+	} 
 	
 	public VBox getGameButtons() {
 		return gameButtons;
