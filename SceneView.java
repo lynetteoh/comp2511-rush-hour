@@ -1,6 +1,8 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
 import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -31,30 +33,20 @@ import javafx.util.Pair;
 public class SceneView extends Pane{
 	private VBox menuButtons;
 	private AnchorPane menuLayout;
-	private Text gameTitle;
 	private double sceneWidth;
 	private double sceneHeight;
 	private VBox gameButtons;
 	private int gridLength;
-//	private AnchorPane easyGameLayout;
-//	private AnchorPane mediumGameLayout;
-//	private AnchorPane hardGameLayout;
 	private HashMap<String, AnchorPane> gameLayout;
-	//private AnchorPane gameLayout;
-	//private Text levelBoard;
 	private Text score;
 	private Pair<String, Group> gameBoard;
-	private Grid grid;
-	
+	private Grid grid;	
 	private int easyLevel;
 	private int mediumLevel;
 	private int hardLevel;
-	private int moves;
-//	private ArrayList<Group> easyBoards;
-//	private ArrayList<Group> mediumBoards;
-//	private ArrayList<Group> hardBoards;
 	private Board puzzle;
 	private ToggleButton menuMuteButton;
+	private AnchorPane currentGameLayout;
 	
 	
 	public SceneView (double width, double height) {
@@ -90,6 +82,9 @@ public class SceneView extends Pane{
 		return menuMuteButton;
 	}
 
+	public HashMap<String, AnchorPane> getGameLayout() {
+		return gameLayout;
+	}
 
 	public AnchorPane createMenu() {
 		//int btnWidth = 200;
@@ -101,7 +96,7 @@ public class SceneView extends Pane{
 				200, 30,
 				0, 30
 		);
-		gameTitle = createText("G R I D L O C K" , 48);
+		Text gameTitle = createText("G R I D L O C K" , 48);
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		gameTitle.setTextAlignment(TextAlignment.CENTER);
 		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
@@ -115,11 +110,9 @@ public class SceneView extends Pane{
 		Button exitBtn = createBtn("EXIT", polygon);
 		menuMuteButton = new ToggleButton("MUTE");
 		menuButtons.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
+		menuLayout.getChildren().addAll(background, gameTitle, menuButtons, menuMuteButton);
 		smallMenuLayout();
 		animation();
-		menuMuteButton.setTranslateX(sceneWidth-100);
-		menuMuteButton.setTranslateY(20);
-		menuLayout.getChildren().addAll(background, gameTitle, menuButtons, menuMuteButton);
 		return menuLayout;		
 	}
 	
@@ -170,14 +163,14 @@ public class SceneView extends Pane{
 			b.setFont(Font.font(25));
 			b.setPrefSize(300, 40);
 		}
-		
+		Text gameTitle = (Text) menuLayout.getChildren().get(1);
 		gameTitle.setFont(Font.font(70));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
 		gameTitle.setTranslateY(sceneHeight/4);
 		menuButtons.setTranslateX(sceneWidth/2 - titleWidth/2 + 100);
 		menuButtons.setTranslateY(sceneHeight/3 + 50);
-		menuMuteButton.setTranslateX(sceneWidth - 80);
+		menuMuteButton.setTranslateX(sceneWidth - 100);
 		menuMuteButton.setTranslateY(20);
 	}
 	
@@ -187,14 +180,14 @@ public class SceneView extends Pane{
 			b.setFont(Font.font(18));
 			b.setPrefSize(200, 30);
 		}
-		
+		Text gameTitle = (Text) menuLayout.getChildren().get(1);
 		gameTitle.setFont(Font.font(48));
 		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		gameTitle.setTranslateX(sceneWidth/2 - titleWidth/2);
 		gameTitle.setTranslateY(sceneHeight/4);
 		menuButtons.setTranslateX(sceneWidth/2 - 100);
 		menuButtons.setTranslateY(sceneHeight/3 + 50);
-		menuMuteButton.setTranslateX(sceneWidth - 80);
+		menuMuteButton.setTranslateX(sceneWidth - 100);
 		menuMuteButton.setTranslateY(20);
 	}
 	
@@ -203,6 +196,7 @@ public class SceneView extends Pane{
 		Text levelBoard = (Text) layout.getChildren().get(1);
 		Text scoreBoard = (Text) layout.getChildren().get(2);
 		gameButtons = (VBox) layout.getChildren().get(3);
+		ToggleButton mute = (ToggleButton) layout.getChildren().get(4);
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
@@ -212,6 +206,8 @@ public class SceneView extends Pane{
 			}
 			
 		}
+		mute.setTranslateX(sceneWidth - 100);
+		mute.setTranslateY(20);
 		gameButtons.setTranslateX(sceneWidth/2 - 150);
 		gameButtons.setTranslateY(sceneHeight/2 + 100);
 		levelBoard.setFont(Font.font(36));
@@ -227,6 +223,7 @@ public class SceneView extends Pane{
 		Text levelBoard = (Text) layout.getChildren().get(1);
 		Text scoreBoard = (Text) layout.getChildren().get(2);
 		gameButtons = (VBox) layout.getChildren().get(3);
+		ToggleButton mute = (ToggleButton) layout.getChildren().get(4);
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
@@ -235,7 +232,8 @@ public class SceneView extends Pane{
 	            b.setPrefSize(120, 20);			
 			}
 		}
-		
+		mute.setTranslateX(sceneWidth - 100);
+		mute.setTranslateY(20);
 		gameButtons.setTranslateX(sceneWidth/2);
 		gameButtons.setTranslateY(sceneHeight/2 + 50);
 		levelBoard.setFont(Font.font(24));
@@ -271,15 +269,16 @@ public class SceneView extends Pane{
 		gameButtonsHolder1.getChildren().addAll(homeBtn, resetBtn);
 		gameButtonsHolder2.getChildren().addAll(nextBtn, previousBtn);
 		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1, gameButtonsHolder2);
-		//mute = new ToggleButton("MUTE");
+		ToggleButton mute = new ToggleButton("MUTE");
+		if(menuMuteButton.isSelected()) {
+			mute.setSelected(true);
+			mute.setText("UNMUTE");
+		}
 		String Level = "Level : 0";
 		String Moves = "Moves : 0";
 		Text levelBoard = createText(Level, 24);
-		Text scoreBoard = createText(Moves, 24);
-		//mute.setTranslateX(sceneWidth-80);
-		//mute.setTranslateY(20);
-		
-		layout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons);
+		Text scoreBoard = createText(Moves, 24);	
+		layout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, mute);
 		gameLayout.put(difficulty, layout);
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			bigGameLayout(difficulty);
@@ -369,9 +368,8 @@ public class SceneView extends Pane{
 				levelBoard.setText(level);
 				grid = new Grid(g.RandomMediumGenerator(6), gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
-//				root.getChildren().addAll(grid.getBlockGroups());
+				root.getChildren().addAll(grid.getBlockGroups());
 				layout.getChildren().add(root);
-				//mediumBoards.add(root);
 				break;
 			case("HARD"):
 				hardLevel++;
@@ -382,11 +380,9 @@ public class SceneView extends Pane{
 				root.getChildren().addAll(grid.getGridSquares());
 //				root.getChildren().addAll(grid.getBlockGroups());
 				layout.getChildren().add(root);
-				//hardBoards.add(root);
 				break;
 		}
-//		root.setTranslateX(sceneWidth/2 + 20);
-//		root.setTranslateY(sceneHeight/5);
+		currentGameLayout = layout;
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		gameBoard = new Pair<String, Group>(difficulty, root);
 	}
@@ -526,16 +522,17 @@ public class SceneView extends Pane{
 			public void handle(MouseEvent t) {
 				int moves = grid.getMoves();
 				String Moves = "Moves : " + moves;
-//				String musicFile = "resource/click.mp3";    
-//				Media sound = new Media(new File(musicFile).toURI().toString());
-//				MediaPlayer effectMP = new MediaPlayer(sound);
-//				if(mute.isSelected()) {
-//					effectMP.stop();
-//				}else {
-//					effectMP.play();
-//				}
-				score.setText(Moves);
-				
+				Text score = (Text) currentGameLayout.getChildren().get(2);
+				ToggleButton mute = (ToggleButton) currentGameLayout.getChildren().get(4);
+				String musicFile = "resource/click.mp3";    
+				Media sound = new Media(new File(musicFile).toURI().toString());
+				MediaPlayer effectMP = new MediaPlayer(sound);
+				if(mute.isSelected()) {
+					effectMP.stop();
+				}else {
+					effectMP.play();
+				}
+				score.setText(Moves);				
 			}
 		};
 	
@@ -554,5 +551,7 @@ public class SceneView extends Pane{
 				layout.getChildren().remove(board);
 				break;
 		}	
-	}	
+	}
+	
+
 }

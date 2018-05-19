@@ -43,33 +43,7 @@ public class SceneManager extends Pane {
 	
 	public Scene createMenuScene() {
 		AnchorPane menuLayout = sceneView.createMenu();
-		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
-		VBox buttons = sceneView.getMenuButtons();
-		addMenuButtonAction(buttons);
-		addMedia();
-		backgroundMP.play();
-		scenes.put("MENU", menuScene);
-		sceneListener(menuScene);
-		return menuScene;
-	}
-	
-	public Scene createGameScene(String difficulty) {
-		AnchorPane gameLayout = sceneView.createGameLayout(difficulty);
-		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
-		VBox buttons = sceneView.getGameButtons();
-		for(int i = 0; i < buttons.getChildren().size(); i++) {
-			HBox gameButtons = (HBox) buttons.getChildren().get(i);
-			addGameButtonAction(gameButtons, difficulty);
-			
-		}
-		scenes.put(difficulty, gameScene);
-		sceneListener(gameScene);
-		return gameScene;
-	}
-
-	
-	private void addMenuButtonAction(VBox buttons) {
-		menuMuteButton = sceneView. getMenuMuteButton();
+		menuMuteButton = sceneView.getMenuMuteButton();
 		menuMuteButton.setOnAction(e->{
 			if(menuMuteButton.isSelected()) {
 				menuMuteButton.setText("UNMUTE");
@@ -79,6 +53,41 @@ public class SceneManager extends Pane {
 			playOrStopMusic();
 			
 		});
+		VBox buttons = sceneView.getMenuButtons();
+		addMenuButtonAction(buttons);
+		addMedia();
+		backgroundMP.play();
+		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
+		scenes.put("MENU", menuScene);
+		sceneListener(menuScene);
+		return menuScene;
+	}
+	
+	public Scene createGameScene(String difficulty) {
+		AnchorPane gameLayout = sceneView.createGameLayout(difficulty);
+		ToggleButton mute = (ToggleButton) gameLayout.getChildren().get(4);
+		mute.setOnAction(e->{
+			if(mute.isSelected()) {
+				mute.setText("UNMUTE");
+			}else {
+				mute.setText("MUTE");
+			}
+			muteMenu();
+			muteGame(difficulty);
+		});
+		VBox buttons = sceneView.getGameButtons();
+		for(int i = 0; i < buttons.getChildren().size(); i++) {
+			HBox gameButtons = (HBox) buttons.getChildren().get(i);
+			addGameButtonAction(gameButtons, difficulty);	
+		}
+		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
+		scenes.put(difficulty, gameScene);
+		sceneListener(gameScene);
+		return gameScene;
+	}
+
+	
+	private void addMenuButtonAction(VBox buttons) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
@@ -101,7 +110,7 @@ public class SceneManager extends Pane {
 	}
 	
 
-	public void addGameButtonAction(HBox buttons, String sceneName) {
+	public void addGameButtonAction(HBox buttons, String sceneName) {	
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
@@ -222,7 +231,7 @@ public class SceneManager extends Pane {
 	
 	public void playOrStopMusic() {
 		if(menuMuteButton.isSelected()) {
-			backgroundMP.pause();
+			backgroundMP.stop();
 		}else {
 			backgroundMP.play();
 		}
@@ -231,9 +240,37 @@ public class SceneManager extends Pane {
 	public void addMedia() {
 		String musicFile = "resource/backgroundMusic.mp3";
 		Media sound = new Media(new File(musicFile).toURI().toString());
-		backgroundMP = new MediaPlayer(sound);		
+		backgroundMP = new MediaPlayer(sound);
 	}
 	
+	public void muteGame(String sceneName) {
+		HashMap<String, AnchorPane> gameLayout = sceneView.getGameLayout();
+		for(Entry<String, AnchorPane> entry: gameLayout.entrySet()) {
+			if(entry.getKey().equals(sceneName)) {
+				continue;
+			}
+			AnchorPane layout = entry.getValue();
+			
+			ToggleButton mute = (ToggleButton) layout.getChildren().get(4);
+			if(mute.isSelected()) {
+				mute.setSelected(false);
+				mute.setText("MUTE");
+			}else {
+				mute.setSelected(true);
+				mute.setText("UNMUTE");
+			}
+		}
+	}
+	
+	public void muteMenu() {
+		if(menuMuteButton.isSelected()) {
+			menuMuteButton.setSelected(false);
+			menuMuteButton.setText("MUTE");
+		}else {
+			menuMuteButton.setSelected(true);
+			menuMuteButton.setText("UNMUTE");
+		}
+	}
 	
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
