@@ -13,7 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Shape;
+import java.lang.*;
 
 /*
 	*** Front-end equivalent of Board.java ***
@@ -37,11 +37,13 @@ public class Grid {
 	public static final String ANSI_CYAN = "\u001B[36m";
 
 	private ArrayList<Rectangle> gridSquares = new ArrayList<Rectangle>();
-    private ArrayList<Shape> blocks = new ArrayList<Shape>();
+    private ArrayList<Sprite> blocks = new ArrayList<Sprite>();
 	private double orgSceneX;
 	private double orgSceneY;
 	private double orgTranslateX;
 	private double orgTranslateY;
+	private double dragTranslate;
+	private double dragOffset;
 	private int gridLength;
 	private int sLength;
 	private Board board;
@@ -89,34 +91,16 @@ public class Grid {
 			dragNode.setOnMousePressed(OnMousePressedEventHandler);
 			System.out.println("newSprite: " + curr.getId());
 			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-			//dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
 		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
-	
+
 	public Sprite createSprite(int xPos, int yPos, int w, int h){
 		Sprite s = new Sprite(xPos, yPos, w, h);
 		this.blocks.add(s);
 		return s;
-	}
-	
-	private Boolean checkShapeIntersection(Shape block) {
-	  boolean collisionDetected = false;
-	  for (Shape static_bloc : this.blocks) {
-		if (static_bloc != block) {
-		  Shape intersect = Shape.intersect(block, static_bloc);
-		  if (intersect.getBoundsInLocal().getWidth() != -1) {
-			collisionDetected = true;
-		  }
-		}
-	  }
-	  if (collisionDetected) {
-		System.out.println(ANSI_RED + "[Collision detected]" + ANSI_RESET);
-	  } else {
-		System.out.println(ANSI_BLUE + "[Empty]" + ANSI_RESET);
-	  }
-	  return collisionDetected;
 	}
 
 	public ArrayList<Rectangle> getGridSquares(){
@@ -152,35 +136,69 @@ public class Grid {
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
 
-				if (block.getX() + newTranslateX < 0){ // if going out of left end of grid
-					if (block.getX() == 1){
-						newTranslateX = 0;
-					}
-					else {
-						newTranslateX += Math.abs(newTranslateX + block.getX() - 1);
+				if (offsetX > 0){
+					int maxMove = board.canMoveForward(v);
+					if (maxMove > 0) {
+						if (maxMove * sLength < offsetX) {
+							newTranslateX = orgTranslateX + maxMove * sLength;
+							dragTranslate = maxMove * sLength;
+						}
+						else {
+							dragTranslate = newTranslateX;
+						}
+
+						dragOffset = offsetX;
+						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					}
 				}
-				else if ((block.getX() + newTranslateX + block.getWidth()) > gridLength - 1){ // if going out of right end of grid
-					newTranslateX -= (block.getX() + newTranslateX + block.getWidth()) - gridLength + 1;
+				else if (offsetX < 0){
+					int maxMove = board.canMoveBackward(v);
+					if (maxMove > 0) {
+						if (maxMove * sLength < -offsetX) {
+							newTranslateX = orgTranslateX - maxMove * sLength;
+							dragTranslate = -maxMove * sLength;
+						}
+						else {
+							dragTranslate = newTranslateX;
+						}
+						dragOffset = offsetX;
+						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+					}
 				}
-				((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 			}
 			else {
 				double offsetY = t.getSceneY() - orgSceneY;
 				double newTranslateY = orgTranslateY + offsetY;
 
-				if ((block.getY() + newTranslateY) < 0){ // if going out of left end of grid
-					if (block.getY() == 1) {
-						newTranslateY = 0;
-					}
-					else {
-						newTranslateY += Math.abs(newTranslateY + block.getY() - 1);
+				if (offsetY > 0){
+					int maxMove = board.canMoveForward(v);
+					if (maxMove > 0) {
+						if (maxMove * sLength < offsetY) {
+							newTranslateY = orgTranslateY + maxMove * sLength;
+							// System.out.println("========MAX MOVE F " + maxMove + " ======");
+							dragTranslate = maxMove * sLength;
+						}
+						else {
+							dragTranslate = newTranslateY;
+						}
+						dragOffset = offsetY;
+						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 					}
 				}
-				else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength - 1){ // if going out of right end of grid
-					newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength + 1;
+				else if (offsetY < 0){
+					int maxMove = board.canMoveBackward(v);
+					if (maxMove > 0) {
+						if (maxMove * sLength < -offsetY) {
+							newTranslateY = orgTranslateY - maxMove * sLength;
+							dragTranslate = -maxMove * sLength;
+						}
+						else {
+							dragTranslate = newTranslateY;
+						}
+						dragOffset = offsetY;
+						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+					}
 				}
-				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);			
 			}
 		}
 	};
@@ -192,57 +210,99 @@ public class Grid {
 		public void handle(MouseEvent t) {
 			Sprite block = ((Sprite)((Group)t.getSource()).getChildren().get(0));
 			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
+			int moves = Math.abs((int)(dragTranslate/sLength));
+
+			board.printBoard();
+
+			if (moves > 0 && Math.abs(dragOffset) > sLength){ // dragTranslate >= sLength
+				if (dragOffset > 0){ // if dragging block forward
+					board.moveNSpaces(v, moves);
+					board.printBoard();
+				} else if (dragOffset < 0) { // if dragging block backward
+					board.moveNSpaces(v, -1*moves);
+					board.printBoard();
+				}
+			}
+			if (Math.abs(dragOffset) > Math.abs(dragTranslate) && Math.abs(dragOffset % sLength) != 0 && Math.abs(dragTranslate % sLength) != 0){ // dragTranslate < sLength - move once
+				moves = Math.abs((int)((Math.abs(dragOffset)-Math.abs(dragTranslate))/sLength));
+				if (dragOffset > 0){
+					board.moveNSpaces(v, moves);
+				}
+				else if (dragOffset < 0){
+					board.moveNSpaces(v, -1*moves);
+				}
+				board.printBoard();
+			}
 
 			if (v.getOrient() == 1){ // horizontal vehicles
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
 
-				// can be potentially reduced to less nested if else statements
-				if ((block.getX() + newTranslateX) >= 0 && (block.getX() + newTranslateX + block.getWidth()) <= gridLength){ // if going out of left end of grid
-					double slideCorrection;
-					slideCorrection = newTranslateX - (newTranslateX % sLength);
-					if (newTranslateX % sLength >= (sLength/2)){
-						newTranslateX = slideCorrection + sLength;
+				if (dragTranslate % sLength != 0.0){
+					if (offsetX >= 0){
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateX += sLength - Math.abs(dragOffset % sLength);
+							board.moveForward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateX -= Math.abs(dragOffset % sLength);
+						}
+						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+					} else if (dragOffset < 0) {
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
+							board.moveBackward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateX += Math.abs(dragOffset % sLength);
+						}
+						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					}
-					else if (-(newTranslateX % sLength) >= (sLength/2)){
-						newTranslateX = slideCorrection - sLength;
-					}
-					else {
-						newTranslateX = slideCorrection;
-					}
-					((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 				}
 			}
 			else {
 				double offsetY = t.getSceneY() - orgSceneY;
 				double newTranslateY = orgTranslateY + offsetY;
 
-				// can be potentially reduced to less nested if else statements
-				if ((block.getY() + newTranslateY) >= 0 && (block.getY() + newTranslateY + block.getHeight()) <= gridLength){ // if going out of left end of grid
-					double slideCorrection;
-					slideCorrection = newTranslateY - (newTranslateY % sLength);
-					if (newTranslateY % sLength >= (sLength/2)){
-						newTranslateY = slideCorrection + sLength;
-					}
-					else if (-(newTranslateY % sLength) >= (sLength/2)){
-						newTranslateY = slideCorrection - sLength;
-					}
-					else {
-						newTranslateY = slideCorrection;
+				if (dragTranslate % sLength != 0.0){
+					if (dragOffset >= 0){
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateY += sLength - Math.abs(dragOffset % sLength);
+							board.moveForward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateY -= Math.abs(dragOffset % sLength);
+						}
+					} else if (dragOffset < 0) {
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateY -= sLength - Math.abs(dragOffset % sLength);
+							board.moveBackward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateY += Math.abs(dragOffset % sLength);
+						}
 					}
 					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
-					
-									
 				}
-	        }			
+	        }
+			dragTranslate = 0;
+			dragOffset = 0;
+			// if (board.fin(v)){
+			// 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
+			// }
 		}
 	};
-		
+
+
 	public int getMoves() {
 		return board.getnMoves();
 	}
-	
+
 	public int getBoardSize() {
 		return board.getN();
 	}
@@ -250,7 +310,7 @@ public class Grid {
 	public int getsLength() {
 		return sLength;
 	}
-	
+
 	public void setsLength(int sLength) {
 		this.sLength = sLength;
 	}
