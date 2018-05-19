@@ -111,130 +111,9 @@ public class Generator {
 		return b;
 	}
 
-	public Board RandomHardGenerator1(int n) { 
-		
-		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
-		do {
-			System.out.println("Hard Generator");
-			int k = randNoCarsMedium();
-			System.out.println("The number of cars to set down: " +k);
-			b.clearVehicles();
-			b = new Board(n);
-			// set down most important car
-			placeFirstVehicle(b);
-			int set = 0; // the number of cars set down
-			while (set < k) {
-				if (placeRandCar(b)) {
-					set++;
-				}
-			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
-			
-			b.solve();
-			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps");
-		} while (!b.solve() || !(MEDIUM < nMoves));
-
-		return b;
-	}
 	
-	public Board RandomEasyGenerator2(int n) { 
-		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
-		do {
-			System.out.println("Easy Random Generator 2");
-			int k = randNoCarsEasy(); // the number of cars to set down
-			b.clearVehicles(); b = new Board(n);
-			placeFirstVehicle(b); // set down most important car
-			int set = 0; // the number of cars set down
-			while (set < k) {
-				if (placeRandCar2(b)) {
-					set++;
-				}
-			}
-			b.printBoard();
-			System.out.println("Random Board:");
-
-			b.printBoard();
-			b.solve();
-			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
-		} while (!b.solve() || !(MIN < nMoves && nMoves <= EASY));
-
-		return b;
-	}
-	
-	public Board RandomMediumGenerator2(int n) { 
-
-		int AttemptNo = 0; 
-		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
-		do {
-			System.out.println("Medium Random Generator 2");
-			b.clearVehicles(); b = new Board(n);
-			placeFirstVehicle(b); // set down most important car
-			b.solve(); nMoves = b.getSolution().size();
-			
-			while (!b.solve() || !(EASY < nMoves && nMoves <= MEDIUM)) {
-				if (placeRandCar2(b)) {
-				}
-			}
-			b.printBoard();
-			b.solve(); nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
-			AttemptNo++;
-		} while (!b.solve() || !(EASY < nMoves && nMoves <= MEDIUM));
-		System.out.println("AttemptNo :" + AttemptNo);
-		return b;
-	}
-	
-	public Board RandomMediumGenerator3(int n) { 
-		/** 
-		 * Boolean GoodBoard = false
-		 * Attempt DoLoop begin
-		 * Add firstVehicle.
-		 * while (steps taken < medium)
-		 * 	add vehicle 
-		 * 	check if solvable, exit if not 
-		 * Now that we have exited, we are either nt solveable, or fulfiled nSteps conditions
-		 * Attempt DoLoop end (while !goodboard)
-		 */
-		
-		boolean goodBoard = false;
-		int AttemptNo = 0; 
-		int nMoves = 0;
-		Board b = new Board(n);
-		do {
-			System.out.println("Medium Random Generator 3");
-			b = new Board(n); b.clearVehicles();
-			placeFirstVehicle(b); // set down most important car
-			while (!(EASY < nMoves && nMoves <= MEDIUM)) {
-				b.printBoard();
-				placeRandCar2(b); 
-				if (!(b.solve())) { // start from begining
-					break;
-				}
-				nMoves = b.getSolution().size();
-				b.clearMoves();
-			}
-			// out of while loop : either not solvable or goodBoard 
-			if (EASY < nMoves && nMoves <= MEDIUM) {
-				break;
-			}
-			System.out.println("nMoves: "+ nMoves);
-			AttemptNo++;
-		} while (!goodBoard);
-		System.out.println("AttemptNo :" + AttemptNo);
-		b.printBoard();
-		System.out.println("This puzzle is solvable in" + nMoves + "Steps");
-		return b;
-	}
-
 	// Ok generator : can produce a board in 1-5 Attempts
-	public Board RandomEasyGenerator4(int n) { 
+	public Board RandomEasyGenerator(int n) { 
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
@@ -265,7 +144,7 @@ public class Generator {
 	}
 
 	// ok Medium Generator : can produce a board in 1 - 20 Attempts
-	public Board RandomMediumGenerator4(int n) { 
+	public Board RandomMediumGenerator(int n) { 
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
@@ -295,7 +174,38 @@ public class Generator {
 		return b;
 	}
 
+	// Crappy Hard Generator: may take over 100 steps
+	public Board RandomHardGenerator(int n) { 
+		int AttemptNo = 0; 
+		Board b = new Board(n); // create new board with dimension n
+		int nMoves = 0;
+		do {
+			System.out.println("Hard Generator 4");
+			int k = randNoCarsHard();
+			System.out.println("The number of cars to TRY to set down: " + k);
+			b.clearVehicles();
+			b = new Board(n);
+			// set down most important car
+			placeFirstVehicle(b);
+			int set = 0; // the number of cars set down
+			while (set < k) { // try k times 
+				placeRandCar2(b);
+				set++;
+			}
+			b.printBoard();
+			System.out.println("Random Board:");
+			b.printBoard();
+			
+			b.solve();
+			nMoves = b.getSolution().size();
+			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
+			AttemptNo++;
+		} while (!b.solve() || !(MEDIUM < nMoves));
+		System.out.println("AttemptNo " + AttemptNo);
+		return b;
+	}
 
+	
 	public int randNoCarsEasy() { // return a random number of cars to set down
 		int k = ThreadLocalRandom.current().nextInt(10, 15);
 		return k;
@@ -304,6 +214,11 @@ public class Generator {
 	// also used for hard
 	public int randNoCarsMedium() { // return a random number of cars to set down
 		int k = ThreadLocalRandom.current().nextInt(12, 17);
+		return k;
+	}
+	
+	public int randNoCarsHard() { // return a random number of cars to set down
+		int k = ThreadLocalRandom.current().nextInt(17, 25);
 		return k;
 	}
 	
