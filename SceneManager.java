@@ -100,23 +100,8 @@ public class SceneManager extends Pane {
 		}
 	}
 	
-<<<<<<< HEAD
-	public void addGameButtonAction(HBox buttons, String sceneName) {
-		
-=======
-	public Scene getScene(String name) {
-		Scene scene = null;
-		for(Entry<String, Scene> entry: scenes.entrySet()){
-			if(entry.getKey().equals(name)) {
-				scene = entry.getValue();
-				break;
-			}
-		}
-		return scene;
-	}
 
-	public void addGameButtonAction(HBox buttons, String difficulty) {
->>>>>>> 5c6b022e25d4d01c64e658affa7dbeeae414d12d
+	public void addGameButtonAction(HBox buttons, String sceneName) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
