@@ -66,7 +66,7 @@ public class Board {
 		System.out.println("== Board ==");
 		for(int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				System.out.print(this.matrix[i][j] + " \t");
+				System.out.print(this.matrix[i][j] + " ");
 			}
 			System.out.println("");
 		}
@@ -508,10 +508,9 @@ public class Board {
 
 	// gives the coordinates of the door in (x,y)
 	public int[] getGoalPosition() { // n is the side of the board
-		int l = size-2;
-		int r = size-1;
+		int l = size-2; // left cell of goal position
+		int r = size-1; // right cell of goal position (cell adjacent to exit)
 		//int y = (n-1)/2;
-//		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
 		int[] coord = new int[] {l,r};
 		return coord;
 	}
@@ -520,15 +519,14 @@ public class Board {
 	// if v and board's door are overlapping, then player has finished the game.
 	public boolean fin(Vehicle v) {
 		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
-			int[] goalPosition = getGoalPosition();
-			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | Y: " + v.getPath());
-			System.out.println("\t" + this.matrix[goalPosition[0]][v.getPath()] + " | " + this.matrix[goalPosition[1]][v.getPath()]);
-			if (this.matrix[goalPosition[0]][v.getPath()] == 1 && this.matrix[goalPosition[1]][v.getPath()] == 1) {
-				System.out.println("Car is touching the door");
+			int[] goalPosition = getGoalPosition(); // the two cells the red car has to occupy (right next to the exit)
+			int[][] matrix = this.matrix;
+			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
+			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
+			if (matrix[goalPosition[0]][v.getPath()] == 1 && matrix[goalPosition[1]][v.getPath()] == 1) {
+				System.out.println("Car is touching the exit");
 				return true;
 			}
-		} else {
-			System.out.println("Error: Primary car must be vertical.");
 		}
 		return false;
 	}
