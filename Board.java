@@ -63,6 +63,7 @@ public class Board {
 		return false;
 	}
 	public void printBoard() {
+		System.out.println("== Board ==");
 		for(int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
