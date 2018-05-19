@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Vehicle {
@@ -20,6 +21,14 @@ public class Vehicle {
 		this.position = position;
 		this.length = position.length;
 	}
+	
+	@Override 
+	public String toString() { 
+		String s = "Id: " + id + "\n";
+		s += "Orient " + orient +"| Path:  " + path + "| Position: " + Arrays.toString(position) + "| Length: " + length + "\n";
+		return s;
+	}
+	
 	public boolean resetCount() {
 		count = new AtomicInteger(0);
 		return true;
@@ -47,6 +56,11 @@ public class Vehicle {
 	public int getLength()
 	{
 		return length;
+	}
+	
+	public int[] getAdjPath() { // get adjacent paths 
+		int[] AdjPaths = {position[0]-1, position[length-1]+1};
+		return AdjPaths;
 	}
 
 

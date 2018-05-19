@@ -85,6 +85,7 @@ public class SceneManager extends Pane {
 		}
 		return scene;
 	}
+
 	public void addGameButtonAction(HBox buttons, String difficulty) {
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);

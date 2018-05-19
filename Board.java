@@ -50,18 +50,8 @@ public class Board {
 		this.vehiclesList = b.getVehiclesList();
 		this.moves = (Stack<Move>) b.getMoves().clone();
 	}
+	
 
-	public static void main(String[] args) {
-		int size = Integer.parseInt(args[0]);
-		Board b = new Board(size);
-//		b.printBoard();
-
-		Generator g = new Generator();
-		b = g.RandomGenerator1(size);
-
-		b.solve();
-		System.out.println("Solved: \n" + b.getSolution());
-	}
 
 	public boolean solve() {
 		Solver s = new Solver(this);
@@ -73,7 +63,6 @@ public class Board {
 		return false;
 	}
 	public void printBoard() {
-		System.out.println("Board:");
 		for(int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				System.out.print(this.matrix[i][j] + " \t");
@@ -115,12 +104,17 @@ public class Board {
 		}
 		vehiclesList.add(v);
 	}
+	
 
 	public ArrayList<Move> getSolution() {
 		return solution;
 	}
 	public Stack<Move> getMoves() {
 		return moves;
+	}
+	
+	public void clearMoves() { 
+		moves.clear();
 	}
 	public static int getBoardId() {
 		return boardId;
@@ -170,6 +164,10 @@ public class Board {
 
 	public ArrayList<Vehicle> getVehiclesList() {
 		return vehiclesList;
+	}
+	
+	public Vehicle getLastVehicle() { 
+		return vehiclesList.get(vehiclesList.size()-1);
 	}
 
 	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
@@ -349,13 +347,30 @@ public class Board {
 
 	public boolean canPlaceVehicle(int orient, int path, int[] position)
 	{
+		
+		// initial check to make sure all paramters are correct 
+		if (!(orient == 1 || orient == 2)) { 
+			System.out.println("Invalid Orient");
+			return false;
+		} else if (!(0 <= path && path < size)) { 
+			System.out.println("Path out of bounds");
+			return false;	
+		} else { 
+			for (int i = 0; i < position.length; i++) { 
+				if (!(0 <= position[i] && position[i] < size)) { 
+					System.out.println("Position index out of bounds");
+					return false;
+				}
+			}
+		}
+		
 		int[][] matrix = this.matrix;
 
-		if(orient == 1)
-		{
+		if(orient == 1) 
+		{ // horizontal
 			for(int i : matrix[path])
 			{
-				System.out.print(i + " ");
+				//System.out.print(i + " ");
 			}
 			if(matrix[path][position[0]] == 0 && matrix[path][position[1]] == 0)
 			{
