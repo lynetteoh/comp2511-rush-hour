@@ -155,9 +155,6 @@ public class Grid {
 
 							dragOffset = offsetX;
 							((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
-							// System.out.println(ANSI_BLUE + "MOVE " + maxMove + ANSI_RESET);
-							// board.moveNSpaces(v, maxMove);
-							// board.printBoard();
 						}
 					}
 				else if (offsetX < 0){
@@ -228,38 +225,21 @@ public class Grid {
 				System.out.println("MAHTHHH " + moves);
 				board.printBoard();
 
-				// if ((block.getX() + block.getWidth() + offsetX) <= gridLength-1){
-				// 	System.out.println(ANSI_GREEN + "INNNER " + ANSI_RESET);
-				// }
-				// else {
-				// 	System.out.println(ANSI_RED + "OUTER " + ANSI_RESET);
-				// }
-
 				if (moves > 0){ // dragTranslate >= sLength
 					System.out.println(ANSI_PURPLE + "\t MOVEN" + ANSI_RESET);
 					if (offsetX > 0){ // if dragging block forward
 						board.moveNSpaces(v, moves);
-						// for (int i = 0; i < moves; i++){
-						// 	board.moveForward(v);
-						// }
-						//((Group)t.getSource()).getChildren().get(0).setTranslateX(dragTranslate);
-						//newTranslateX += dragTranslate;
 						System.out.println(ANSI_CYAN + "\t\tF [MAX MOVE FORWARD " + moves + " release]" + ANSI_RESET);
 					    board.printBoard();
 						System.out.println("FF==============================================================");
 					} else if (offsetX < 0) { // if dragging block backward
 						board.moveNSpaces(v, -1*moves);
-						//((Group)t.getSource()).getChildren().get(0).setTranslateX(dragTranslate);
-						// for (int i = 0; i < moves; i++){
-						// 	board.moveBackward(v);
-						// }
-						//newTranslateX -= dragTranslate;
 						System.out.println(ANSI_CYAN + "\t\tB [MAX MOVE BACK " + moves + " release]" + ANSI_RESET);
 						board.printBoard();
 						System.out.println("BB==============================================================");
 					}
 				}
-				else if (Math.abs(dragOffset) > Math.abs(moves)){ // dragTranslate < sLength - move once
+				else if (Math.abs(dragOffset) > Math.abs(dragTranslate) && (dragOffset % sLength) > 0){ // dragTranslate < sLength - move once
 					System.out.println(ANSI_BLUE + "\t\tNEEDS TO MOVES MORE" + ANSI_RESET);
 					if (offsetX > 0){
 						board.moveForward(v);
@@ -270,9 +250,6 @@ public class Grid {
 					board.printBoard();
 				}
 
-				if (dragOffset <= gridLength){
-					System.out.println(ANSI_CYAN + "\t\t DRAGG OFFSESETTTTT" + ANSI_RESET);
-				}
 				if (dragTranslate % sLength != 0.0){
 					System.out.println("MOD: " + (dragTranslate % sLength));
 					if (offsetX > 0){
