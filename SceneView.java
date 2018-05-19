@@ -278,6 +278,7 @@ public class SceneView extends Pane{
 		Text scoreBoard = createText(Moves, 24);
 		//mute.setTranslateX(sceneWidth-80);
 		//mute.setTranslateY(20);
+		
 		layout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons);
 		gameLayout.put(difficulty, layout);
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
@@ -351,7 +352,7 @@ public class SceneView extends Pane{
 		}
 		switch(difficulty) {
 			case("EASY"):
-				puzzle = g.RandomGenerator1(6);
+				puzzle = g.RandomEasyGenerator(6);
 				grid = new Grid(puzzle, gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
 				root.getChildren().addAll(grid.getBlockGroups());
@@ -366,7 +367,7 @@ public class SceneView extends Pane{
 				level = level + mediumLevel;
 				System.out.println(level);
 				levelBoard.setText(level);
-				grid = new Grid(g.RandomGenerator1(6), gridLength);
+				grid = new Grid(g.RandomMediumGenerator(6), gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
 //				root.getChildren().addAll(grid.getBlockGroups());
 				layout.getChildren().add(root);
@@ -377,7 +378,7 @@ public class SceneView extends Pane{
 				level = level + hardLevel;
 				levelBoard.setText(level);
 				System.out.println(level);
-				grid = new Grid(g.RandomGenerator1(6), gridLength);
+				//grid = new Grid(g.RandomGenerator1(6), gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
 //				root.getChildren().addAll(grid.getBlockGroups());
 				layout.getChildren().add(root);
