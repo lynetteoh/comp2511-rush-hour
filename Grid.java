@@ -1,7 +1,10 @@
 import javafx.scene.shape.Rectangle;
 import javafx.scene.Cursor;
 import javafx.stage.Screen;
+
 import java.util.ArrayList;
+import java.util.Stack;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.application.Application;
@@ -43,6 +46,7 @@ public class Grid {
 	private int sLength;
 	private Board board;
 	private ArrayList<Group> g = new ArrayList<Group>();
+
 
 
 	public Grid(Board b, int sLength){
@@ -90,7 +94,7 @@ public class Grid {
 		}
 		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
-
+	
 	public Sprite createSprite(int xPos, int yPos, int w, int h){
 		Sprite s = new Sprite(xPos, yPos, w, h);
 		this.blocks.add(s);
@@ -166,7 +170,7 @@ public class Grid {
 				double newTranslateY = orgTranslateY + offsetY;
 
 				if ((block.getY() + newTranslateY) < 0){ // if going out of left end of grid
-					if (block.getY() == 1){
+					if (block.getY() == 1) {
 						newTranslateY = 0;
 					}
 					else {
@@ -176,7 +180,7 @@ public class Grid {
 				else if ((block.getY() + newTranslateY + block.getHeight()) > gridLength - 1){ // if going out of right end of grid
 					newTranslateY -= (block.getY() + newTranslateY + block.getHeight()) - gridLength + 1;
 				}
-				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);			
 			}
 		}
 	};
@@ -228,11 +232,13 @@ public class Grid {
 						newTranslateY = slideCorrection;
 					}
 					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+					
+									
 				}
-	        }
+	        }			
 		}
 	};
-	
+		
 	public int getMoves() {
 		return board.getnMoves();
 	}
@@ -248,5 +254,8 @@ public class Grid {
 	public void setsLength(int sLength) {
 		this.sLength = sLength;
 	}
-	
+	public void setGridLength(int sLength) {
+		this.gridLength = sLength * board.getN();
+	}
+
 }

@@ -16,8 +16,8 @@ public class GridLock extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
-			screenMinWidth = 700;
-			screenMinHeight = 500;
+			screenMinWidth = 800;
+			screenMinHeight = 600;
 			screenMaxWidth = 1980;
 			screenMaxHeight = 1200;
 

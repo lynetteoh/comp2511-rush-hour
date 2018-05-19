@@ -1,16 +1,25 @@
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class SceneManager extends Pane {
@@ -19,27 +28,33 @@ public class SceneManager extends Pane {
 	private Stage stage;
 	private HashMap<String, Scene> scenes;
 	private SceneView sceneView;
+	private MediaPlayer backgroundMP;
+	private boolean playMusic;
+	private ToggleButton menuMuteButton;
+	
 	
 	public SceneManager(double width, double height, Stage stage) {
 		this.sceneWidth = width;
 		this.sceneHeight = height;
 		this.stage = stage;
 		this.scenes = new HashMap<String, Scene>();
-		this.sceneView = new SceneView(sceneWidth, sceneHeight);	
+		this.sceneView = new SceneView(sceneWidth, sceneHeight);
 	}
 	
 	public Scene createMenuScene() {
-		Parent menuLayout = sceneView.createMenu();
+		AnchorPane menuLayout = sceneView.createMenu();
 		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
 		VBox buttons = sceneView.getMenuButtons();
 		addMenuButtonAction(buttons);
+		addMedia();
+		backgroundMP.play();
 		scenes.put("MENU", menuScene);
 		sceneListener(menuScene);
 		return menuScene;
 	}
 	
 	public Scene createGameScene(String difficulty) {
-		Parent gameLayout = sceneView.createGameLayout(difficulty);
+		AnchorPane gameLayout = sceneView.createGameLayout(difficulty);
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
 		VBox buttons = sceneView.getGameButtons();
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
@@ -54,18 +69,28 @@ public class SceneManager extends Pane {
 
 	
 	private void addMenuButtonAction(VBox buttons) {
+		menuMuteButton = sceneView. getMenuMuteButton();
+		menuMuteButton.setOnAction(e->{
+			if(menuMuteButton.isSelected()) {
+				menuMuteButton.setText("UNMUTE");
+			}else {
+				menuMuteButton.setText("MUTE");
+			}
+			playOrStopMusic();
+			
+		});
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
 			switch(name) {
 				case("EASY"):
-					b.setOnAction(e->changeScene(name));
+					b.setOnAction(e->changeScene(name, b));
 					break;
 				case("MEDIUM"):
-					b.setOnAction(e->changeScene(name));
+					b.setOnAction(e->changeScene(name, b));
 					break;
 				case("HARD"):
-					b.setOnAction(e->changeScene(name));
+					b.setOnAction(e->changeScene(name, b));
 					break;
 				case("EXIT"):
 					b.setOnAction(e->closeProgram(stage));
@@ -75,17 +100,8 @@ public class SceneManager extends Pane {
 		}
 	}
 	
-	public Scene getScene(String name) {
-		Scene scene = null;
-		for(Entry<String, Scene> entry: scenes.entrySet()){
-			if(entry.getKey().equals(name)) {
-				scene = entry.getValue();
-				break;
-			}
-		}
-		return scene;
-	}
-	public void addGameButtonAction(HBox buttons, String difficulty) {
+	public void addGameButtonAction(HBox buttons, String sceneName) {
+		
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
@@ -97,16 +113,16 @@ public class SceneManager extends Pane {
 		
 					break;
 				case("HOME"):
-					b.setOnAction(e->changeScene("MENU"));
+					b.setOnAction(e->changeScene("MENU", b));
 					break;
 				case("HINTS"):
 					
 					break;
 				case("NEXT"):
-					b.setOnAction(e->changeScene(difficulty));
+					b.setOnAction(e->changeScene(sceneName, b));
 					break;
 				case("PREVIOUS"):
-					b.setOnAction(e->changeScene(difficulty));
+					b.setOnAction(e->changeScene(sceneName, b));
 					break;
 				
             }
@@ -114,27 +130,25 @@ public class SceneManager extends Pane {
 		}
 		
 	}
-
-	private void changeScene(String name) {
-		System.out.println("scene " +name);
-//		String sceneName = null;
-		
-//		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-//			sceneName = "GAME";
-//		}else {
-//			sceneName = "MENU";
-//		}
-//		
-//		Scene scene = getScene(sceneName);
-		//Scene scene = getScene(name);
+	
+	private void changeScene(String name, Button button) {
+		System.out.println("scene " + name);
+		Generator g = new Generator();
 		Scene scene = scenes.get(name);
 		if(scene != null) {
 			if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-				sceneView.createPuzzle(name);
-			}		
+				sceneView.createPuzzle(name, g);	
+			} 
 		}else {
 			scene = createGameScene(name);
-			sceneView.createPuzzle(name);
+			sceneView.createPuzzle(name, g);
+
+		}
+		
+		if(name.equals("MENU")) {
+			playOrStopMusic();
+		}else {
+			backgroundMP.stop();
 		}
 		
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
@@ -167,7 +181,6 @@ public class SceneManager extends Pane {
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			switch(key) {
 				case("EASY"):
-					//sceneView.bigGrid();
 					sceneView.bigGameLayout(key);
 					sceneView.bigGrid();
 					break;
@@ -187,7 +200,6 @@ public class SceneManager extends Pane {
 		}else {
 			switch(key) {
 				case("EASY"):
-					//sceneView.smallGrid();
 					sceneView.smallGameLayout(key);	
 					sceneView.smallGrid();
 					break;
@@ -207,6 +219,21 @@ public class SceneManager extends Pane {
 		}
 		
 	}
+	
+	public void playOrStopMusic() {
+		if(menuMuteButton.isSelected()) {
+			backgroundMP.pause();
+		}else {
+			backgroundMP.play();
+		}
+	}
+	
+	public void addMedia() {
+		String musicFile = "resource/backgroundMusic.mp3";
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		backgroundMP = new MediaPlayer(sound);		
+	}
+	
 	
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
