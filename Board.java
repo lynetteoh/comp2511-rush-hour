@@ -50,7 +50,7 @@ public class Board {
 		this.vehiclesList = b.getVehiclesList();
 		this.moves = (Stack<Move>) b.getMoves().clone();
 	}
-	
+
 
 
 	public boolean solve() {
@@ -104,7 +104,7 @@ public class Board {
 		}
 		vehiclesList.add(v);
 	}
-	
+
 
 	public ArrayList<Move> getSolution() {
 		return solution;
@@ -112,8 +112,8 @@ public class Board {
 	public Stack<Move> getMoves() {
 		return moves;
 	}
-	
-	public void clearMoves() { 
+
+	public void clearMoves() {
 		moves.clear();
 	}
 	public static int getBoardId() {
@@ -165,8 +165,8 @@ public class Board {
 	public ArrayList<Vehicle> getVehiclesList() {
 		return vehiclesList;
 	}
-	
-	public Vehicle getLastVehicle() { 
+
+	public Vehicle getLastVehicle() {
 		return vehiclesList.get(vehiclesList.size()-1);
 	}
 
@@ -216,7 +216,7 @@ public class Board {
 			nMoves++;
 			moves.add(new Move(v,-max));
 			return -nSpaces;
-		} 
+		}
 	}
 	public boolean moveForward(Vehicle v)
 	{
@@ -347,26 +347,26 @@ public class Board {
 
 	public boolean canPlaceVehicle(int orient, int path, int[] position)
 	{
-		
-		// initial check to make sure all paramters are correct 
-		if (!(orient == 1 || orient == 2)) { 
+
+		// initial check to make sure all paramters are correct
+		if (!(orient == 1 || orient == 2)) {
 			System.out.println("Invalid Orient");
 			return false;
-		} else if (!(0 <= path && path < size)) { 
+		} else if (!(0 <= path && path < size)) {
 			System.out.println("Path out of bounds");
-			return false;	
-		} else { 
-			for (int i = 0; i < position.length; i++) { 
-				if (!(0 <= position[i] && position[i] < size)) { 
+			return false;
+		} else {
+			for (int i = 0; i < position.length; i++) {
+				if (!(0 <= position[i] && position[i] < size)) {
 					System.out.println("Position index out of bounds");
 					return false;
 				}
 			}
 		}
-		
+
 		int[][] matrix = this.matrix;
 
-		if(orient == 1) 
+		if(orient == 1)
 		{ // horizontal
 			for(int i : matrix[path])
 			{
@@ -439,7 +439,7 @@ public class Board {
 
 		int counter = 0;
 		int[] array = getArray(v);
-		
+
 		//System.out.print("\tBackward: ");
 		//for(int i : array)
 		//	System.out.print(i + ", ");
@@ -502,6 +502,34 @@ public class Board {
 	public void setnMoves(int i) {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	// gives the coordinates of the door in (x,y)
+	public int[] getGoalPosition() { // n is the side of the board
+		int l = size-2;
+		int r = size-1;
+		//int y = (n-1)/2;
+//		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
+		int[] coord = new int[] {l,r};
+		return coord;
+	}
+
+	// function receives a vehicle and a Board
+	// if v and board's door are overlapping, then player has finished the game.
+	public boolean fin(Vehicle v) {
+		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
+			int[] goalPosition = getGoalPosition();
+			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | Y: " + v.getPath());
+			System.out.println("\t" + this.matrix[goalPosition[0]][v.getPath()] + " | " + this.matrix[goalPosition[1]][v.getPath()]);
+			if (this.matrix[goalPosition[0]][v.getPath()] == 1 && this.matrix[goalPosition[1]][v.getPath()] == 1) {
+				System.out.println("Car is touching the door");
+				return true;
+			}
+		} else {
+			System.out.println("Error: Primary car must be vertical.");
+		}
+		return false;
 	}
 
 }
