@@ -487,27 +487,26 @@ public class Board {
 	}
 
 	// gives the coordinates of the door in (x,y)
-	public int[] getDoor(int n) { // n is the side of the board
-		int x = n-1;
-		int y = (n-1)/2;
+	public int[] getGoalPosition() { // n is the side of the board
+		int l = size-2;
+		int r = size-1;
+		//int y = (n-1)/2;
 //		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
-		int[] coord = new int[] {x,y};
+		int[] coord = new int[] {l,r};
 		return coord;
 	}
 
 	// function receives a vehicle and a Board
 	// if v and board's door are overlapping, then player has finished the game.
-	public boolean fin(Vehicle v, int[] door) {
-
-		if (v.getOrient() == 1) { //horizontal car
-			int[] x_coord = v.getPosition();
-			int[] car_coords = {x_coord[1], v.getPath()};
-//			System.out.println("car coords: " + Arrays.toString(car_coords));
-			if (car_coords[0] == door[0] && car_coords[1] == door[1] ) {
-//				System.out.println("Car is touching the door");
+	public boolean fin(Vehicle v) {
+		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
+			int[] goalPosition = getGoalPosition();
+			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | Y: " + v.getPath());
+			System.out.println("\t" + this.matrix[goalPosition[0]][v.getPath()] + " | " + this.matrix[goalPosition[1]][v.getPath()]);
+			if (this.matrix[goalPosition[0]][v.getPath()] == 1 && this.matrix[goalPosition[1]][v.getPath()] == 1) {
+				System.out.println("Car is touching the door");
 				return true;
 			}
-
 		} else {
 			System.out.println("Error: Primary car must be vertical.");
 		}

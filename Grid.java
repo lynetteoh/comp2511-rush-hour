@@ -10,17 +10,9 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.shape.Shape;
 import java.lang.*;
 /*
 	*** Front-end equivalent of Board.java ***
-
-==> Functions that might be in here?
-		placeVehicle()
-		moveForward()
-		moveBackward()
-		canMove()
-		canPlaceVehicle()
 */
 
 public class Grid {
@@ -34,7 +26,7 @@ public class Grid {
 	public static final String ANSI_CYAN = "\u001B[36m";
 
 	private ArrayList<Rectangle> gridSquares = new ArrayList<Rectangle>();
-    private ArrayList<Shape> blocks = new ArrayList<Shape>();
+    private ArrayList<Sprite> blocks = new ArrayList<Sprite>();
 	private double orgSceneX;
 	private double orgSceneY;
 	private double orgTranslateX;
@@ -87,7 +79,7 @@ public class Grid {
 			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
-		//System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
+		//// System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
 
 	public Sprite createSprite(int xPos, int yPos, int w, int h){
@@ -102,17 +94,6 @@ public class Grid {
 
 	public ArrayList<Group> getBlockGroups(){
 		return this.g;
-	}
-
-	public boolean isGoalState(Vehicle v){
-		if (v.getId() == 1){
-			if (board.fin(v, board.getDoor(board.getN()))){
-				System.out.println(ANSI_BLUE + "\t Congrats!" + ANSI_RESET);
-				return true;
-			}
-			return false;
-		}
-		return false;
 	}
 
 	EventHandler<MouseEvent> OnMousePressedEventHandler =
@@ -145,13 +126,11 @@ public class Grid {
 					if (maxMove > 0) {
 						if (maxMove * sLength < offsetX) {
 							newTranslateX = orgTranslateX + maxMove * sLength;
-							System.out.println("========MAX MOVE F " + maxMove + " ======");
 							dragTranslate = maxMove * sLength;
 						}
 						else {
 							dragTranslate = newTranslateX;
 						}
-						System.out.println(ANSI_BLUE + "DRAG: : " + dragTranslate + " | " + "N: " + newTranslateX + ANSI_RESET);
 
 						dragOffset = offsetX;
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
@@ -162,13 +141,11 @@ public class Grid {
 					if (maxMove > 0) {
 						if (maxMove * sLength < -offsetX) {
 							newTranslateX = orgTranslateX - maxMove * sLength;
-							System.out.println("========MAX MOVE B " + maxMove + " ======");
 							dragTranslate = -maxMove * sLength;
 						}
 						else {
 							dragTranslate = newTranslateX;
 						}
-						System.out.println(ANSI_BLUE + "DRAG:: " + dragTranslate + " | " + "N: " + newTranslateX + ANSI_RESET);
 						dragOffset = offsetX;
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					}
@@ -183,14 +160,12 @@ public class Grid {
 					if (maxMove > 0) {
 						if (maxMove * sLength < offsetY) {
 							newTranslateY = orgTranslateY + maxMove * sLength;
-							System.out.println("========MAX MOVE F " + maxMove + " ======");
+							// System.out.println("========MAX MOVE F " + maxMove + " ======");
 							dragTranslate = maxMove * sLength;
 						}
 						else {
 							dragTranslate = newTranslateY;
 						}
-						System.out.println(ANSI_BLUE + "DRAG: : " + dragTranslate + " | " + "N: " + newTranslateY + ANSI_RESET);
-
 						dragOffset = offsetY;
 						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 					}
@@ -200,13 +175,11 @@ public class Grid {
 					if (maxMove > 0) {
 						if (maxMove * sLength < -offsetY) {
 							newTranslateY = orgTranslateY - maxMove * sLength;
-							System.out.println("========MAX MOVE B " + maxMove + " ======");
 							dragTranslate = -maxMove * sLength;
 						}
 						else {
 							dragTranslate = newTranslateY;
 						}
-						System.out.println(ANSI_BLUE + "DRAG:: " + dragTranslate + " | " + "N: " + newTranslateY + ANSI_RESET);
 						dragOffset = offsetY;
 						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 					}
@@ -224,26 +197,19 @@ public class Grid {
 			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
 			int moves = Math.abs((int)(dragTranslate/sLength));
 
-			System.out.println("MAHTHHH " + moves);
 			board.printBoard();
 
 			if (moves > 0 && Math.abs(dragOffset) > sLength){ // dragTranslate >= sLength
-				System.out.println(ANSI_PURPLE + "\t MOVEN" + ANSI_RESET);
 				if (dragOffset > 0){ // if dragging block forward
 					board.moveNSpaces(v, moves);
-					System.out.println(ANSI_CYAN + "\t\tF [MAX MOVE FORWARD " + moves + " release]" + ANSI_RESET);
 					board.printBoard();
-					System.out.println("FF==============================================================");
 				} else if (dragOffset < 0) { // if dragging block backward
 					board.moveNSpaces(v, -1*moves);
-					System.out.println(ANSI_CYAN + "\t\tB [MAX MOVE BACK " + moves + " release]" + ANSI_RESET);
 					board.printBoard();
-					System.out.println("BB==============================================================");
 				}
 			}
 			if (Math.abs(dragOffset) > Math.abs(dragTranslate) && Math.abs(dragOffset % sLength) != 0 && Math.abs(dragTranslate % sLength) != 0){ // dragTranslate < sLength - move once
 				moves = Math.abs((int)((Math.abs(dragOffset)-Math.abs(dragTranslate))/sLength));
-				System.out.println(ANSI_BLUE + "\t\tNEEDS TO MOVES MORE: " + moves + ANSI_RESET);
 				if (dragOffset > 0){
 					board.moveNSpaces(v, moves);
 				}
@@ -257,86 +223,63 @@ public class Grid {
 
 				double offsetX = t.getSceneX() - orgSceneX;
 				double newTranslateX = orgTranslateX + offsetX;
-				System.out.println(ANSI_RED + "DRAG_TRANS: " + dragTranslate + " | " + (dragTranslate % sLength) + ANSI_RESET);
-				System.out.println(ANSI_BLUE + "RELEASE: O: " + orgTranslateX + " | " + "N: " + newTranslateX + " OS: " + orgSceneX + ANSI_RESET);
-				System.out.println(ANSI_PURPLE + "DRAGOFF: " + dragOffset + " | OFF: " + offsetX + " | TT: " + (block.getX() + block.getWidth() + offsetX) + ANSI_RESET);
-
-
-
-
 
 				if (dragTranslate % sLength != 0.0){
-					System.out.println("MOD: " + (dragTranslate % sLength));
 					if (offsetX >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX += sLength - Math.abs(dragOffset % sLength);
 							board.moveForward(v);
-							System.out.println(ANSI_BLUE + "[updated release]" + ANSI_RESET);
 							board.printBoard();
 						}
 						else {
 								newTranslateX -= Math.abs(dragOffset % sLength);
 						}
-						System.out.println(ANSI_RED + "AA|RELEASE: O: " + orgTranslateX + " | " + "N: " + newTranslateX + " OS: " + orgSceneX + ANSI_RESET);
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
 							board.moveBackward(v);
-							System.out.println(ANSI_RED + "B [updated release]" + ANSI_RESET);
 							board.printBoard();
 						}
 						else {
-							System.out.println(ANSI_GREEN + "[NOCHANGE release]" + ANSI_RESET);
 								newTranslateX += Math.abs(dragOffset % sLength);
 						}
-						System.out.println(ANSI_RED + "AA|RELEASE: O: " + orgTranslateX + " | " + "N: " + newTranslateX + " OS: " + orgSceneX + ANSI_RESET);
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
 					}
-					else {
-						System.out.println("SPECIALLLLLLLLLLLLL");
-					}
 				}
-				dragTranslate = 0;
-				dragOffset = 0;
-		}
-		else {
-			double offsetY = t.getSceneY() - orgSceneY;
-			double newTranslateY = orgTranslateY + offsetY;
-			System.out.println(ANSI_RED + "DRAG_TRANS: " + dragTranslate + " | " + (dragTranslate % sLength) + ANSI_RESET);
-			System.out.println(ANSI_BLUE + "RELEASE: O: " + orgTranslateY + " | " + "N: " + newTranslateY + " OS: " + orgSceneY + ANSI_RESET);
-			System.out.println(ANSI_PURPLE + "DRAGOFF: " + dragOffset + " | OFF: " + offsetY + " | TT: " + (block.getY() + block.getHeight() + offsetY) + ANSI_RESET);
-
-			if (dragTranslate % sLength != 0.0){
-				System.out.println("MOD: " + (dragTranslate % sLength));
-				if (dragOffset >= 0){
-					if (Math.abs(dragOffset % sLength) >= sLength / 2) {
-						newTranslateY += sLength - Math.abs(dragOffset % sLength);
-						board.moveForward(v);
-						System.out.println(ANSI_BLUE + "[updated release]" + ANSI_RESET);
-						board.printBoard();
-					}
-					else {
-							newTranslateY -= Math.abs(dragOffset % sLength);
-					}
-				} else if (dragOffset < 0) {
-					if (Math.abs(dragOffset % sLength) >= sLength / 2) {
-						newTranslateY -= sLength - Math.abs(dragOffset % sLength);
-						board.moveBackward(v);
-						System.out.println(ANSI_RED + "B [updated release]" + ANSI_RESET);
-						board.printBoard();
-					}
-					else {
-						System.out.println(ANSI_GREEN + "[NOCHANGE release]" + ANSI_RESET);
-							newTranslateY += Math.abs(dragOffset % sLength);
-					}
-				}
-				System.out.println(ANSI_RED + "AA|RELEASE: O: " + orgTranslateY + " | " + "N: " + newTranslateY + " OS: " + orgSceneY + ANSI_RESET);
-				((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
 			}
-			dragTranslate = 0;
+			else {
+				double offsetY = t.getSceneY() - orgSceneY;
+				double newTranslateY = orgTranslateY + offsetY;
 
-        }
+				if (dragTranslate % sLength != 0.0){
+					if (dragOffset >= 0){
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateY += sLength - Math.abs(dragOffset % sLength);
+							board.moveForward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateY -= Math.abs(dragOffset % sLength);
+						}
+					} else if (dragOffset < 0) {
+						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
+							newTranslateY -= sLength - Math.abs(dragOffset % sLength);
+							board.moveBackward(v);
+							board.printBoard();
+						}
+						else {
+								newTranslateY += Math.abs(dragOffset % sLength);
+						}
+					}
+					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+				}
+	        }
+			dragTranslate = 0;
+			dragOffset = 0;
+			// if (board.fin(v)){
+			// 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
+			// }
 		}
 	};
 
