@@ -85,7 +85,7 @@ public class Grid {
 			dragNode.setOnMousePressed(OnMousePressedEventHandler);
 			System.out.println("newSprite: " + curr.getId());
 			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			//dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
 		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
@@ -96,7 +96,7 @@ public class Grid {
 		this.blocks.add(s);
 		return s;
 	}
-
+	
 	private Boolean checkShapeIntersection(Shape block) {
 	  boolean collisionDetected = false;
 	  for (Shape static_bloc : this.blocks) {
@@ -236,4 +236,17 @@ public class Grid {
 	public int getMoves() {
 		return board.getnMoves();
 	}
+	
+	public int getBoardSize() {
+		return board.getN();
+	}
+
+	public int getsLength() {
+		return sLength;
+	}
+	
+	public void setsLength(int sLength) {
+		this.sLength = sLength;
+	}
+	
 }
