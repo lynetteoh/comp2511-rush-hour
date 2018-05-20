@@ -175,6 +175,9 @@ public class Board {
 	}
 	// undo the last move taken by the board
 	public Move undo () {
+		if(moves.size() < 1) {
+			return null;
+		}
 		Move lastMove = moves.pop();
 		if (lastMove == null) {
 			return null;

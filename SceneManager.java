@@ -290,11 +290,11 @@ public class SceneManager extends Pane {
 		if(v.getOrient() == 1) {
 			double value = s.getX() - direction*gridLength;
 			s.setX(value);
-			System.out.println(value);
+			
 		} else {
 			double value = s.getY() - direction*gridLength; 
 			s.setY(value);
-			System.out.println(value);
+			
 		}
 		
 	}
