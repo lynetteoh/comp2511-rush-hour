@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -116,7 +117,7 @@ public class SceneManager extends Pane {
 			String name = b.getText();
 			switch(name) {
 				case("UNDO"):
-				
+					b.setOnAction(e->undo());
 					break;
 				case("RESET"):
 		
@@ -270,6 +271,31 @@ public class SceneManager extends Pane {
 			menuMuteButton.setSelected(true);
 			menuMuteButton.setText("UNMUTE");
 		}
+	}
+	
+	public void undo() {
+		Board puzzle = sceneView.getPuzzle();
+		Move m = puzzle.undo();
+		Vehicle v = m.getVehicle();
+		int id = v.getId();
+		int direction = m.getDirection();
+		Grid grid = sceneView.getGrid();
+		ArrayList vehicles = grid.getBlockGroups();
+		Group vehicle = (Group) vehicles.get(id-1);
+		Sprite s = (Sprite) vehicle.getChildren().get(0);
+		int gridLength = sceneView.getGridLength();
+		if(v.getOrient() == 1) {
+			double value = s.getX() - direction*gridLength; 
+			System.out.println(value);
+			
+			s.setX(value);
+			System.out.println(value);
+		} else {
+			double value = s.getY() + direction*gridLength; 
+			s.setY(value);
+			System.out.println(value);
+		}
+		
 	}
 	
 	public void sceneListener(Scene scene) {

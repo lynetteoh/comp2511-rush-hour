@@ -114,7 +114,7 @@ public class Grid {
 			Sprite newSprite;
 			if (curr.getOrient() == 1){ // horizontal
 				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
-				System.out.println(sLength);		
+				
 				if (curr.getId() == 1){ // first vehicle - always the red car
 					newSprite.setFill(Color.RED);
 				}
@@ -324,6 +324,7 @@ public class Grid {
 			// if (board.fin(v)){
 			// 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 			// }
+			
 		}
 	};
 

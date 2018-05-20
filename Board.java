@@ -174,10 +174,10 @@ public class Board {
 		this.vehiclesList = vehiclesList;
 	}
 	// undo the last move taken by the board
-	public boolean undo () {
+	public Move undo () {
 		Move lastMove = moves.pop();
 		if (lastMove == null) {
-			return false;
+			return null;
 		}
 		Vehicle v = lastMove.getVehicle();
 		int direction = lastMove.getDirection();
@@ -190,11 +190,11 @@ public class Board {
 			moveNSpaces(v, -1*direction);
 			moves.pop();
 		} else {
-			return false;
+			return null;
 		}
 //		printBoard();
 		nMoves-= 2;
-		return true;
+		return lastMove;
 	}
 	public int moveNSpaces(Vehicle v, int nSpaces) {
 		if (nSpaces == 0) {

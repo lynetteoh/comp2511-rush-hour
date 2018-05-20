@@ -84,6 +84,18 @@ public class SceneView extends Pane{
 
 	public HashMap<String, AnchorPane> getGameLayout() {
 		return gameLayout;
+	}	
+
+	public Board getPuzzle() {
+		return puzzle;
+	}
+
+	public Grid getGrid() {
+		return grid;
+	}
+
+	public int getGridLength() {
+		return gridLength;
 	}
 
 	public AnchorPane createMenu() {
@@ -363,10 +375,11 @@ public class SceneView extends Pane{
 				break;
 			case("MEDIUM"):
 				mediumLevel++; 
+				puzzle = g.RandomMediumGenerator(6);
 				level = level + mediumLevel;
 				System.out.println(level);
 				levelBoard.setText(level);
-				grid = new Grid(g.RandomMediumGenerator(6), gridLength);
+				grid = new Grid(puzzle, gridLength);
 				root.getChildren().addAll(grid.getGridSquares());
 				root.getChildren().addAll(grid.getBlockGroups());
 				layout.getChildren().add(root);
@@ -493,6 +506,7 @@ public class SceneView extends Pane{
 			i++;
 		}
 		vehicles.clear();
+		System.out.println(vehicles.size());
 		grid.placeVehicle(b);
 		root.getChildren().addAll(gridSquares);
 		root.getChildren().addAll(vehicles);
