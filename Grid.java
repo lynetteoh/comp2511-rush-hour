@@ -88,12 +88,10 @@ public class Grid {
 			}
 			dragNode.getChildren().add(newSprite);
 			dragNode.setOnMousePressed(OnMousePressedEventHandler);
-			System.out.println("newSprite: " + curr.getId());
 			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
 			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
 			this.g.add(dragNode);
 		}
-		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
 
 	public Sprite createSprite(int xPos, int yPos, int w, int h){
