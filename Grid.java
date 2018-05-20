@@ -79,7 +79,6 @@ public class Grid {
 			Sprite newSprite;
 			if (curr.getOrient() == 1){ // horizontal
 				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
-
 				if (curr.getId() == 1){ // first vehicle - always the red car
 					newSprite.setFill(Color.RED);
 				}
@@ -99,6 +98,7 @@ public class Grid {
 
 	public Sprite createSprite(int xPos, int yPos, int w, int h){
 		Sprite s = new Sprite(xPos, yPos, w, h);
+		s.setColor();
 		this.blocks.add(s);
 		return s;
 	}
