@@ -145,15 +145,13 @@ public class SceneManager extends Pane {
 		System.out.println("scene " + name);
 		Generator g = new Generator();
 		Scene scene = scenes.get(name);
-		if(scene != null) {
-			if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-				sceneView.createPuzzle(name, g);	
-			} 
-		}else {
+		if(scene == null) {
 			scene = createGameScene(name);
-			sceneView.createPuzzle(name, g);
-
 		}
+		
+		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+			sceneView.createPuzzle(name, g);	
+		} 
 		
 		if(name.equals("MENU")) {
 			playOrStopMusic();
