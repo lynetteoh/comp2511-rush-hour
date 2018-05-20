@@ -395,6 +395,10 @@ public class SceneView extends Pane{
 		//double size = gridLength;
 		grid.setsLength((int)size);
 		grid.setGridLength((int) size);
+		Board b = grid.getBoard();
+//		Group board = (Group) gameBoard.getValue();
+		String difficulty = gameBoard.getKey();
+		Group root = new Group();
 		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
 		ArrayList<Group> vehicles = grid.getBlockGroups();
 		for(Rectangle r: gridSquares) {
@@ -409,16 +413,20 @@ public class SceneView extends Pane{
 			xPos += size;
 			i++;
 		}
-		
+		//System.out.println(grid.getsLength());
+		vehicles.clear();
+		grid.placeVehicle(b);
+		root.getChildren().addAll(gridSquares);
+		root.getChildren().addAll(vehicles);
 //		for(int j = 0; j < vehicles.size(); j++) {
 //			Group g = vehicles.get(j);
 //			Sprite s = (Sprite) g.getChildren().get(0);
-////			int xPosVehicles = (int) ((s.getX()/gridLength)*size);
-////			int yPosVehicles = (int) ((s.getY()/gridLength)*size);
+//			int xPosVehicles = (int) ((s.getX()/gridLength)*size);
+//			int yPosVehicles = (int) ((s.getY()/gridLength)*size);
 //			double x = s.getTranslateX() + s.getX();
 //			double y = s.getTranslateY() + s.getY();
-////			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
-////			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
+//			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
+//			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
 //			int xPosVehicles = (int) (x/gridLength);
 //			int yPosVehicles = (int) (y/gridLength);
 //			if(s.getWidth() > s.getHeight()) {	//horizontal
@@ -439,18 +447,24 @@ public class SceneView extends Pane{
 //					s.setWidth(size-2);
 //				}
 //			}
-//			s.setX(xPosVehicles*size+1);
-//			s.setY(yPosVehicles*size+1);
-////			System.out.println("x " + (xPosVehicles+1));
-////			System.out.println(s.getX());
-////			System.out.println("y" + (yPosVehicles+1));
-////			System.out.println(s.getY());
+//			s.setX(xPosVehicles+1);
+//			s.setY(yPosVehicles+1);
+//			System.out.println("x " + (xPosVehicles+1));
+//			System.out.println(s.getX());
+//			System.out.println("y" + (yPosVehicles+1));
+//			System.out.println(s.getY());
 //		}
-		Group board = (Group) gameBoard.getValue();
-		board.setTranslateX(sceneWidth/2 + 20);
-		board.setTranslateY(sceneHeight/5);
 		
-	}
+//		board.setTranslateX(sceneWidth/2 + 20);
+//		board.setTranslateY(sceneHeight/5);
+		root.setTranslateX(sceneWidth/2 + 20);
+		root.setTranslateY(sceneHeight/5);
+		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+		gameBoard = new Pair<String, Group>(difficulty, root);
+		currentGameLayout.getChildren().remove(5);
+		currentGameLayout.getChildren().add(root);
+		
+	}	
 	
 	public void smallGrid() {
 		double xPos = 0;
@@ -460,6 +474,9 @@ public class SceneView extends Pane{
 		double orgGridLength = grid.getsLength();
 		grid.setsLength((int)size);
 		grid.setGridLength((int) size);
+		Board b = grid.getBoard();
+		String difficulty = gameBoard.getKey();
+		Group root = new Group();
 		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
 		ArrayList<Group> vehicles = grid.getBlockGroups();
 		
@@ -475,7 +492,10 @@ public class SceneView extends Pane{
 			xPos += size;
 			i++;
 		}
-		
+		vehicles.clear();
+		grid.placeVehicle(b);
+		root.getChildren().addAll(gridSquares);
+		root.getChildren().addAll(vehicles);
 //		for(Group g: vehicles) {
 //			Sprite s = (Sprite) g.getChildren().get(0);
 //			double x = s.getTranslateX() + s.getX();
@@ -510,9 +530,16 @@ public class SceneView extends Pane{
 ////			System.out.print(s.getY());
 //		}
 		
-		Group board = (Group) gameBoard.getValue();
-		board.setTranslateX(sceneWidth/2 + 20);
-		board.setTranslateY(sceneHeight/5);
+//		Group board = (Group) gameBoard.getValue();
+//		board.setTranslateX(sceneWidth/2 + 20);
+//		board.setTranslateY(sceneHeight/5);
+		root.setTranslateX(sceneWidth/2 + 20);
+		root.setTranslateY(sceneHeight/5);
+		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+		gameBoard = new Pair<String, Group>(difficulty, root);
+		currentGameLayout.getChildren().remove(5);
+		currentGameLayout.getChildren().add(root);
+		
 		
 	}
 	
