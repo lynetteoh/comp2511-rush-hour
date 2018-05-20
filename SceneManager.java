@@ -276,6 +276,9 @@ public class SceneManager extends Pane {
 	public void undo() {
 		Board puzzle = sceneView.getPuzzle();
 		Move m = puzzle.undo();
+		if(m == null) {
+			return;
+		}
 		Vehicle v = m.getVehicle();
 		int id = v.getId();
 		int direction = m.getDirection();
