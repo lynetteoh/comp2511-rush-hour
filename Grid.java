@@ -241,7 +241,7 @@ public class Grid {
 					if (offsetX >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX += sLength - Math.abs(dragOffset % sLength);
-							board.moveForward(v);
+							board.moveNSpaces(v, 1);
 							// board.printBoard();
 						}
 						else {
@@ -251,7 +251,7 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
-							board.moveBackward(v);
+							board.moveNSpaces(v, -1);
 							// board.printBoard();
 						}
 						else {
@@ -269,7 +269,7 @@ public class Grid {
 					if (dragOffset >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY += sLength - Math.abs(dragOffset % sLength);
-							board.moveForward(v);
+							board.moveNSpaces(v, 1);
 							// board.printBoard();
 						}
 						else {
@@ -278,7 +278,7 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY -= sLength - Math.abs(dragOffset % sLength);
-							board.moveBackward(v);
+							board.moveNSpaces(v, -1);
 							// board.printBoard();
 						}
 						else {
