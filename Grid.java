@@ -178,6 +178,7 @@ public class Grid {
 
 						dragOffset = offsetX;
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+						
 					}
 				}
 				else if (offsetX < 0){
@@ -192,6 +193,7 @@ public class Grid {
 						}
 						dragOffset = offsetX;
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+						
 					}
 				}
 			}
@@ -212,6 +214,7 @@ public class Grid {
 						}
 						dragOffset = offsetY;
 						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+					
 					}
 				}
 				else if (offsetY < 0){
@@ -226,6 +229,7 @@ public class Grid {
 						}
 						dragOffset = offsetY;
 						((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+						
 					}
 				}
 			}
@@ -277,13 +281,15 @@ public class Grid {
 //							board.printBoard();
 
 							board.moveNSpaces(v, 1);
-							board.printBoard();
+//							board.printBoard();
 
 						}
 						else {
 								newTranslateX -= Math.abs(dragOffset % sLength);
 						}
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+						System.out.println(((Group)t.getSource()).getChildren().get(0).getTranslateX());
+						System.out.println(block.getX());
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
@@ -292,13 +298,15 @@ public class Grid {
 //							board.printBoard();
 
 							board.moveNSpaces(v, -1);
-							board.printBoard();
+//							board.printBoard();
 
 						}
 						else {
 								newTranslateX += Math.abs(dragOffset % sLength);
 						}
 						((Group)t.getSource()).getChildren().get(0).setTranslateX(newTranslateX);
+						System.out.println(((Group)t.getSource()).getChildren().get(0).getTranslateX());
+						System.out.println(block.getX());
 					}
 				}
 			}
@@ -315,7 +323,7 @@ public class Grid {
 //							board.printBoard();
 
 							board.moveNSpaces(v, 1);
-							board.printBoard();
+//							board.printBoard();
 
 						}
 						else {
@@ -329,7 +337,7 @@ public class Grid {
 //							board.printBoard();
 
 							board.moveNSpaces(v, -1);
-							board.printBoard();
+//							board.printBoard();
 
 						}
 						else {
@@ -337,6 +345,8 @@ public class Grid {
 						}
 					}
 					((Group)t.getSource()).getChildren().get(0).setTranslateY(newTranslateY);
+					System.out.println(((Group)t.getSource()).getChildren().get(0).getTranslateY());
+					System.out.println(block.getY());
 				}
 	        }
 			dragTranslate = 0;

@@ -286,15 +286,16 @@ public class SceneManager extends Pane {
 		int gridLength = sceneView.getGridLength();
 		System.out.println("length " + (direction*gridLength));
 		if(v.getOrient() == 1) {
-			double value =  s.getX() - (direction*gridLength);
-			System.out.println(s.getX());
-			s.setX(value);
-			System.out.println(s.getX());
+			double value = s.getTranslateX() - direction*gridLength;
+			System.out.println(s.getTranslateX());
+			s.setTranslateX(value);
+			System.out.println("previous position: " + s.getTranslateX());
 			
 		} else {
-			double value = s.getY() - (direction*gridLength); 
-			System.out.println(s.getY());
-			s.setY(value);	
+			double value =  s.getTranslateY() - direction*gridLength; 
+			System.out.println(s.getTranslateY());
+			s.setTranslateY(value);	
+			System.out.println("previous position: " + s.getTranslateY());
 		}
 		sceneView.updateMove();
 		puzzle.printBoard();
