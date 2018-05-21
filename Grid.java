@@ -324,7 +324,6 @@ public class Grid {
 			// if (board.fin(v)){
 			// 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 			// }
-
 		}
 	};
 
