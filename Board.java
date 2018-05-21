@@ -12,6 +12,9 @@ public class Board {
 	private ArrayList<Vehicle> vehiclesList = new ArrayList<Vehicle>();
 	private ArrayList<Move> solution = new ArrayList<Move>();
 	private Stack<Move> moves = new Stack<Move>();
+	public static ArrayList<Board> boards;
+	private int level;
+	private int[][] initialBoard;
 
 
 	public Board(int size) {
@@ -25,6 +28,9 @@ public class Board {
 		}
 		this.id = boardId;
 		boardId += 1;
+		boards.add(this);
+		this.level = boards.indexOf(this);
+		this.initialBoard = this.matrix;
 	}
 
 	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
@@ -33,6 +39,9 @@ public class Board {
 		this.size = size;
 		this.vehiclesList = vehicles;
 		this.nMoves = 0;
+		boards.add(this);
+		this.level = boards.indexOf(this);
+		this.initialBoard = this.matrix;
 	}
 	public Board(Board b)
 	{
@@ -49,10 +58,46 @@ public class Board {
 		this.nMoves = b.getnMoves();
 		this.vehiclesList = b.getVehiclesList();
 		this.moves = (Stack<Move>) b.getMoves().clone();
+		boards.add(this);
+		this.level = boards.indexOf(this);
+		this.initialBoard = this.matrix;
 	}
 
+	public int[][] resetBoard()
+	{
+		return this.getInitialBoard();
+	}
 
-
+	public Board getPreviousBoard()
+	{
+		if(this.level > 0)
+		{
+			return getBoards().get(this.level - 1);
+		}
+		else
+			return null;
+	}
+	
+	public Board getNextBoard()
+	{
+		if(this.level < getBoards().size() + 1)
+		{
+			return getBoards().get(this.level + 1);
+		}
+		else
+			return null;
+	}
+	
+	public int getLevel()
+	{
+		return this.level;
+	}
+	
+	public ArrayList<Board> getBoards()
+	{
+		return boards;
+	}
+	
 	public boolean solve() {
 		Solver s = new Solver(this);
 		ArrayList<Move> solution = s.solve();
@@ -104,8 +149,19 @@ public class Board {
 			}
 		}
 		vehiclesList.add(v);
+		setInitialBoard(matrix);
+		
 	}
 
+	public void setInitialBoard(int[][] matrix)
+	{
+		this.initialBoard = matrix;
+	}
+	
+	public int[][] getInitialBoard()
+	{
+		return this.initialBoard;
+	}
 
 	public ArrayList<Move> getSolution() {
 		return solution;
