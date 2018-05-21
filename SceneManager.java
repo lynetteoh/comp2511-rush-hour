@@ -142,7 +142,6 @@ public class SceneManager extends Pane {
 	}
 	
 	private void changeScene(String name, Button button) {
-		System.out.println("scene " + name);
 		Generator g = new Generator();
 		Scene scene = scenes.get(name);
 		if(scene == null) {
@@ -285,16 +284,21 @@ public class SceneManager extends Pane {
 		Group vehicle = (Group) vehicles.get(id-1);
 		Sprite s = (Sprite) vehicle.getChildren().get(0);
 		int gridLength = sceneView.getGridLength();
+		System.out.println("length " + (direction*gridLength));
 		if(v.getOrient() == 1) {
-			double value = s.getX() - direction*gridLength;
+			double value =  s.getX() - (direction*gridLength);
+			System.out.println(s.getX());
 			s.setX(value);
+			System.out.println(s.getX());
 			
 		} else {
-			double value = s.getY() - direction*gridLength; 
-			s.setY(value);
-			
+			double value = s.getY() - (direction*gridLength); 
+			System.out.println(s.getY());
+			s.setY(value);	
 		}
-		
+		sceneView.updateMove();
+		puzzle.printBoard();
+		System.out.println("");
 	}
 	
 	public void sceneListener(Scene scene) {
