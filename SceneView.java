@@ -220,13 +220,13 @@ public class SceneView extends Pane{
 		}
 		mute.setTranslateX(sceneWidth - 100);
 		mute.setTranslateY(20);
-		gameButtons.setTranslateX(sceneWidth/2 - 150);
+		gameButtons.setTranslateX(sceneWidth/2 - 100);
 		gameButtons.setTranslateY(sceneHeight/2 + 100);
 		levelBoard.setFont(Font.font(36));
-		levelBoard.setTranslateX(sceneWidth/2 - 450);
+		levelBoard.setTranslateX(sceneWidth/2 - 400);
 		levelBoard.setTranslateY(sceneHeight/4);
 		scoreBoard.setFont(Font.font(36));
-		scoreBoard.setTranslateX(sceneWidth/2 - 450);
+		scoreBoard.setTranslateX(sceneWidth/2 - 400);
 		scoreBoard.setTranslateY(sceneHeight/4 + 100);
 	}
 	
@@ -398,184 +398,192 @@ public class SceneView extends Pane{
 		currentGameLayout = layout;
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		gameBoard = new Pair<String, Group>(difficulty, root);
+		root.setTranslateX(sceneWidth/2 + 20);
+		root.setTranslateY(sceneHeight/5);
 	}
 	
 	public void bigGrid() {
-		double xPos = 0;
-		double yPos = 0;
-		int i = 0;
-		double size = gridLength*1.5;
-		//double size = gridLength;
-		grid.setsLength((int)size);
-		grid.setGridLength((int) size);
-		Board b = grid.getBoard();
-//		Group board = (Group) gameBoard.getValue();
-		String difficulty = gameBoard.getKey();
-		Group root = new Group();
-		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
-		ArrayList<Group> vehicles = grid.getBlockGroups();
-		for(Rectangle r: gridSquares) {
-			if (i % grid.getBoardSize() == 0 && i != 0){
-				xPos = 0;
-				yPos += size;
-			}
-			r.setWidth(size);
-			r.setHeight(size);
-			r.setX(xPos);
-			r.setY(yPos);
-			xPos += size;
-			i++;
-		}
-		//System.out.println(grid.getsLength());
-		vehicles.clear();
-		grid.placeVehicle(b);
-		root.getChildren().addAll(gridSquares);
-		root.getChildren().addAll(vehicles);
-//		for(int j = 0; j < vehicles.size(); j++) {
-//			Group g = vehicles.get(j);
-//			Sprite s = (Sprite) g.getChildren().get(0);
-//			int xPosVehicles = (int) ((s.getX()/gridLength)*size);
-//			int yPosVehicles = (int) ((s.getY()/gridLength)*size);
-//			double x = s.getTranslateX() + s.getX();
-//			double y = s.getTranslateY() + s.getY();
-//			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
-//			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
-//			int xPosVehicles = (int) (x/gridLength);
-//			int yPosVehicles = (int) (y/gridLength);
-//			if(s.getWidth() > s.getHeight()) {	//horizontal
-//				if(s.getWidth() <  gridLength*3-2) {	//car
-//					s.setWidth(size*2-2);
-//					s.setHeight(size-2);
-//				}else {
-//					s.setWidth(size*3-2);
-//					s.setHeight(size-2);
-//				}
-//				
-//			}else {
-//				if(s.getWidth() < gridLength*3-2) {
-//					s.setHeight(size*2-2);
-//					s.setWidth(size-2);
-//				}else {
-//					s.setHeight(size*3-2);
-//					s.setWidth(size-2);
-//				}
+//		double xPos = 0;
+//		double yPos = 0;
+//		int i = 0;
+//		double size = gridLength*1.5;
+//		//double size = gridLength;
+//		grid.setsLength((int)size);
+//		grid.setGridLength((int) size);
+//		Board b = grid.getBoard();
+		Group board = (Group) gameBoard.getValue();
+//		String difficulty = gameBoard.getKey();
+//		Group root = new Group();
+//		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
+//		ArrayList<Group> vehicles = grid.getBlockGroups();
+//		for(Rectangle r: gridSquares) {
+//			if (i % grid.getBoardSize() == 0 && i != 0){
+//				xPos = 0;
+//				yPos += size;
 //			}
-//			s.setX(xPosVehicles+1);
-//			s.setY(yPosVehicles+1);
-//			System.out.println("x " + (xPosVehicles+1));
-//			System.out.println(s.getX());
-//			System.out.println("y" + (yPosVehicles+1));
-//			System.out.println(s.getY());
+//			r.setWidth(size);
+//			r.setHeight(size);
+//			r.setX(xPos);
+//			r.setY(yPos);
+//			xPos += size;
+//			i++;
 //		}
-		
-//		board.setTranslateX(sceneWidth/2 + 20);
-//		board.setTranslateY(sceneHeight/5);
-		root.setTranslateX(sceneWidth/2 + 20);
-		root.setTranslateY(sceneHeight/5);
-		root.setOnMouseReleased(OnMouseReleasedEventHandler);
-		gameBoard = new Pair<String, Group>(difficulty, root);
-		currentGameLayout.getChildren().remove(5);
-		currentGameLayout.getChildren().add(root);
-		
+//		//System.out.println(grid.getsLength());
+//		vehicles.clear();
+//		grid.placeVehicle(b);
+//		root.getChildren().addAll(gridSquares);
+//		root.getChildren().addAll(vehicles);
+////		for(int j = 0; j < vehicles.size(); j++) {
+////			Group g = vehicles.get(j);
+////			Sprite s = (Sprite) g.getChildren().get(0);
+////			int xPosVehicles = (int) ((s.getX()/gridLength)*size);
+////			int yPosVehicles = (int) ((s.getY()/gridLength)*size);
+////			double x = s.getTranslateX() + s.getX();
+////			double y = s.getTranslateY() + s.getY();
+////			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
+////			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
+////			int xPosVehicles = (int) (x/gridLength);
+////			int yPosVehicles = (int) (y/gridLength);
+////			if(s.getWidth() > s.getHeight()) {	//horizontal
+////				if(s.getWidth() <  gridLength*3-2) {	//car
+////					s.setWidth(size*2-2);
+////					s.setHeight(size-2);
+////				}else {
+////					s.setWidth(size*3-2);
+////					s.setHeight(size-2);
+////				}
+////				
+////			}else {
+////				if(s.getWidth() < gridLength*3-2) {
+////					s.setHeight(size*2-2);
+////					s.setWidth(size-2);
+////				}else {
+////					s.setHeight(size*3-2);
+////					s.setWidth(size-2);
+////				}
+////			}
+////			s.setX(xPosVehicles+1);
+////			s.setY(yPosVehicles+1);
+////			System.out.println("x " + (xPosVehicles+1));
+////			System.out.println(s.getX());
+////			System.out.println("y" + (yPosVehicles+1));
+////			System.out.println(s.getY());
+////		}
+//		
+		board.setTranslateX(sceneWidth/2 + 20);
+		board.setTranslateY(sceneHeight/5);
+//		root.setTranslateX(sceneWidth/2 + 20);
+//		root.setTranslateY(sceneHeight/5);
+//		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+//		gameBoard = new Pair<String, Group>(difficulty, root);
+//		currentGameLayout.getChildren().remove(5);
+//		currentGameLayout.getChildren().add(root);
+//		
 	}	
 	
 	public void smallGrid() {
-		double xPos = 0;
-		double yPos = 0;
-		int i = 0;
-		double size = gridLength;
-		double orgGridLength = grid.getsLength();
-		grid.setsLength((int)size);
-		grid.setGridLength((int) size);
-		Board b = grid.getBoard();
-		String difficulty = gameBoard.getKey();
-		Group root = new Group();
-		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
-		ArrayList<Group> vehicles = grid.getBlockGroups();
-		
-		for(Rectangle r: gridSquares) {
-			if (i % grid.getBoardSize() == 0 && i != 0){
-				xPos = 0;
-				yPos += size;
-			}
-			r.setWidth(size);
-			r.setHeight(size);
-			r.setX(xPos);
-			r.setY(yPos);
-			xPos += size;
-			i++;
-		}
-		vehicles.clear();
-		System.out.println(vehicles.size());
-		grid.placeVehicle(b);
-		root.getChildren().addAll(gridSquares);
-		root.getChildren().addAll(vehicles);
-//		for(Group g: vehicles) {
-//			Sprite s = (Sprite) g.getChildren().get(0);
-//			double x = s.getTranslateX() + s.getX();
-//			double y = s.getTranslateY() + s.getY();
-////			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
-////			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
-//			int xPosVehicles = (int) (x/orgGridLength);
-//			int yPosVehicles = (int) (y/orgGridLength);
-//			if(s.getWidth() > s.getHeight()) {	//horizontal
-//				if(s.getWidth() < orgGridLength*3-2) {	//car
-//					s.setWidth(size*2-2);
-//					s.setHeight(size-2);
-//				}else {
-//					s.setWidth(size*3-2);
-//					s.setHeight(size-2);
-//				}
-//				
-//			}else {
-//				if(s.getWidth() < orgGridLength*3-2) {
-//					s.setHeight(size*2-2);
-//					s.setWidth(size-2);
-//				}else {
-//					s.setHeight(size*3-2);
-//					s.setWidth(size-2);
-//				}
+//		double xPos = 0;
+//		double yPos = 0;
+//		int i = 0;
+//		double size = gridLength;
+//		double orgGridLength = grid.getsLength();
+//		grid.setsLength((int)size);
+//		grid.setGridLength((int) size);
+//		Board b = grid.getBoard();
+//		String difficulty = gameBoard.getKey();
+//		Group root = new Group();
+//		ArrayList<Rectangle> gridSquares = grid.getGridSquares();
+//		ArrayList<Group> vehicles = grid.getBlockGroups();
+//		
+//		for(Rectangle r: gridSquares) {
+//			if (i % grid.getBoardSize() == 0 && i != 0){
+//				xPos = 0;
+//				yPos += size;
 //			}
-//			s.setX(xPosVehicles*size+1);
-//			s.setY(yPosVehicles*size+1);
-////			System.out.println("x " + (xPosVehicles*size+1.0));
-////			System.out.println(s.getX());
-////			System.out.println((yPosVehicles*size+1.0));
-////			System.out.print(s.getY());
+//			r.setWidth(size);
+//			r.setHeight(size);
+//			r.setX(xPos);
+//			r.setY(yPos);
+//			xPos += size;
+//			i++;
 //		}
-		
-//		Group board = (Group) gameBoard.getValue();
-//		board.setTranslateX(sceneWidth/2 + 20);
-//		board.setTranslateY(sceneHeight/5);
-		root.setTranslateX(sceneWidth/2 + 20);
-		root.setTranslateY(sceneHeight/5);
-		root.setOnMouseReleased(OnMouseReleasedEventHandler);
-		gameBoard = new Pair<String, Group>(difficulty, root);
-		currentGameLayout.getChildren().remove(5);
-		currentGameLayout.getChildren().add(root);
-		
-		
+//		vehicles.clear();
+//		System.out.println(vehicles.size());
+//		grid.placeVehicle(b);
+//		root.getChildren().addAll(gridSquares);
+//		root.getChildren().addAll(vehicles);
+////		for(Group g: vehicles) {
+////			Sprite s = (Sprite) g.getChildren().get(0);
+////			double x = s.getTranslateX() + s.getX();
+////			double y = s.getTranslateY() + s.getY();
+//////			int xPosVehicles = (int) (s.getTranslateX()/orgGridLength);
+//////			int yPosVehicles = (int) (s.getTranslateY()/orgGridLength);
+////			int xPosVehicles = (int) (x/orgGridLength);
+////			int yPosVehicles = (int) (y/orgGridLength);
+////			if(s.getWidth() > s.getHeight()) {	//horizontal
+////				if(s.getWidth() < orgGridLength*3-2) {	//car
+////					s.setWidth(size*2-2);
+////					s.setHeight(size-2);
+////				}else {
+////					s.setWidth(size*3-2);
+////					s.setHeight(size-2);
+////				}
+////				
+////			}else {
+////				if(s.getWidth() < orgGridLength*3-2) {
+////					s.setHeight(size*2-2);
+////					s.setWidth(size-2);
+////				}else {
+////					s.setHeight(size*3-2);
+////					s.setWidth(size-2);
+////				}
+////			}
+////			s.setX(xPosVehicles*size+1);
+////			s.setY(yPosVehicles*size+1);
+//////			System.out.println("x " + (xPosVehicles*size+1.0));
+//////			System.out.println(s.getX());
+//////			System.out.println((yPosVehicles*size+1.0));
+//////			System.out.print(s.getY());
+////		}
+//		
+		Group board = (Group) gameBoard.getValue();
+		board.setTranslateX(sceneWidth/2 + 20);
+		board.setTranslateY(sceneHeight/5);
+//		root.setTranslateX(sceneWidth/2 + 20);
+//		root.setTranslateY(sceneHeight/5);
+//		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+//		gameBoard = new Pair<String, Group>(difficulty, root);
+//		currentGameLayout.getChildren().remove(5);
+//		currentGameLayout.getChildren().add(root);
+//		
+//		
 	}
-	
+//	
 	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
 			new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent t) {
-				int moves = grid.getMoves();
-				String Moves = "Moves : " + moves;
-				Text score = (Text) currentGameLayout.getChildren().get(2);
-				ToggleButton mute = (ToggleButton) currentGameLayout.getChildren().get(4);
 				String musicFile = "resource/click.mp3";    
 				Media sound = new Media(new File(musicFile).toURI().toString());
 				MediaPlayer effectMP = new MediaPlayer(sound);
+				ToggleButton mute = (ToggleButton) currentGameLayout.getChildren().get(4);
 				if(mute.isSelected()) {
 					effectMP.stop();
 				}else {
 					effectMP.play();
 				}
-				score.setText(Moves);				
+				updateMove();
+							
 			}
 		};
+		
+
+	public void updateMove() {
+		int moves = grid.getMoves();
+		String Moves = "Moves: " + moves;
+		Text score = (Text) currentGameLayout.getChildren().get(2);
+		score.setText(Moves);	
+	}
 	
 	public void removeBoard() {	
 		String difficulty = (String) gameBoard.getKey();

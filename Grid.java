@@ -122,14 +122,14 @@ public class Grid {
 			else {
 				newSprite = this.createSprite(curr.getPath()*sLength+1, curr.getPosition()[0]*sLength+1, sLength-2, curr.getLength()*sLength-2);
 			}
-				dragNode.getChildren().add(newSprite);
-				dragNode.setOnMousePressed(OnMousePressedEventHandler);
-				System.out.println("newSprite: " + curr.getId());
-				dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
-				dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
-				this.g.add(dragNode);
-			}
-			System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
+			dragNode.getChildren().add(newSprite);
+			dragNode.setOnMousePressed(OnMousePressedEventHandler);
+			System.out.println("newSprite: " + curr.getId());
+			dragNode.setOnMouseDragged(OnMouseDraggedEventHandler);
+			dragNode.setOnMouseReleased(OnMouseReleasedEventHandler);
+			this.g.add(dragNode);
+		}
+		System.out.println(ANSI_BLUE + "\t DONE" + ANSI_RESET);
 	}
 
 	public ArrayList<Rectangle> getGridSquares(){
@@ -241,15 +241,15 @@ public class Grid {
 			Vehicle v = board.getVehiclesList().get(g.indexOf(((Group)t.getSource())));
 			int moves = Math.abs((int)(dragTranslate/sLength));
 
-			board.printBoard();
+			//board.printBoard();
 
 			if (moves > 0 && Math.abs(dragOffset) > sLength){ // dragTranslate >= sLength
 				if (dragOffset > 0){ // if dragging block forward
 					board.moveNSpaces(v, moves);
-					board.printBoard();
+					//board.printBoard();
 				} else if (dragOffset < 0) { // if dragging block backward
 					board.moveNSpaces(v, -1*moves);
-					board.printBoard();
+					//board.printBoard();
 				}
 			}
 			if (Math.abs(dragOffset) > Math.abs(dragTranslate) && Math.abs(dragOffset % sLength) != 0 && Math.abs(dragTranslate % sLength) != 0){ // dragTranslate < sLength - move once
@@ -260,7 +260,7 @@ public class Grid {
 				else if (dragOffset < 0){
 					board.moveNSpaces(v, -1*moves);
 				}
-				board.printBoard();
+//				board.printBoard();
 			}
 
 			if (v.getOrient() == 1){ // horizontal vehicles
@@ -272,8 +272,13 @@ public class Grid {
 					if (offsetX >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX += sLength - Math.abs(dragOffset % sLength);
+
+//							board.moveForward(v);
+//							board.printBoard();
+
 							board.moveNSpaces(v, 1);
 							board.printBoard();
+
 						}
 						else {
 								newTranslateX -= Math.abs(dragOffset % sLength);
@@ -282,8 +287,13 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
+
+//							board.moveBackward(v);
+//							board.printBoard();
+
 							board.moveNSpaces(v, -1);
 							board.printBoard();
+
 						}
 						else {
 								newTranslateX += Math.abs(dragOffset % sLength);
@@ -300,8 +310,13 @@ public class Grid {
 					if (dragOffset >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY += sLength - Math.abs(dragOffset % sLength);
+
+//							board.moveForward(v);
+//							board.printBoard();
+
 							board.moveNSpaces(v, 1);
 							board.printBoard();
+
 						}
 						else {
 								newTranslateY -= Math.abs(dragOffset % sLength);
@@ -309,8 +324,13 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY -= sLength - Math.abs(dragOffset % sLength);
+
+//							board.moveBackward(v);
+//							board.printBoard();
+
 							board.moveNSpaces(v, -1);
 							board.printBoard();
+
 						}
 						else {
 								newTranslateY += Math.abs(dragOffset % sLength);
@@ -321,9 +341,13 @@ public class Grid {
 	        }
 			dragTranslate = 0;
 			dragOffset = 0;
-			// if (board.fin(v)){
-			// 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
-			// }
+
+//			 if (board.fin(v)){
+//			 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
+//			 }
+			board.printBoard();
+			System.out.println(" ");
+
 		}
 	};
 
