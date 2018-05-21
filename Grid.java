@@ -82,7 +82,7 @@ public class Grid {
 //			Sprite newSprite;
 //			if (curr.getOrient() == 1){ // horizontal
 //				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
-//				
+//
 //				if (curr.getId() == 1){ // first vehicle - always the red car
 //					newSprite.setFill(Color.RED);
 //				}
@@ -105,7 +105,7 @@ public class Grid {
 		this.blocks.add(s);
 		return s;
 	}
-	
+
 	public void placeVehicle(Board b) {
 		// creates sprites equivalent to their vehicle counterpart
 		for (int i=0; i < b.getVehiclesList().size(); i++){
@@ -114,7 +114,7 @@ public class Grid {
 			Sprite newSprite;
 			if (curr.getOrient() == 1){ // horizontal
 				newSprite = this.createSprite(curr.getPosition()[0]*sLength+1, curr.getPath()*sLength+1, curr.getLength()*sLength-2, sLength-2);
-				
+
 				if (curr.getId() == 1){ // first vehicle - always the red car
 					newSprite.setFill(Color.RED);
 				}
@@ -272,8 +272,13 @@ public class Grid {
 					if (offsetX >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX += sLength - Math.abs(dragOffset % sLength);
-							board.moveForward(v);
+
+//							board.moveForward(v);
 //							board.printBoard();
+
+							board.moveNSpaces(v, 1);
+							board.printBoard();
+
 						}
 						else {
 								newTranslateX -= Math.abs(dragOffset % sLength);
@@ -282,8 +287,13 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateX -= sLength - Math.abs(dragOffset % sLength);
-							board.moveBackward(v);
+
+//							board.moveBackward(v);
 //							board.printBoard();
+
+							board.moveNSpaces(v, -1);
+							board.printBoard();
+
 						}
 						else {
 								newTranslateX += Math.abs(dragOffset % sLength);
@@ -300,8 +310,13 @@ public class Grid {
 					if (dragOffset >= 0){
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY += sLength - Math.abs(dragOffset % sLength);
-							board.moveForward(v);
+
+//							board.moveForward(v);
 //							board.printBoard();
+
+							board.moveNSpaces(v, 1);
+							board.printBoard();
+
 						}
 						else {
 								newTranslateY -= Math.abs(dragOffset % sLength);
@@ -309,8 +324,13 @@ public class Grid {
 					} else if (dragOffset < 0) {
 						if (Math.abs(dragOffset % sLength) >= sLength / 2) {
 							newTranslateY -= sLength - Math.abs(dragOffset % sLength);
-							board.moveBackward(v);
+
+//							board.moveBackward(v);
 //							board.printBoard();
+
+							board.moveNSpaces(v, -1);
+							board.printBoard();
+
 						}
 						else {
 								newTranslateY += Math.abs(dragOffset % sLength);
@@ -321,12 +341,13 @@ public class Grid {
 	        }
 			dragTranslate = 0;
 			dragOffset = 0;
+
 //			 if (board.fin(v)){
 //			 	System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 //			 }
 			board.printBoard();
 			System.out.println(" ");
-			
+
 		}
 	};
 
