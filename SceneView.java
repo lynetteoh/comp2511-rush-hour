@@ -36,7 +36,7 @@ public class SceneView extends Pane{
 	private double sceneWidth;
 	private double sceneHeight;
 	private VBox gameButtons;
-	private int gridLength;
+	private int blockLength;
 	private HashMap<String, AnchorPane> gameLayout;
 	private Text score;
 	private Pair<String, Group> gameBoard;
@@ -54,7 +54,7 @@ public class SceneView extends Pane{
 		this.menuButtons = new VBox(30);
 		this.sceneWidth = width;
 		this.sceneHeight = height;
-		this.gridLength = 50;
+		this.blockLength = 50;
 		this.easyLevel = 0; 
 		this.mediumLevel = 0; 
 		this.hardLevel = 0;
@@ -94,8 +94,8 @@ public class SceneView extends Pane{
 		return grid;
 	}
 
-	public int getGridLength() {
-		return gridLength;
+	public int getBlockLength() {
+		return blockLength;
 	}
 
 	public AnchorPane createMenu() {
@@ -302,55 +302,7 @@ public class SceneView extends Pane{
 	
 	}
 	
-	public void renderPuzzle(String difficulty, String buttonText) {
-		String move = "Moves: 0";
-		String level = "Level: ";
-		AnchorPane layout = gameLayout.get(difficulty);	
-		Text levelBoard = (Text) layout.getChildren().get(1);
-		score = (Text) layout.getChildren().get(2);
-		score.setText(move);
-		removeBoard();
-		Group puzzle = null;
-		if(buttonText.equals("NEXT")) {
-			switch(difficulty) {
-				case("EASY"):
-					easyLevel--;
-					level = level + easyLevel;
-					levelBoard.setText(level);
-					//puzzle = easyBoards.get(easyLevel);
-					layout.getChildren().add(puzzle);
-					break;
-				case("MEDIUM"):
-					mediumLevel--;
-					break;
-				case("HARD"):
-					hardLevel--;
-					break;
-			
-			}
-		}else if(buttonText.equals("PREVIOUS")) {
-			switch(difficulty) {
-				case("EASY"):
-					easyLevel++;
-					level = level + easyLevel;
-					levelBoard.setText(level);
-					//puzzle = easyBoards.get(easyLevel);
-					layout.getChildren().add(puzzle);
-					break;
-				case("MEDIUM"):
-					mediumLevel++;
-					break;
-				case("HARD"):
-					hardLevel++;
-					break;
-			
-			}
-			
-		}
-		gameBoard = new Pair<String, Group>(difficulty, puzzle);
-	}
-	
-	public void createPuzzle(String difficulty, Generator g) {
+	public void renderPuzzle(String difficulty, Generator g, String buttonText) {
 		String level = "Level: ";
 		String move = "Moves: 0";
 		AnchorPane layout = gameLayout.get(difficulty);	
@@ -361,45 +313,127 @@ public class SceneView extends Pane{
 		if(gameBoard != null) {
 			removeBoard();
 		}
-		switch(difficulty) {
-			case("EASY"):
-				puzzle = g.RandomEasyGenerator(6);
-				grid = new Grid(puzzle, gridLength);
-				root.getChildren().addAll(grid.getGridSquares());
-				root.getChildren().addAll(grid.getBlockGroups());
-				easyLevel++;
-				level = level + easyLevel;
-				levelBoard.setText(level);
-				layout.getChildren().add(root);
-				//easyBoards.add(root);
-				break;
-			case("MEDIUM"):
-				mediumLevel++; 
-				puzzle = g.RandomMediumGenerator(6);
-				level = level + mediumLevel;
-				System.out.println(level);
-				levelBoard.setText(level);
-				grid = new Grid(puzzle, gridLength);
-				root.getChildren().addAll(grid.getGridSquares());
-				root.getChildren().addAll(grid.getBlockGroups());
-				layout.getChildren().add(root);
-				break;
-			case("HARD"):
-				hardLevel++;
-				level = level + hardLevel;
-				levelBoard.setText(level);
-				System.out.println(level);
-				//grid = new Grid(g.RandomGenerator1(6), gridLength);
-				root.getChildren().addAll(grid.getGridSquares());
-//				root.getChildren().addAll(grid.getBlockGroups());
-				layout.getChildren().add(root);
-				break;
+		
+		if(buttonText.equals("PREVIOUS")) {
+			switch(difficulty) {
+				case("EASY"):
+					easyLevel--;
+					level = level + easyLevel;
+					levelBoard.setText(level);
+					//add code for previous board here 
+					// puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+				case("MEDIUM"):
+					mediumLevel--;
+					//add code for previous board here 
+					// puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					level = level + mediumLevel;
+					levelBoard.setText(level);
+					layout.getChildren().add(root);
+					break;
+				case("HARD"):
+					hardLevel--;
+					//add code for previous board here 
+					// puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					level = level + hardLevel;
+					levelBoard.setText(level);
+					layout.getChildren().add(root);
+					break;
+			
+			}
+		}else if(buttonText.equals("NEXT")) {
+			switch(difficulty) {
+				case("EASY"):
+					easyLevel++;
+					level = level + easyLevel;
+					levelBoard.setText(level);
+					//add code for next board here
+					//puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+				case("MEDIUM"):
+					mediumLevel++;
+					level = level + mediumLevel;
+					levelBoard.setText(level);
+					//add code for previous board here 
+					// puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+				case("HARD"):
+					hardLevel++;
+					level = level + hardLevel;
+					levelBoard.setText(level);
+					//add code for previous board here 
+					// puzzle = ...
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+			
+			}
+			
+		}else {
+			switch(difficulty) {
+				case("EASY"):
+					easyLevel++;
+					level = level + easyLevel;
+					levelBoard.setText(level);
+					puzzle = g.RandomEasyGenerator(6);
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+				case("MEDIUM"):
+					mediumLevel++;
+					level = level + mediumLevel;
+					levelBoard.setText(level);
+					puzzle = g.RandomMediumGenerator(6);
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+				case("HARD"):
+					hardLevel++;
+					level = level + hardLevel;
+					levelBoard.setText(level);
+					puzzle = g.RandomHardGenerator(6);
+					root = createPuzzle(difficulty, puzzle);
+					layout.getChildren().add(root);
+					break;
+			
+			}	
 		}
+		
 		currentGameLayout = layout;
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		gameBoard = new Pair<String, Group>(difficulty, root);
 		root.setTranslateX(sceneWidth/2 + 20);
 		root.setTranslateY(sceneHeight/5);
+	}
+	
+	public Group createPuzzle(String difficulty, Board puzzle) {
+		Group root = new Group();
+		switch(difficulty) {
+			case("EASY"):
+				grid = new Grid(puzzle, blockLength);
+				root.getChildren().addAll(grid.getGridSquares());
+				root.getChildren().addAll(grid.getBlockGroups());				
+				break;
+			case("MEDIUM"):
+				grid = new Grid(puzzle, blockLength);
+				root.getChildren().addAll(grid.getGridSquares());
+				root.getChildren().addAll(grid.getBlockGroups());
+				break;
+			case("HARD"):
+				grid = new Grid(puzzle, blockLength);
+				root.getChildren().addAll(grid.getGridSquares());
+				root.getChildren().addAll(grid.getBlockGroups());
+				break;
+		}
+		return root;
 	}
 	
 	public void bigGrid() {

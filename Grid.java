@@ -374,6 +374,10 @@ public class Grid {
 	public int getsLength() {
 		return sLength;
 	}
+	
+	public int getGridLength() {
+		return gridLength;
+	}
 
 	public void setsLength(int sLength) {
 		this.sLength = sLength;

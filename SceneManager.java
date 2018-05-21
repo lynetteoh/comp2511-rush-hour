@@ -149,7 +149,8 @@ public class SceneManager extends Pane {
 		}
 		
 		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-			sceneView.createPuzzle(name, g);	
+			String buttonText = button.getText();
+			sceneView.renderPuzzle(name, g, buttonText);	
 		} 
 		
 		if(name.equals("MENU")) {
@@ -283,7 +284,7 @@ public class SceneManager extends Pane {
 		ArrayList vehicles = grid.getBlockGroups();
 		Group vehicle = (Group) vehicles.get(id-1);
 		Sprite s = (Sprite) vehicle.getChildren().get(0);
-		int gridLength = sceneView.getGridLength();
+		int gridLength = sceneView.getBlockLength();
 		System.out.println("length " + (direction*gridLength));
 		if(v.getOrient() == 1) {
 			double value = s.getTranslateX() - direction*gridLength;
