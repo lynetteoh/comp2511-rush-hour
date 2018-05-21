@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -116,7 +117,7 @@ public class SceneManager extends Pane {
 			String name = b.getText();
 			switch(name) {
 				case("UNDO"):
-				
+					b.setOnAction(e->undo());
 					break;
 				case("RESET"):
 		
@@ -141,18 +142,16 @@ public class SceneManager extends Pane {
 	}
 	
 	private void changeScene(String name, Button button) {
-		System.out.println("scene " + name);
 		Generator g = new Generator();
 		Scene scene = scenes.get(name);
-		if(scene != null) {
-			if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-				sceneView.createPuzzle(name, g);	
-			} 
-		}else {
+		if(scene == null) {
 			scene = createGameScene(name);
-			sceneView.createPuzzle(name, g);
-
 		}
+		
+		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+			String buttonText = button.getText();
+			sceneView.renderPuzzle(name, g, buttonText);	
+		} 
 		
 		if(name.equals("MENU")) {
 			playOrStopMusic();
@@ -270,6 +269,38 @@ public class SceneManager extends Pane {
 			menuMuteButton.setSelected(true);
 			menuMuteButton.setText("UNMUTE");
 		}
+	}
+	
+	public void undo() {
+		Board puzzle = sceneView.getPuzzle();
+		Move m = puzzle.undo();
+		if(m == null) {
+			return;
+		}
+		Vehicle v = m.getVehicle();
+		int id = v.getId();
+		int direction = m.getDirection();
+		Grid grid = sceneView.getGrid();
+		ArrayList vehicles = grid.getBlockGroups();
+		Group vehicle = (Group) vehicles.get(id-1);
+		Sprite s = (Sprite) vehicle.getChildren().get(0);
+		int gridLength = sceneView.getBlockLength();
+		System.out.println("length " + (direction*gridLength));
+		if(v.getOrient() == 1) {
+			double value = s.getTranslateX() - direction*gridLength;
+			System.out.println(s.getTranslateX());
+			s.setTranslateX(value);
+			System.out.println("previous position: " + s.getTranslateX());
+			
+		} else {
+			double value =  s.getTranslateY() - direction*gridLength; 
+			System.out.println(s.getTranslateY());
+			s.setTranslateY(value);	
+			System.out.println("previous position: " + s.getTranslateY());
+		}
+		sceneView.updateMove();
+		puzzle.printBoard();
+		System.out.println("");
 	}
 	
 	public void sceneListener(Scene scene) {
