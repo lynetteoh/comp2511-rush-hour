@@ -12,6 +12,9 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import java.lang.*;
 
@@ -292,12 +295,11 @@ public class Grid {
 			dragTranslate = 0;
 			dragOffset = 0;
 			board.printBoard();
-			if (board.fin(v)){
+			if (board.fin(v)) {
 				System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 			}
 		}
 	};
-
 
 	public int getMoves() {
 		return board.getnMoves();

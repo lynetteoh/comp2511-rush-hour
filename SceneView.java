@@ -282,8 +282,8 @@ public class SceneView extends Pane{
 		Button nextBtn = createBtn("NEXT", polygon);
 		Button previousBtn = createBtn("PREVIOUS", polygon);
 		gameButtonsHolder.getChildren().addAll(hintsBtn, undoBtn);
-		gameButtonsHolder1.getChildren().addAll(homeBtn, resetBtn);
-		gameButtonsHolder2.getChildren().addAll(nextBtn, previousBtn);
+		gameButtonsHolder1.getChildren().addAll(resetBtn, homeBtn);
+		gameButtonsHolder2.getChildren().addAll(previousBtn, nextBtn);
 		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1, gameButtonsHolder2);
 		ToggleButton mute = new ToggleButton("MUTE");
 		mute.setStyle("-fx-background-color: #f9d1ae");
@@ -320,49 +320,38 @@ public class SceneView extends Pane{
 			switch(difficulty) {
 				case("EASY"):
 					if(easyLevel > 1) { 
-						removeBoard();
 						easyLevel--;
 						level = level + easyLevel;
 						levelBoard.setText(level);
 						puzzle = g.GetPreviousEasyBoard();
 						root = createPuzzle(difficulty, puzzle);
-						layout.getChildren().add(root);
-						gameBoard = new Pair<String, Group>(difficulty, root);
 						
 					}
 					
 					break;
 				case("MEDIUM"):
 					if(mediumLevel > 1) {
-						removeBoard();
 						mediumLevel--;
 						puzzle = g.GetPreviousMediumBoard();
 						root = createPuzzle(difficulty, puzzle);
 						level = level + mediumLevel;
 						levelBoard.setText(level);
-						layout.getChildren().add(root);
-						gameBoard = new Pair<String, Group>(difficulty, root);
 					}
 					
 					break;
 				case("HARD"):
 					if(hardLevel > 1) {
-						removeBoard();
 						hardLevel--;
 						puzzle = g.GetPreviousHardBoard();
 						root = createPuzzle(difficulty, puzzle);
 						level = level + hardLevel;
 						levelBoard.setText(level);
-						layout.getChildren().add(root);
-						gameBoard = new Pair<String, Group>(difficulty, root);
 					}	
 					break;
 			}
 			
 		}else {
-			if(gameBoard != null) {
-				removeBoard();
-			}
+
 			
 			switch(difficulty) {
 				case("EASY"):
@@ -371,7 +360,6 @@ public class SceneView extends Pane{
 					levelBoard.setText(level);
 					puzzle = g.GetNextEasyBoard();
 					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
 					break;
 				case("MEDIUM"):
 					mediumLevel++;
@@ -379,7 +367,6 @@ public class SceneView extends Pane{
 					levelBoard.setText(level);
 					puzzle = g.GetNextMediumBoard();
 					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
 					break;
 				case("HARD"):
 					hardLevel++;
@@ -387,18 +374,20 @@ public class SceneView extends Pane{
 					levelBoard.setText(level);
 					puzzle = g.GetNextHardBoard();
 					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
 					break;
 			
 			}
-			gameBoard = new Pair<String, Group>(difficulty, root);
+			
 		}
 		currentGameLayout = layout;
-		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 	}
 	
 	public Group createPuzzle(String difficulty, Board puzzle) {
+		if(gameBoard != null) {
+			removeBoard();
+		}
 		Group root = new Group();
+		AnchorPane layout = gameLayout.get(difficulty);	
 		switch(difficulty) {
 			case("EASY"):
 				grid = new Grid(puzzle, blockLength);
@@ -416,6 +405,9 @@ public class SceneView extends Pane{
 				root.getChildren().addAll(grid.getBlockGroups());
 				break;
 		}
+		gameBoard = new Pair<String, Group>(difficulty, root);
+		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+		layout.getChildren().add(root);
 		return root;
 	}
 	
@@ -436,6 +428,7 @@ public class SceneView extends Pane{
 			new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent t) {
+				Board board = grid.getBoard();
 				String musicFile = "resource/click.mp3";    
 				Media sound = new Media(new File(musicFile).toURI().toString());
 				MediaPlayer effectMP = new MediaPlayer(sound);
@@ -446,10 +439,14 @@ public class SceneView extends Pane{
 					effectMP.play();
 				}
 				updateMove();
+//				if(board.fin(v)) {
+//					win();
+//				}
 							
 			}
 		};
 		
+	
 
 	public void updateMove() {
 		int moves = grid.getMoves();
@@ -457,6 +454,7 @@ public class SceneView extends Pane{
 		Text score = (Text) currentGameLayout.getChildren().get(2);
 		score.setText(Moves);	
 	}
+	
 	
 	public void removeBoard() {	
 		String difficulty = (String) gameBoard.getKey();
