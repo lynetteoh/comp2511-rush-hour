@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -15,11 +16,100 @@ public class Generator {
 	//a medium puzzle is solvable from 6 steps to 15 steps inclusive
 	public static final int MEDIUM = 10;  
 	// a hard puzzle is solvable from 16 steps up 
+	
+	private int n;
 
-	public Generator() {
+	private ArrayList<Board> easyBoards = new ArrayList<Board>();
+	private ArrayList<Board> mediumBoards = new ArrayList<Board>();
+	private ArrayList<Board> hardBoards = new ArrayList<Board>();
+	private int currentEasyBoardIndex;
+	private int currentMediumBoardIndex;
+	private int currentHardBoardIndex;
+	
+	public Board GetPreviousEasyBoard() {
+		if (easyBoards.isEmpty()) {
+			return null;
+		}
+		if (currentEasyBoardIndex > easyBoards.size()) {
+			currentEasyBoardIndex = easyBoards.size();
+		}
+		currentEasyBoardIndex--;
+		if (currentEasyBoardIndex < 0) {
+			currentEasyBoardIndex = 0;
+		} 
+		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
+		return easyBoards.get(currentEasyBoardIndex);
+	}
+	public Board GetNextEasyBoard() {
+		currentEasyBoardIndex++;
+		if (currentEasyBoardIndex < easyBoards.size()) {
+			return easyBoards.get(currentEasyBoardIndex);
+		} 
+		if (currentEasyBoardIndex >= easyBoards.size()) {
+			currentEasyBoardIndex = easyBoards.size();
+			easyBoards.add(RandomEasyGenerator());
+		}
+		System.out.println("Hidahfidsaf\n\n" + currentEasyBoardIndex + " what? " + easyBoards.size());
+		return easyBoards.get(currentEasyBoardIndex);
+	}
+	public Board GetPreviousMediumBoard() {
+		if (mediumBoards.isEmpty()) {
+			return null;
+		}
+		if (currentMediumBoardIndex > mediumBoards.size()) {
+			currentMediumBoardIndex = mediumBoards.size();
+		}
+		currentMediumBoardIndex--;
+		if (currentMediumBoardIndex < 0) {
+			currentMediumBoardIndex = 0;
+		} 
+		return mediumBoards.get(currentMediumBoardIndex);
+	}
+	public Board GetNextMediumBoard() {
+		if (currentMediumBoardIndex < mediumBoards.size()) {
+			return mediumBoards.get(currentMediumBoardIndex);
+		} 
+		currentMediumBoardIndex++;
+		if (currentMediumBoardIndex > mediumBoards.size()) {
+			currentMediumBoardIndex = mediumBoards.size();
+		}
+		mediumBoards.add(RandomMediumGenerator());
+		return mediumBoards.get(currentMediumBoardIndex);
+	}
+	public Board GetPreviousHardBoard() {
+		if (hardBoards.isEmpty()) {
+			return null;
+		}
+		if (currentHardBoardIndex > hardBoards.size()) {
+			currentHardBoardIndex = hardBoards.size();
+		}
+		currentHardBoardIndex--;
+		if (currentHardBoardIndex <= 0) {
+			currentHardBoardIndex = 0;
+		} 
+		return hardBoards.get(currentHardBoardIndex);
+	}
+	public Board GetNextHardBoard() {
+		if (currentHardBoardIndex < hardBoards.size()) {
+			return hardBoards.get(currentHardBoardIndex);
+		} 
+		currentHardBoardIndex++;
+		if (currentHardBoardIndex > hardBoards.size()) {
+			currentHardBoardIndex = hardBoards.size();
+		}
+		hardBoards.add(RandomHardGenerator());
+		return hardBoards.get(currentHardBoardIndex);
+	}
+	
+	
+	public Generator(int size) {
+		this.n = size;
+		this.currentEasyBoardIndex = 0;
+		this.currentHardBoardIndex = 0;
+		this.currentMediumBoardIndex = 0;
 	}	
 	// Ok generator : can produce a board in 1-5 Attempts
-	public Board RandomEasyGenerator(int n) { 
+	public Board RandomEasyGenerator() { 
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
@@ -50,7 +140,7 @@ public class Generator {
 	}
 
 	// ok Medium Generator : can produce a board in 1 - 20 Attempts
-	public Board RandomMediumGenerator(int n) { 
+	public Board RandomMediumGenerator() { 
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
@@ -81,7 +171,7 @@ public class Generator {
 	}
 
 	// Crappy Hard Generator: may take over 100 steps
-	public Board RandomHardGenerator(int n) { 
+	public Board RandomHardGenerator() { 
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
@@ -130,10 +220,14 @@ public class Generator {
 	
 	// Calls the random-number functions below to generate a random car
 	public boolean placeRandCar(Board b) {
+		if (b.getSize() != this.n) {
+			System.out.println("Generator board size does not match board size");
+			return false;
+		}
 		int randOrient = randomCarOrient();
-		int randPath = randomCarPath(b.getN(), randOrient);
+		int randPath = randomCarPath(randOrient);
 		int randLen = randomCarLength();
-		int position[] = randomPosition(b.getN(), randLen);
+		int position[] = randomPosition(randLen);
 
 		if (b.canPlaceVehicle(randOrient, randPath, position)) { 
 			// check if putting down car is going to be allowed
@@ -168,7 +262,7 @@ public class Generator {
 	}
 
 	// returns the index of the random row/column number for the car to be aligned on
-	public int randomCarPath(int n, int orient) {
+	public int randomCarPath(int orient) {
 		int randomNum = 0; 
 		if (orient == 1) { // horizontal, cannot place on the centerline
 			do { 
@@ -192,7 +286,7 @@ public class Generator {
 
 	// generates a random array of integers for car to lie on.
 	// takes in arguments len = length of car; n = dimension of board
-	public int[] randomPosition(int n, int len) {
+	public int[] randomPosition(int len) {
 		int[] position = new int[len];
 		int i = 0;
 		int rangeIndex = n-len;
@@ -208,7 +302,7 @@ public class Generator {
 	}
 
 	// gives the coordinates of the door in (x,y)
-	public int[] getDoor(int n) { // n is the side of the board
+	public int[] getDoor() { // n is the side of the board
 		int x = n-1;
 		int y = (n-1)/2;
 //		System.out.println("Door: " + Integer.toString(x) + ", " +Integer.toString(y));
@@ -227,7 +321,11 @@ public class Generator {
 	
 	// Based on the previous car, places vehicles.
 	public boolean placeRandCar2(Board b) {
-		
+
+		if (b.getSize() != this.n) {
+			System.out.println("Generator board size does not match board size");
+			return false;
+		}
 		Vehicle v = b.getLastVehicle(); 
 		System.out.println("The previous car: " + v);
 		// based on the last vehicle placed on the board, place the next vechicle
@@ -248,7 +346,7 @@ public class Generator {
 			if (possiblePaths[1] == (b.getN()-1)/2) possiblePaths[1] = -1;
 		}
 		int randLen = randomCarLength();
-		int position[] = randomPosition(b.getN(), randLen);
+		int position[] = randomPosition(randLen);
 		
 		if (b.canPlaceVehicle(randOrient, possiblePaths[0], position)) { // place in first paht
 			b.placeVehicle(randOrient, possiblePaths[0], position);
@@ -259,7 +357,7 @@ public class Generator {
 			return true;
 		}
 		else { // try anywhere else 
-			int randPath = randomCarPath(b.getN(), randOrient);
+			int randPath = randomCarPath(randOrient);
 			if (b.canPlaceVehicle(randOrient, randPath, position)) { 
 				b.placeVehicle(randOrient, randPath, position);
 				return true;

@@ -324,6 +324,7 @@ public class SceneView extends Pane{
 					easyLevel--;
 					level = level + easyLevel;
 					levelBoard.setText(level);
+					puzzle = g.GetPreviousEasyBoard();
 					//add code for previous board here 
 					// puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
@@ -333,6 +334,7 @@ public class SceneView extends Pane{
 					mediumLevel--;
 					//add code for previous board here 
 					// puzzle = ...
+					puzzle = g.GetPreviousMediumBoard();
 					root = createPuzzle(difficulty, puzzle);
 					level = level + mediumLevel;
 					levelBoard.setText(level);
@@ -342,6 +344,7 @@ public class SceneView extends Pane{
 					hardLevel--;
 					//add code for previous board here 
 					// puzzle = ...
+					puzzle = g.GetPreviousHardBoard();
 					root = createPuzzle(difficulty, puzzle);
 					level = level + hardLevel;
 					levelBoard.setText(level);
@@ -349,12 +352,13 @@ public class SceneView extends Pane{
 					break;
 			
 			}
-		}else if(buttonText.equals("NEXT")) {
+		}else {
 			switch(difficulty) {
 				case("EASY"):
 					easyLevel++;
 					level = level + easyLevel;
 					levelBoard.setText(level);
+					puzzle = g.GetNextEasyBoard();
 					//add code for next board here
 					//puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
@@ -364,6 +368,7 @@ public class SceneView extends Pane{
 					mediumLevel++;
 					level = level + mediumLevel;
 					levelBoard.setText(level);
+					puzzle = g.GetNextMediumBoard();
 					//add code for previous board here 
 					// puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
@@ -373,6 +378,7 @@ public class SceneView extends Pane{
 					hardLevel++;
 					level = level + hardLevel;
 					levelBoard.setText(level);
+					puzzle = g.GetNextHardBoard();
 					//add code for previous board here 
 					// puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
@@ -381,34 +387,7 @@ public class SceneView extends Pane{
 			
 			}
 			
-		}else {
-			switch(difficulty) {
-				case("EASY"):
-					easyLevel++;
-					level = level + easyLevel;
-					levelBoard.setText(level);
-					puzzle = g.RandomEasyGenerator(6);
-					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
-					break;
-				case("MEDIUM"):
-					mediumLevel++;
-					level = level + mediumLevel;
-					levelBoard.setText(level);
-					puzzle = g.RandomMediumGenerator(6);
-					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
-					break;
-				case("HARD"):
-					hardLevel++;
-					level = level + hardLevel;
-					levelBoard.setText(level);
-					puzzle = g.RandomHardGenerator(6);
-					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
-					break;
-			
-			}	
+		
 		}
 		
 		currentGameLayout = layout;
