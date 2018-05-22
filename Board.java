@@ -29,7 +29,7 @@ public class Board {
 		this.id = boardId;
 		boardId += 1;
 		this.level = boards.indexOf(this);
-		this.initialBoard = this.matrix;
+		setInitialBoard(this.matrix);
 		boards.add(this);
 	}
 
@@ -41,7 +41,7 @@ public class Board {
 		this.nMoves = 0;
 		boards.add(this);
 		this.level = boards.indexOf(this);
-		this.initialBoard = this.matrix;
+		setInitialBoard(this.matrix);
 	}
 	public Board(Board b)
 	{
@@ -60,13 +60,27 @@ public class Board {
 		this.moves = (Stack<Move>) b.getMoves().clone();
 		boards.add(this);
 		this.level = boards.indexOf(this);
-		this.initialBoard = this.matrix;
+		setInitialBoard(this.matrix);
 	}
 
 	public int[][] resetBoard()
 	{
 		this.nMoves = 0;
 		return this.getInitialBoard();
+	}
+	
+	public int[][] copyMatrix(int[][] matrix)
+	{
+		int[][] newMatrix = new int[matrix.length][matrix.length];
+		for(int i = 0; i < matrix.length; i++)
+		{
+			for(int j = 0; j < matrix.length; j++)
+			{
+				newMatrix[i][j] = matrix[i][j];
+			}
+		}
+		
+		return newMatrix;
 	}
 
 	public Board getPreviousBoard()
@@ -180,7 +194,7 @@ public class Board {
 
 	public void setInitialBoard(int[][] matrix)
 	{
-		this.initialBoard = matrix;
+		this.initialBoard = copyMatrix(this.matrix);
 	}
 	
 	public int[][] getInitialBoard()

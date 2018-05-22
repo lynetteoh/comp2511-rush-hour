@@ -45,10 +45,15 @@ public class Generator {
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetNextEasyBoard() {
+<<<<<<< HEAD
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
 			current.resetBoard();			
 		}
+=======
+		//Board current = easyBoards.get(currentEasyBoardIndex);
+		//current.resetBoard();
+>>>>>>> 8699f55cae81d5c6f10a1599339f295e49230a29
 		currentEasyBoardIndex++;
 		if (currentEasyBoardIndex < easyBoards.size()) {
 			return easyBoards.get(currentEasyBoardIndex);
@@ -61,8 +66,10 @@ public class Generator {
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetPreviousMediumBoard() {
-		Board current = easyBoards.get(currentMediumBoardIndex);
-		current.resetBoard();
+		if (mediumBoards.size()>currentMediumBoardIndex) {
+			Board current = mediumBoards.get(currentMediumBoardIndex);
+			current.resetBoard();			
+		}
 		if (mediumBoards.isEmpty()) {
 			return null;
 		}
@@ -76,8 +83,10 @@ public class Generator {
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
 	public Board GetNextMediumBoard() {
-		Board current = easyBoards.get(currentMediumBoardIndex);
-		current.resetBoard();
+		if (mediumBoards.size()>currentMediumBoardIndex) {
+			Board current = mediumBoards.get(currentMediumBoardIndex);
+			current.resetBoard();			
+		}
 		if (currentMediumBoardIndex < mediumBoards.size()) {
 			return mediumBoards.get(currentMediumBoardIndex);
 		} 
@@ -89,8 +98,10 @@ public class Generator {
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
 	public Board GetPreviousHardBoard() {
-		Board current = easyBoards.get(currentHardBoardIndex);
-		current.resetBoard();
+		if (hardBoards.size()>currentHardBoardIndex) {
+			Board current = hardBoards.get(currentHardBoardIndex);
+			current.resetBoard();			
+		}
 		if (hardBoards.isEmpty()) {
 			return null;
 		}
@@ -104,8 +115,10 @@ public class Generator {
 		return hardBoards.get(currentHardBoardIndex);
 	}
 	public Board GetNextHardBoard() {
-		Board current = easyBoards.get(currentHardBoardIndex);
-		current.resetBoard();
+		if (hardBoards.size()>currentHardBoardIndex) {
+			Board current = hardBoards.get(currentHardBoardIndex);
+			current.resetBoard();			
+		}
 		if (currentHardBoardIndex < hardBoards.size()) {
 			return hardBoards.get(currentHardBoardIndex);
 		} 
