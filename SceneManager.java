@@ -123,7 +123,7 @@ public class SceneManager extends Pane {
 					b.setOnAction(e->undo());
 					break;
 				case("RESET"):
-		
+					b.setOnAction(e->resetBoard(sceneName));
 					break;
 				case("HOME"):
 					b.setOnAction(e->changeScene("MENU", b));
@@ -302,6 +302,20 @@ public class SceneManager extends Pane {
 		sceneView.updateMove();
 //		puzzle.printBoard();
 //		System.out.println("");
+	}
+	
+	public void resetBoard(String sceneName) {
+		Grid grid = sceneView.getGrid();
+		Board board = grid.getBoard();
+		int[][] b = board.resetBoard();
+		board.setMatrix(b);
+		board.printBoard();
+		sceneView.createPuzzle(sceneName, board);
+		if(sceneWidth >= 900  && sceneHeight  >= 700) {
+			sceneView.bigGrid();
+		}else {
+			sceneView.smallGrid();
+		}	
 	}
 	
 	public void sceneListener(Scene scene) {

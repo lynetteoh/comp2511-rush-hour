@@ -607,7 +607,7 @@ public class Board {
 			int[][] matrix = this.matrix;
 			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
 			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
-			if (matrix[goalPosition[0]][v.getPath()] == 1 && matrix[goalPosition[1]][v.getPath()] == 1) {
+			if (matrix[v.getPath()][goalPosition[0]] == 1 && matrix[v.getPath()][goalPosition[1]] == 1) {
 				System.out.println("Car is touching the exit");
 				return true;
 			}
