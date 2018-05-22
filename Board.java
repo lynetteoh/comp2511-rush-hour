@@ -78,6 +78,30 @@ public class Board {
 			return null;
 	}
 	
+	public Move getHint()
+	{
+		Solver s = new Solver(this);
+		ArrayList<Move> solution = s.solve();
+		if (solution != null) {
+			Move move = solution.get(0);
+			return move;
+		}
+		return null;
+		
+		/*
+		if(move.getDirection() > 0)
+		{
+			this.moveForward(move.getVehicle());
+		}
+		else if(move.getDirection() < 0)
+		{
+			this.moveBackward(move.getVehicle());
+		}
+		return this;
+		*/
+		
+	}
+	
 	public Board getNextBoard()
 	{
 		if(this.level < getBoards().size() + 1)
