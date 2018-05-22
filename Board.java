@@ -12,7 +12,7 @@ public class Board {
 	private ArrayList<Vehicle> vehiclesList = new ArrayList<Vehicle>();
 	private ArrayList<Move> solution = new ArrayList<Move>();
 	private Stack<Move> moves = new Stack<Move>();
-	public static ArrayList<Board> boards;
+	public static ArrayList<Board> boards = new ArrayList<Board>();
 	private int level;
 	private int[][] initialBoard;
 
@@ -28,9 +28,9 @@ public class Board {
 		}
 		this.id = boardId;
 		boardId += 1;
-		boards.add(this);
 		this.level = boards.indexOf(this);
 		this.initialBoard = this.matrix;
+		boards.add(this);
 	}
 
 	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
