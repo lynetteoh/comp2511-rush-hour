@@ -27,8 +27,10 @@ public class Generator {
 	private int currentHardBoardIndex;
 	
 	public Board GetPreviousEasyBoard() {
-		Board current = easyBoards.get(currentEasyBoardIndex);
-		current.resetBoard();
+		if (easyBoards.size()>currentEasyBoardIndex) {
+			Board current = easyBoards.get(currentEasyBoardIndex);
+			current.resetBoard();			
+		}
 		if (easyBoards.isEmpty()) {
 			return null;
 		}
@@ -43,8 +45,10 @@ public class Generator {
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetNextEasyBoard() {
-		Board current = easyBoards.get(currentEasyBoardIndex);
-		current.resetBoard();
+		if (easyBoards.size()>currentEasyBoardIndex) {
+			Board current = easyBoards.get(currentEasyBoardIndex);
+			current.resetBoard();			
+		}
 		currentEasyBoardIndex++;
 		if (currentEasyBoardIndex < easyBoards.size()) {
 			return easyBoards.get(currentEasyBoardIndex);
