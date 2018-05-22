@@ -309,11 +309,7 @@ public class Grid {
 		return sLength;
 	}
 
-	public void setsLength(int sLength) {
-		this.sLength = sLength;
+	public Board getBoard() {
+		return board;
 	}
-	public void setGridLength(int sLength) {
-		this.gridLength = sLength * board.getN();
-	}
-
 }

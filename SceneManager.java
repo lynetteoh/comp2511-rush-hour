@@ -4,14 +4,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
@@ -272,7 +268,8 @@ public class SceneManager extends Pane {
 	}
 	
 	public void undo() {
-		Board puzzle = sceneView.getPuzzle();
+		Grid grid = sceneView.getGrid();
+		Board puzzle = grid.getBoard();
 		Move m = puzzle.undo();
 		if(m == null) {
 			return;
@@ -280,27 +277,26 @@ public class SceneManager extends Pane {
 		Vehicle v = m.getVehicle();
 		int id = v.getId();
 		int direction = m.getDirection();
-		Grid grid = sceneView.getGrid();
-		ArrayList vehicles = grid.getBlockGroups();
+		ArrayList<Group> vehicles = grid.getBlockGroups();
 		Group vehicle = (Group) vehicles.get(id-1);
 		Sprite s = (Sprite) vehicle.getChildren().get(0);
 		int gridLength = sceneView.getBlockLength();
 		System.out.println("length " + (direction*gridLength));
 		if(v.getOrient() == 1) {
 			double value = s.getTranslateX() - direction*gridLength;
-			System.out.println(s.getTranslateX());
-			s.setTranslateX(value);
-			System.out.println("previous position: " + s.getTranslateX());
+//			System.out.println(s.getTranslateX());
+//			s.setTranslateX(value);
+//			System.out.println("previous position: " + s.getTranslateX());
 			
 		} else {
 			double value =  s.getTranslateY() - direction*gridLength; 
-			System.out.println(s.getTranslateY());
-			s.setTranslateY(value);	
-			System.out.println("previous position: " + s.getTranslateY());
+//			System.out.println(s.getTranslateY());
+//			s.setTranslateY(value);	
+//			System.out.println("previous position: " + s.getTranslateY());
 		}
 		sceneView.updateMove();
-		puzzle.printBoard();
-		System.out.println("");
+//		puzzle.printBoard();
+//		System.out.println("");
 	}
 	
 	public void sceneListener(Scene scene) {
