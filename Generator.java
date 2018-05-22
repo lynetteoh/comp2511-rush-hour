@@ -45,15 +45,10 @@ public class Generator {
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetNextEasyBoard() {
-<<<<<<< HEAD
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
 			current.resetBoard();			
 		}
-=======
-		//Board current = easyBoards.get(currentEasyBoardIndex);
-		//current.resetBoard();
->>>>>>> 8699f55cae81d5c6f10a1599339f295e49230a29
 		currentEasyBoardIndex++;
 		if (currentEasyBoardIndex < easyBoards.size()) {
 			return easyBoards.get(currentEasyBoardIndex);
