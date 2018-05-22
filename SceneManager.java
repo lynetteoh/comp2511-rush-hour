@@ -28,7 +28,9 @@ public class SceneManager extends Pane {
 	private MediaPlayer backgroundMP;
 	private boolean playMusic;
 	private ToggleButton menuMuteButton;
-	
+	public static final int BOARDSIZE = 6; 
+
+	private Generator g;
 	
 	public SceneManager(double width, double height, Stage stage) {
 		this.sceneWidth = width;
@@ -36,6 +38,7 @@ public class SceneManager extends Pane {
 		this.stage = stage;
 		this.scenes = new HashMap<String, Scene>();
 		this.sceneView = new SceneView(sceneWidth, sceneHeight);
+		this.g = new Generator(BOARDSIZE);
 	}
 	
 	public Scene createMenuScene() {
@@ -143,7 +146,6 @@ public class SceneManager extends Pane {
 	}
 	
 	private void changeScene(String name, Button button) {
-		Generator g = new Generator();
 		Scene scene = scenes.get(name);
 		if(scene == null) {
 			scene = createGameScene(name);
