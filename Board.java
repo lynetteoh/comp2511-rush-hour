@@ -65,6 +65,7 @@ public class Board {
 
 	public int[][] resetBoard()
 	{
+		this.nMoves = 0;
 		return this.getInitialBoard();
 	}
 
