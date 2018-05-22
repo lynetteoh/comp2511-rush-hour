@@ -114,6 +114,12 @@ public class SceneView extends Pane{
 		Button hardBtn = createBtn("HARD", polygon);
 		Button exitBtn = createBtn("EXIT", polygon);
 		menuMuteButton = new ToggleButton("MUTE");
+		menuMuteButton.setStyle("-fx-background-color: #f9d1ae");
+		Effect shadow = new DropShadow(5, Color.GREY);
+		menuMuteButton.setEffect(shadow);
+		menuMuteButton.styleProperty().bind( Bindings.when(menuMuteButton.hoverProperty())
+                .then("-fx-background-color:#fbdfc6")   
+                .otherwise("-fx-background-color: #f9d1ae"));
 		menuButtons.getChildren().addAll(easyBtn, mediumBtn, hardBtn,exitBtn);
 		menuLayout.getChildren().addAll(background, gameTitle, menuButtons, menuMuteButton);
 		smallMenuLayout();
@@ -253,7 +259,6 @@ public class SceneView extends Pane{
 		scoreBoard.setFont(Font.font(24));
 		scoreBoard.setTranslateX(sceneWidth/2 - 350);
 		scoreBoard.setTranslateY(sceneHeight/4 + 50);
-		
 	}
 	
 	public AnchorPane createGameLayout(String difficulty) {
@@ -281,6 +286,12 @@ public class SceneView extends Pane{
 		gameButtonsHolder2.getChildren().addAll(nextBtn, previousBtn);
 		gameButtons.getChildren().addAll(gameButtonsHolder, gameButtonsHolder1, gameButtonsHolder2);
 		ToggleButton mute = new ToggleButton("MUTE");
+		mute.setStyle("-fx-background-color: #f9d1ae");
+		Effect shadow = new DropShadow(5, Color.GREY);
+		mute.setEffect(shadow);
+		mute.styleProperty().bind( Bindings.when(mute.hoverProperty())
+                .then("-fx-background-color:#fbdfc6")   
+                .otherwise("-fx-background-color: #f9d1ae"));
 		if(menuMuteButton.isSelected()) {
 			mute.setSelected(true);
 			mute.setText("UNMUTE");
@@ -291,12 +302,6 @@ public class SceneView extends Pane{
 		Text scoreBoard = createText(Moves, 24);	
 		layout.getChildren().addAll(background, levelBoard, scoreBoard, gameButtons, mute);
 		gameLayout.put(difficulty, layout);
-		if(sceneWidth >= 900  && sceneHeight  >= 700) {
-			bigGameLayout(difficulty);
-		}else {
-			smallGameLayout(difficulty);
-		}
-		
 		return layout;
 	
 	}

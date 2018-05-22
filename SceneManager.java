@@ -80,6 +80,11 @@ public class SceneManager extends Pane {
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
 		scenes.put(difficulty, gameScene);
 		sceneListener(gameScene);
+		if(sceneWidth >= 900  && sceneHeight  >= 700) {
+			sceneView.bigGameLayout(difficulty);
+		}else {
+			sceneView.smallGameLayout(difficulty);
+		}
 		return gameScene;
 	}
 
@@ -147,18 +152,17 @@ public class SceneManager extends Pane {
 		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
 			String buttonText = button.getText();
 			sceneView.renderPuzzle(name, g, buttonText);	
+			if(sceneWidth >= 900  && sceneHeight  >= 700) {
+				sceneView.bigGrid();
+			}else {
+				sceneView.smallGrid();
+			}
 		} 
 		
 		if(name.equals("MENU")) {
 			playOrStopMusic();
 		}else {
 			backgroundMP.stop();
-		}
-		
-		if(sceneWidth >= 900  && sceneHeight  >= 700) {
-			sceneView.bigGrid();
-		}else {
-			sceneView.smallGrid();
 		}
 		
 		stage.setScene(scene);
@@ -285,13 +289,13 @@ public class SceneManager extends Pane {
 		if(v.getOrient() == 1) {
 			double value = s.getTranslateX() - direction*gridLength;
 //			System.out.println(s.getTranslateX());
-//			s.setTranslateX(value);
+			s.setTranslateX(value);
 //			System.out.println("previous position: " + s.getTranslateX());
 			
 		} else {
 			double value =  s.getTranslateY() - direction*gridLength; 
 //			System.out.println(s.getTranslateY());
-//			s.setTranslateY(value);	
+			s.setTranslateY(value);	
 //			System.out.println("previous position: " + s.getTranslateY());
 		}
 		sceneView.updateMove();
@@ -304,7 +308,6 @@ public class SceneManager extends Pane {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
 		    	sceneWidth = (double) newWidth;
-		    	//sceneHeight = scene.getHeight();
 		    	sceneView.setSceneWidth((double)newWidth);
 		        resizeScene(scene);
 		    }
@@ -314,7 +317,6 @@ public class SceneManager extends Pane {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
 		    	sceneHeight = (double) newHeight;
-		        //sceneWidth = scene.getWidth();
 		        sceneView.setSceneHeight((double) newHeight);
 		        resizeScene(scene);
 		    }
