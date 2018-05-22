@@ -310,6 +310,7 @@ public class SceneManager extends Pane {
 		int[][] b = board.resetBoard();
 		board.setMatrix(b);
 		board.printBoard();
+		sceneView.updateMove();
 		sceneView.createPuzzle(sceneName, board);
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			sceneView.bigGrid();
