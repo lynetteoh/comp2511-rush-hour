@@ -28,8 +28,7 @@ public class SceneManager extends Pane {
 	private MediaPlayer backgroundMP;
 	private boolean playMusic;
 	private ToggleButton menuMuteButton;
-	public static final int BOARDSIZE = 6; 
-
+	private final int BOARDSIZE = 6; 
 	private Generator g;
 	
 	public SceneManager(double width, double height, Stage stage) {

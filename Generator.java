@@ -10,11 +10,11 @@ enum orient {
 public class Generator {
 	
 	// The minumum number of moves required to solve is 3. 
-	public static final int MIN = 2; 
+	public final int MIN = 2; 
 	// an easy puzzle is solvable from 3 - 5 steps inclusive
-	public static final int EASY = 5;  
+	public final int EASY = 5;  
 	//a medium puzzle is solvable from 6 steps to 15 steps inclusive
-	public static final int MEDIUM = 10;  
+	public final int MEDIUM = 10;  
 	// a hard puzzle is solvable from 16 steps up 
 	
 	private int n;
@@ -72,7 +72,7 @@ public class Generator {
 		currentMediumBoardIndex++;
 		if (currentMediumBoardIndex > mediumBoards.size()) {
 			currentMediumBoardIndex = mediumBoards.size();
-		}
+		}	
 		mediumBoards.add(RandomMediumGenerator());
 		return mediumBoards.get(currentMediumBoardIndex);
 	}

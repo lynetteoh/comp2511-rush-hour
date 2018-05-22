@@ -41,7 +41,7 @@ public class SceneView extends Pane{
 	private int easyLevel;
 	private int mediumLevel;
 	private int hardLevel;
-	private Board puzzle;
+//	private Board puzzle;
 	private ToggleButton menuMuteButton;
 	private AnchorPane currentGameLayout;
 	
@@ -307,6 +307,7 @@ public class SceneView extends Pane{
 	}
 	
 	public void renderPuzzle(String difficulty, Generator g, String buttonText) {
+		Board puzzle = null;
 		String level = "Level: ";
 		String move = "Moves: 0";
 		AnchorPane layout = gameLayout.get(difficulty);	
@@ -314,53 +315,61 @@ public class SceneView extends Pane{
 		score = (Text) layout.getChildren().get(2);
 		score.setText(move);
 		Group root = new Group();
-		if(gameBoard != null) {
-			removeBoard();
-		}
-		
+
 		if(buttonText.equals("PREVIOUS")) {
 			switch(difficulty) {
 				case("EASY"):
-					easyLevel--;
-					level = level + easyLevel;
-					levelBoard.setText(level);
-					puzzle = g.GetPreviousEasyBoard();
-					//add code for previous board here 
-					// puzzle = ...
-					root = createPuzzle(difficulty, puzzle);
-					layout.getChildren().add(root);
+					if(easyLevel > 1) { 
+						removeBoard();
+						easyLevel--;
+						level = level + easyLevel;
+						levelBoard.setText(level);
+						puzzle = g.GetPreviousEasyBoard();
+						root = createPuzzle(difficulty, puzzle);
+						layout.getChildren().add(root);
+						gameBoard = new Pair<String, Group>(difficulty, root);
+						
+					}
+					
 					break;
 				case("MEDIUM"):
-					mediumLevel--;
-					//add code for previous board here 
-					// puzzle = ...
-					puzzle = g.GetPreviousMediumBoard();
-					root = createPuzzle(difficulty, puzzle);
-					level = level + mediumLevel;
-					levelBoard.setText(level);
-					layout.getChildren().add(root);
+					if(mediumLevel > 1) {
+						removeBoard();
+						mediumLevel--;
+						puzzle = g.GetPreviousMediumBoard();
+						root = createPuzzle(difficulty, puzzle);
+						level = level + mediumLevel;
+						levelBoard.setText(level);
+						layout.getChildren().add(root);
+						gameBoard = new Pair<String, Group>(difficulty, root);
+					}
+					
 					break;
 				case("HARD"):
-					hardLevel--;
-					//add code for previous board here 
-					// puzzle = ...
-					puzzle = g.GetPreviousHardBoard();
-					root = createPuzzle(difficulty, puzzle);
-					level = level + hardLevel;
-					levelBoard.setText(level);
-					layout.getChildren().add(root);
+					if(hardLevel > 1) {
+						removeBoard();
+						hardLevel--;
+						puzzle = g.GetPreviousHardBoard();
+						root = createPuzzle(difficulty, puzzle);
+						level = level + hardLevel;
+						levelBoard.setText(level);
+						layout.getChildren().add(root);
+						gameBoard = new Pair<String, Group>(difficulty, root);
+					}	
 					break;
-			
 			}
+			
 		}else {
+			if(gameBoard != null) {
+				removeBoard();
+			}
+			
 			switch(difficulty) {
 				case("EASY"):
 					easyLevel++;
 					level = level + easyLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextEasyBoard();
-					//add code for next board here
-					//puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
 					layout.getChildren().add(root);
 					break;
@@ -369,8 +378,6 @@ public class SceneView extends Pane{
 					level = level + mediumLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextMediumBoard();
-					//add code for previous board here 
-					// puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
 					layout.getChildren().add(root);
 					break;
@@ -379,20 +386,15 @@ public class SceneView extends Pane{
 					level = level + hardLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextHardBoard();
-					//add code for previous board here 
-					// puzzle = ...
 					root = createPuzzle(difficulty, puzzle);
 					layout.getChildren().add(root);
 					break;
 			
 			}
-			
-		
+			gameBoard = new Pair<String, Group>(difficulty, root);
 		}
-		
 		currentGameLayout = layout;
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
-		gameBoard = new Pair<String, Group>(difficulty, root);
 	}
 	
 	public Group createPuzzle(String difficulty, Board puzzle) {
@@ -470,7 +472,9 @@ public class SceneView extends Pane{
 			case("HARD"):
 				layout.getChildren().remove(board);
 				break;
-		}	
+		}
+		
+		gameBoard = null;
 	}
 	
 
