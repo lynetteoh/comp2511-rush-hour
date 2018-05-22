@@ -199,6 +199,7 @@ public class Grid {
 				}
 			}
 		}
+		
 	};
 
 	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
@@ -290,6 +291,7 @@ public class Grid {
 	        }
 			dragTranslate = 0;
 			dragOffset = 0;
+			board.printBoard();
 			if (board.fin(v)){
 				System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 			}
