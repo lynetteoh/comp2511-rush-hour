@@ -1,9 +1,5 @@
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 
 /*
 	*** Front-end equivalent of Vehicle.java ***

@@ -4,13 +4,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
@@ -83,6 +80,11 @@ public class SceneManager extends Pane {
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
 		scenes.put(difficulty, gameScene);
 		sceneListener(gameScene);
+		if(sceneWidth >= 900  && sceneHeight  >= 700) {
+			sceneView.bigGameLayout(difficulty);
+		}else {
+			sceneView.smallGameLayout(difficulty);
+		}
 		return gameScene;
 	}
 
@@ -116,7 +118,7 @@ public class SceneManager extends Pane {
 			String name = b.getText();
 			switch(name) {
 				case("UNDO"):
-				
+					b.setOnAction(e->undo());
 					break;
 				case("RESET"):
 		
@@ -141,29 +143,26 @@ public class SceneManager extends Pane {
 	}
 	
 	private void changeScene(String name, Button button) {
-		System.out.println("scene " + name);
 		Generator g = new Generator();
 		Scene scene = scenes.get(name);
-		if(scene != null) {
-			if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
-				sceneView.createPuzzle(name, g);	
-			} 
-		}else {
+		if(scene == null) {
 			scene = createGameScene(name);
-			sceneView.createPuzzle(name, g);
-
 		}
+		
+		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+			String buttonText = button.getText();
+			sceneView.renderPuzzle(name, g, buttonText);	
+			if(sceneWidth >= 900  && sceneHeight  >= 700) {
+				sceneView.bigGrid();
+			}else {
+				sceneView.smallGrid();
+			}
+		} 
 		
 		if(name.equals("MENU")) {
 			playOrStopMusic();
 		}else {
 			backgroundMP.stop();
-		}
-		
-		if(sceneWidth >= 900  && sceneHeight  >= 700) {
-			sceneView.bigGrid();
-		}else {
-			sceneView.smallGrid();
 		}
 		
 		stage.setScene(scene);
@@ -272,12 +271,43 @@ public class SceneManager extends Pane {
 		}
 	}
 	
+	public void undo() {
+		Grid grid = sceneView.getGrid();
+		Board puzzle = grid.getBoard();
+		Move m = puzzle.undo();
+		if(m == null) {
+			return;
+		}
+		Vehicle v = m.getVehicle();
+		int id = v.getId();
+		int direction = m.getDirection();
+		ArrayList<Group> vehicles = grid.getBlockGroups();
+		Group vehicle = (Group) vehicles.get(id-1);
+		Sprite s = (Sprite) vehicle.getChildren().get(0);
+		int gridLength = sceneView.getBlockLength();
+		System.out.println("length " + (direction*gridLength));
+		if(v.getOrient() == 1) {
+			double value = s.getTranslateX() - direction*gridLength;
+//			System.out.println(s.getTranslateX());
+			s.setTranslateX(value);
+//			System.out.println("previous position: " + s.getTranslateX());
+			
+		} else {
+			double value =  s.getTranslateY() - direction*gridLength; 
+//			System.out.println(s.getTranslateY());
+			s.setTranslateY(value);	
+//			System.out.println("previous position: " + s.getTranslateY());
+		}
+		sceneView.updateMove();
+//		puzzle.printBoard();
+//		System.out.println("");
+	}
+	
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
 		    	sceneWidth = (double) newWidth;
-		    	//sceneHeight = scene.getHeight();
 		    	sceneView.setSceneWidth((double)newWidth);
 		        resizeScene(scene);
 		    }
@@ -287,7 +317,6 @@ public class SceneManager extends Pane {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
 		    	sceneHeight = (double) newHeight;
-		        //sceneWidth = scene.getWidth();
 		        sceneView.setSceneHeight((double) newHeight);
 		        resizeScene(scene);
 		    }
