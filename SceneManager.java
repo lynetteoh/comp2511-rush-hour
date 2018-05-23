@@ -300,7 +300,7 @@ public class SceneManager extends Pane {
 //			System.out.println("previous position: " + s.getTranslateY());
 		}
 		sceneView.updateMove();
-//		puzzle.printBoard();
+		puzzle.printBoard();
 //		System.out.println("");
 	}
 	
@@ -319,6 +319,16 @@ public class SceneManager extends Pane {
 		}	
 	}
 	
+	
+	
+	public void setSceneWidth(double sceneWidth) {
+		this.sceneWidth = sceneWidth;
+	}
+
+	public void setSceneHeight(double sceneHeight) {
+		this.sceneHeight = sceneHeight;
+	}
+
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override 
