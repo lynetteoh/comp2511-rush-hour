@@ -99,6 +99,7 @@ public class Board {
 		ArrayList<Move> solution = s.solve();
 		if (solution != null) {
 			Move move = solution.get(0);
+			System.out.println("Vehicle: " + move.getVehicle().getId() + " move: " + move.getDirection());
 			return move;
 		}
 		return null;
