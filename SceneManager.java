@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
@@ -18,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class SceneManager extends Pane {
 	private double sceneWidth;
@@ -53,9 +56,26 @@ public class SceneManager extends Pane {
 			
 		});
 		VBox buttons = sceneView.getMenuButtons();
-		addMenuButtonAction(buttons);
+		for (int i = 0; i < buttons.getChildren().size(); i++) {
+			Button b = (Button) buttons.getChildren().get(i);
+			String name = b.getText();
+			switch(name) {
+				case("EASY"):
+					b.setOnAction(e->changeScene(name, b));
+					break;
+				case("MEDIUM"):
+					b.setOnAction(e->changeScene(name, b));
+					break;
+				case("HARD"):
+					b.setOnAction(e->changeScene(name, b));
+					break;
+				case("EXIT"):
+					b.setOnAction(e->closeProgram(stage));
+					break;
+            }
+			
+		}
 		addMedia();
-		backgroundMP.play();
 		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
 		scenes.put("MENU", menuScene);
 		sceneListener(menuScene);
@@ -77,7 +97,31 @@ public class SceneManager extends Pane {
 		VBox buttons = sceneView.getGameButtons();
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
 			HBox gameButtons = (HBox) buttons.getChildren().get(i);
-			addGameButtonAction(gameButtons, difficulty);	
+			for (int j = 0; j < gameButtons.getChildren().size(); j++) {
+				Button b = (Button) gameButtons.getChildren().get(j);
+				String name = b.getText();
+				switch(name) {
+					case("UNDO"):
+						b.setOnAction(e->undo());
+						break;
+					case("RESET"):
+						b.setOnAction(e->resetBoard(difficulty));
+						break;
+					case("HOME"):
+						b.setOnAction(e->changeScene("MENU", b));
+						break;
+					case("HINTS"):
+						
+						break;
+					case("NEXT"):
+						b.setOnAction(e->changeScene(difficulty, b));
+						break;
+					case("PREVIOUS"):
+						b.setOnAction(e->changeScene(difficulty, b));
+						break;
+					
+	            }	
+			}
 		}
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
 		scenes.put(difficulty, gameScene);
@@ -89,60 +133,6 @@ public class SceneManager extends Pane {
 		}
 		return gameScene;
 	}
-
-	
-	private void addMenuButtonAction(VBox buttons) {
-		for (int i = 0; i < buttons.getChildren().size(); i++) {
-			Button b = (Button) buttons.getChildren().get(i);
-			String name = b.getText();
-			switch(name) {
-				case("EASY"):
-					b.setOnAction(e->changeScene(name, b));
-					break;
-				case("MEDIUM"):
-					b.setOnAction(e->changeScene(name, b));
-					break;
-				case("HARD"):
-					b.setOnAction(e->changeScene(name, b));
-					break;
-				case("EXIT"):
-					b.setOnAction(e->closeProgram(stage));
-					break;
-            }
-			
-		}
-	}
-	
-
-	public void addGameButtonAction(HBox buttons, String sceneName) {	
-		for (int i = 0; i < buttons.getChildren().size(); i++) {
-			Button b = (Button) buttons.getChildren().get(i);
-			String name = b.getText();
-			switch(name) {
-				case("UNDO"):
-					b.setOnAction(e->undo());
-					break;
-				case("RESET"):
-					b.setOnAction(e->resetBoard(sceneName));
-					break;
-				case("HOME"):
-					b.setOnAction(e->changeScene("MENU", b));
-					break;
-				case("HINTS"):
-					
-					break;
-				case("NEXT"):
-					b.setOnAction(e->changeScene(sceneName, b));
-					break;
-				case("PREVIOUS"):
-					b.setOnAction(e->changeScene(sceneName, b));
-					break;
-				
-            }
-			
-		}
-		
-	}
 	
 	private void changeScene(String name, Button button) {
 		Scene scene = scenes.get(name);
@@ -152,7 +142,9 @@ public class SceneManager extends Pane {
 		
 		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
 			String buttonText = button.getText();
-			sceneView.renderPuzzle(name, g, buttonText);	
+			AnchorPane currentGameLayout = sceneView.renderPuzzle(name, g, buttonText);
+			Group root = (Group) currentGameLayout.getChildren().get(5);
+			root.setOnMouseReleased(OnMouseReleasedEventHandler);
 			if(sceneWidth >= 900  && sceneHeight  >= 700) {
 				sceneView.bigGrid();
 			}else {
@@ -204,6 +196,10 @@ public class SceneManager extends Pane {
 				case("MENU"):
 					sceneView.bigMenuLayout();
 					break;
+				case("WIN"):
+					AnchorPane winLayout = (AnchorPane) scene.getRoot();
+					sceneView.bigWinningScene(winLayout);
+					break;
 			}
 			
 		}else {
@@ -223,6 +219,10 @@ public class SceneManager extends Pane {
 				case("MENU"):
 					sceneView.smallMenuLayout();
 					break;
+				case("WIN"):
+					AnchorPane winLayout = (AnchorPane) scene.getRoot();
+					sceneView.smallWiningScene(winLayout);
+					break;
 			}
 	
 		}
@@ -241,6 +241,7 @@ public class SceneManager extends Pane {
 		String musicFile = "resource/backgroundMusic.mp3";
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		backgroundMP = new MediaPlayer(sound);
+		backgroundMP.play();
 	}
 	
 	public void muteGame(String sceneName) {
@@ -274,8 +275,8 @@ public class SceneManager extends Pane {
 	
 	public void undo() {
 		Grid grid = sceneView.getGrid();
-		Board puzzle = grid.getBoard();
-		Move m = puzzle.undo();
+		Board board = grid.getBoard();
+		Move m = board.undo();
 		if(m == null) {
 			return;
 		}
@@ -299,8 +300,8 @@ public class SceneManager extends Pane {
 			s.setTranslateY(value);	
 //			System.out.println("previous position: " + s.getTranslateY());
 		}
-		sceneView.updateMove();
-		puzzle.printBoard();
+		sceneView.updateMove(board);
+		board.printBoard();
 //		System.out.println("");
 	}
 	
@@ -310,8 +311,9 @@ public class SceneManager extends Pane {
 		int[][] b = board.resetBoard();
 		board.setMatrix(b);
 		board.printBoard();
-		sceneView.updateMove();
-		sceneView.createPuzzle(sceneName, board);
+		sceneView.updateMove(board);
+		Group root = sceneView.createPuzzle(sceneName, board);
+		root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			sceneView.bigGrid();
 		}else {
@@ -319,14 +321,64 @@ public class SceneManager extends Pane {
 		}	
 	}
 	
-	
-	
-	public void setSceneWidth(double sceneWidth) {
-		this.sceneWidth = sceneWidth;
-	}
-
-	public void setSceneHeight(double sceneHeight) {
-		this.sceneHeight = sceneHeight;
+	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
+			new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent t) {
+				Grid grid = sceneView.getGrid();
+				Pair<String, AnchorPane> currentGameLayout = sceneView.getCurrentGameLayout();
+				AnchorPane gameLayout = currentGameLayout.getValue();
+				String difficulty = currentGameLayout.getKey();
+				Board board = grid.getBoard();
+				Vehicle v = board.getVehiclesList().get(0);
+				String musicFile = "resource/click.mp3";    
+				Media sound = new Media(new File(musicFile).toURI().toString());
+				MediaPlayer effectMP = new MediaPlayer(sound);
+				ToggleButton mute = (ToggleButton) gameLayout.getChildren().get(4);
+				if(mute.isSelected()) {
+					effectMP.stop();
+				}else {
+					effectMP.play();
+				}
+				sceneView.updateMove(board);
+				if(board.fin(v)) {
+					win(board, difficulty);
+				}
+							
+			}
+		};
+		
+	public void win(Board board, String difficulty) {
+		AnchorPane winLayout = sceneView.winningScene(board);
+		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		for (int i = 0; i < buttons.getChildren().size(); i++) {
+			Button b = (Button) buttons.getChildren().get(i);
+			String btnText = b.getText();
+			switch(btnText) {
+				case("RESET"):
+					b.setOnAction(e->{
+						resetBoard(difficulty);
+						Scene scene = scenes.get(difficulty);
+						stage.setScene(scene);
+					});
+					break;
+				case("HOME"):
+					b.setOnAction(e->changeScene("MENU", b));
+					break;
+				case("NEXT"):
+					b.setOnAction(e->changeScene(difficulty, b));
+					break;
+	        }	
+		}
+		Scene scene = new Scene(winLayout, sceneWidth, sceneHeight);
+		if(sceneWidth >= 900 && sceneHeight >= 700) {
+			sceneView.bigWinningScene(winLayout);
+		}else {
+			sceneView.smallWiningScene(winLayout);
+		}
+		scenes.put("WIN", scene);
+		sceneListener(scene);
+		stage.setScene(scene);
 	}
 
 	public void sceneListener(Scene scene) {

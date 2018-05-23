@@ -57,7 +57,6 @@ public class GridLock extends Application {
 		    @Override
 		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
 		        stage.setWidth((double) newWidth);
-		        sceneManager.setSceneWidth((double) newWidth);
 		    }
 		});
 
@@ -65,7 +64,6 @@ public class GridLock extends Application {
 		    @Override
 		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
 		    	stage.setHeight((double) newHeight);
-		    	sceneManager.setSceneHeight((double) newHeight);
 		    }
 		});
 	}

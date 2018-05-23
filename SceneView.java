@@ -43,7 +43,7 @@ public class SceneView extends Pane{
 	private int hardLevel;
 //	private Board puzzle;
 	private ToggleButton menuMuteButton;
-	private AnchorPane currentGameLayout;
+	private Pair currentGameLayout;
 	
 	
 	public SceneView (double width, double height) {
@@ -89,6 +89,10 @@ public class SceneView extends Pane{
 
 	public int getBlockLength() {
 		return blockLength;
+	}
+
+	public Pair getCurrentGameLayout() {
+		return currentGameLayout;
 	}
 
 	public AnchorPane createMenu() {
@@ -306,7 +310,68 @@ public class SceneView extends Pane{
 	
 	}
 	
-	public void renderPuzzle(String difficulty, Generator g, String buttonText) {
+	public AnchorPane winningScene(Board board) {
+		AnchorPane winLayout = new AnchorPane();
+		String Moves = "Moves made: " + board.getnMoves();
+		HBox hbox = new HBox(30);
+		Polygon polygon = new Polygon(
+				0, 0,
+				200, 0,
+				200, 30,
+				0, 30
+        );
+		Button homeBtn = createBtn("HOME", polygon);
+		Button resetBtn = createBtn("RESET", polygon);
+		Button nextBtn = createBtn("NEXT", polygon);
+		hbox.getChildren().addAll(homeBtn, resetBtn, nextBtn);
+		Text moves = new Text(Moves);
+		Text win = new Text("Congratulations! You Win."); 
+		ImageView background = getBackground("file:resource/background.jpg", 1.0);
+		winLayout.getChildren().addAll(background, win, moves, hbox);
+		return winLayout;
+	}
+	
+	public void smallWiningScene(AnchorPane winLayout) {
+		Text win = (Text) winLayout.getChildren().get(1);
+		Text moves = (Text) winLayout.getChildren().get(2);
+		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		for(int i = 0; i < buttons.getChildren().size(); i++) {
+			Button b = (Button) buttons.getChildren().get(i);
+			b.setPrefSize(120, 20);
+		}
+		win.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 26));
+		moves.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 26));
+		double winPosition = sceneWidth - win.getLayoutBounds().getWidth();
+		double movesPosition = sceneWidth - moves.getLayoutBounds().getWidth();
+		win.setTranslateX(winPosition/2);
+		win.setTranslateY(sceneHeight/3);
+		moves.setTranslateX(movesPosition/2);
+		moves.setTranslateY(sceneHeight/3 + 50);
+		buttons.setTranslateX(sceneWidth/2 + 100);
+		buttons.setTranslateY(sceneHeight/2 + 50);
+	}
+	
+	public void bigWinningScene(AnchorPane winLayout) {
+		Text win = (Text) winLayout.getChildren().get(1);
+		Text moves = (Text) winLayout.getChildren().get(2);
+		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		for(int i = 0; i < buttons.getChildren().size(); i++) {
+			Button b = (Button) buttons.getChildren().get(i);
+			b.setPrefSize(150, 30);
+		}
+		win.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 36));
+		moves.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 36));
+		double winPosition = sceneWidth - win.getLayoutBounds().getWidth();
+		double movesPosition = sceneWidth - moves.getLayoutBounds().getWidth();
+		win.setTranslateX(winPosition/2);
+		win.setTranslateY(sceneHeight/3);
+		moves.setTranslateX(movesPosition/2);
+		moves.setTranslateY(sceneHeight/3 + 50);
+		buttons.setTranslateX(sceneWidth/2 + 50);
+		buttons.setTranslateY(sceneHeight/2 + 50);
+	}
+	
+	public AnchorPane renderPuzzle(String difficulty, Generator g, String buttonText) {
 		Board puzzle = null;
 		String level = "Level: ";
 		String move = "Moves: 0";
@@ -324,8 +389,7 @@ public class SceneView extends Pane{
 						level = level + easyLevel;
 						levelBoard.setText(level);
 						puzzle = g.GetPreviousEasyBoard();
-						root = createPuzzle(difficulty, puzzle);
-						
+						root = createPuzzle(difficulty, puzzle);					
 					}
 					
 					break;
@@ -351,8 +415,6 @@ public class SceneView extends Pane{
 			}
 			
 		}else {
-
-			
 			switch(difficulty) {
 				case("EASY"):
 					easyLevel++;
@@ -379,7 +441,9 @@ public class SceneView extends Pane{
 			}
 			
 		}
-		currentGameLayout = layout;
+		currentGameLayout = new Pair<String, AnchorPane>(difficulty, layout);
+		return layout;
+		
 	}
 	
 	public Group createPuzzle(String difficulty, Board puzzle) {
@@ -406,7 +470,7 @@ public class SceneView extends Pane{
 				break;
 		}
 		gameBoard = new Pair<String, Group>(difficulty, root);
-		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+		//root.setOnMouseReleased(OnMouseReleasedEventHandler);
 		layout.getChildren().add(root);
 		return root;
 	}
@@ -423,35 +487,12 @@ public class SceneView extends Pane{
 		board.setTranslateX(sceneWidth/2);
 		board.setTranslateY(sceneHeight/5);		
 	}
-	
-	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
-			new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent t) {
-				Board board = grid.getBoard();
-				String musicFile = "resource/click.mp3";    
-				Media sound = new Media(new File(musicFile).toURI().toString());
-				MediaPlayer effectMP = new MediaPlayer(sound);
-				ToggleButton mute = (ToggleButton) currentGameLayout.getChildren().get(4);
-				if(mute.isSelected()) {
-					effectMP.stop();
-				}else {
-					effectMP.play();
-				}
-				updateMove();
-//				if(board.fin(v)) {
-//					win();
-//				}
-							
-			}
-		};
-		
-	
 
-	public void updateMove() {
-		int moves = grid.getMoves();
+	public void updateMove(Board board) {
+		AnchorPane gameLayout = (AnchorPane) currentGameLayout.getValue();
+		int moves = board.getnMoves();
 		String Moves = "Moves: " + moves;
-		Text score = (Text) currentGameLayout.getChildren().get(2);
+		Text score = (Text) gameLayout.getChildren().get(2);
 		score.setText(Moves);	
 	}
 	
