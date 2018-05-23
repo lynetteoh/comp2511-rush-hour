@@ -4,6 +4,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author lean lynn oh
+ *
+ */
 public class GridLock extends Application {
 
 	private SceneManager sceneManager;
@@ -12,7 +17,11 @@ public class GridLock extends Application {
 	private double screenMaxWidth;
 	private double screenMaxHeight;
 	private Scene scene;
-
+	
+	/**
+	 * This function is the entry point for the view. It sets up the window and display the first scene on screen
+	 * @param primaryStage: the window of the game
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		try {
@@ -44,14 +53,19 @@ public class GridLock extends Application {
 		}
 
 	}
-
-	public static void main(String[] args) {
-		Generator g = new Generator(6);
-		g.RandomEasyGenerator();
-		
+	
+	/**
+	 * Main function of the gridLock game
+	 * @param args
+	 */
+	public static void main(String[] args) {	
 		launch(args);
 	}
-
+	
+	/**
+	 * This function listen to the changes made on the window and updates the width and height of the window accordingly
+	 * @param stage: the window of the gridLock game
+	 */
 	public void stageListener(Stage stage) {
 		stage.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override

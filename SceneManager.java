@@ -22,6 +22,11 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * This class acts as the controller between the model and the view
+ * @author lean lynn oh
+ *
+ */
 public class SceneManager extends Pane {
 	private double sceneWidth;
 	private double sceneHeight;
@@ -34,6 +39,12 @@ public class SceneManager extends Pane {
 	private final int BOARDSIZE = 6; 
 	private Generator g;
 	
+	/**
+	 * class constructor 
+	 * @param width: sceneWidth
+	 * @param height: sceneHeight
+	 * @param stage: the stage to show the scene
+	 */
 	public SceneManager(double width, double height, Stage stage) {
 		this.sceneWidth = width;
 		this.sceneHeight = height;
@@ -43,9 +54,18 @@ public class SceneManager extends Pane {
 		this.g = new Generator(BOARDSIZE);
 	}
 	
+	/**
+	 * This function creates a game menu scene 
+	 * @return menuScene: the scene to display on screen
+	 */
 	public Scene createMenuScene() {
+		//create the menu layout
 		AnchorPane menuLayout = sceneView.createMenu();
-		menuMuteButton = sceneView.getMenuMuteButton();
+		
+		//get the mute button
+		menuMuteButton = (ToggleButton) menuLayout.getChildren().get(3);
+		
+		//defines the functionality of the mute button
 		menuMuteButton.setOnAction(e->{
 			if(menuMuteButton.isSelected()) {
 				menuMuteButton.setText("UNMUTE");
@@ -56,7 +76,11 @@ public class SceneManager extends Pane {
 			muteScene("MENU");
 			
 		});
-		VBox buttons = sceneView.getMenuButtons();
+		
+		//gets all the buttons in the menu scene except the mute button
+		VBox buttons = (VBox) menuLayout.getChildren().get(2);
+		
+		//add functionality to each button
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String name = b.getText();
@@ -76,25 +100,58 @@ public class SceneManager extends Pane {
             }
 			
 		}
-		addMedia();
+		
+		//add background music for the game
+		String musicFile = "resource/backgroundMusic.mp3";
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		backgroundMP = new MediaPlayer(sound);
+		
+		//play the music
+		backgroundMP.play();
+		
+		//create the scene object for menu page
 		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
+		
+		//add the scene to a hash table
 		scenes.put("MENU", menuScene);
+		
+		//add listener to the scene
 		sceneListener(menuScene);
+		
+		//display the menu with small menu layout
+		sceneView.smallMenuLayout();
+		
+		//create animation 
+		sceneView.animation();
 		return menuScene;
 	}
 	
-	public Scene createGameScene(String difficulty) {
-		AnchorPane gameLayout = sceneView.createGameLayout(difficulty);
+	/**
+	 * This function creates a game scene 
+	 * @param hardness: hardness of a level
+	 * @return gameScene: the game scene to display on screen
+	 */
+	public Scene createGameScene(String hardness) {
+		//create game layout
+		AnchorPane gameLayout = sceneView.createGameLayout(hardness);
+		
+		//get the mute button
 		ToggleButton mute = (ToggleButton) gameLayout.getChildren().get(4);
+		
+		//add functionality to the mute button
 		mute.setOnAction(e->{
 			if(mute.isSelected()) {
 				mute.setText("UNMUTE");
 			}else {
 				mute.setText("MUTE");
 			}
-			muteScene(difficulty);
+			muteScene(hardness);
 		});
-		VBox buttons = sceneView.getGameButtons();
+		
+		//get all the buttons in a game scene except the mute button
+		VBox buttons = (VBox) gameLayout.getChildren().get(3);
+		
+		//add functionality to each of the buttons
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
 			HBox gameButtons = (HBox) buttons.getChildren().get(i);
 			for (int j = 0; j < gameButtons.getChildren().size(); j++) {
@@ -105,7 +162,7 @@ public class SceneManager extends Pane {
 						b.setOnAction(e->undo());
 						break;
 					case("RESET"):
-						b.setOnAction(e->resetBoard(difficulty));
+						b.setOnAction(e->resetBoard(hardness));
 						break;
 					case("HOME"):
 						b.setOnAction(e->changeScene("MENU", b));
@@ -114,34 +171,55 @@ public class SceneManager extends Pane {
 						
 						break;
 					case("NEXT"):
-						b.setOnAction(e->changeScene(difficulty, b));
+						b.setOnAction(e->changeScene(hardness, b));
 						break;
 					case("PREVIOUS"):
-						b.setOnAction(e->changeScene(difficulty, b));
+						b.setOnAction(e->changeScene(hardness, b));
 						break;
 					
 	            }	
 			}
 		}
+		
+		//create the scene object for the game scene
 		Scene gameScene = new Scene(gameLayout, sceneWidth, sceneHeight);
-		scenes.put(difficulty, gameScene);
+		
+		//add the scene to the hash map
+		scenes.put(hardness, gameScene);
+		
+		//add listener to the scene
 		sceneListener(gameScene);
+		
+		//choose which size to display depends on the scene width and scene height
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
-			sceneView.bigGameLayout(difficulty);
+			sceneView.bigGameLayout(hardness);
 		}else {
-			sceneView.smallGameLayout(difficulty);
+			sceneView.smallGameLayout(hardness);
 		}
 		return gameScene;
 	}
 	
+	/**
+	 * This function change the scene according to user input and display it on screen
+	 * @precondition user pressed a button and the name of the scene is valid
+	 * @postcondition the program changes the scene accordingly
+	 * @param name: name of the scene
+	 * @param button: button that a user pressed
+	 */
 	private void changeScene(String name, Button button) {
+		//find the scene in the hash map
 		Scene scene = scenes.get(name);
+		
+		//the scene has not been created
 		if(scene == null) {
+			//create the scene
 			scene = createGameScene(name);
 		}
 		
+		//if the scene is a game scene
 		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
 			String buttonText = button.getText();
+			//create the puzzle
 			AnchorPane currentGameLayout = sceneView.renderPuzzle(name, g, buttonText);
 			Group root = (Group) currentGameLayout.getChildren().get(5);
 			root.setOnMouseReleased(OnMouseReleasedEventHandler);
@@ -152,16 +230,28 @@ public class SceneManager extends Pane {
 			}
 		} 
 		
+		//if the scene is a menu scene
 		if(name.equals("MENU")) {
+			
+			//play or stop the background music in the menu scene
 			playOrStopMusic();
 		}else {
+			
+			//stop the background music in menu scene
 			backgroundMP.stop();
 		}
 		
+		//display the scene
 		stage.setScene(scene);
 		stage.show();
 	}
-
+	
+	/**
+	 * This function creates a alert box to prompt the user if they really want to exit the game
+	 * @precondition user clicks on the exit button or the cross button on the left hand corner of the window
+	 * @postcondition a alert box will pop up and ask the user for response
+	 * @param stage: game window
+	 */
 	public void closeProgram(Stage stage) {
 		Alert alert = new Alert(AlertType.NONE, "Are you sure to exit " + " ?", ButtonType.YES, ButtonType.NO);
 		alert.showAndWait();
@@ -170,6 +260,12 @@ public class SceneManager extends Pane {
 		}
 	}
 	
+	/**
+	 * This function change the view of the scene (ie the size of items in the scene) based on current scene width and scene height
+	 * @precondition scene size changes 
+	 * @postcondition items in the scene change their size and position
+	 * @param scene: current scene 
+	 */
 	public void resizeScene(Scene scene) {
 		String key = null;
 		for(Entry<String, Scene> entry: scenes.entrySet()){
@@ -229,6 +325,12 @@ public class SceneManager extends Pane {
 		
 	}
 	
+	/**
+	 * This function plays or stops the background music in the main menu 
+	 * @precondition mute button in the menu page is pressed
+	 * @postcondition If the mute button is selected, the background music is stopped.
+	 * 					If unmute button is unselected, the background music is played.
+	 */
 	public void playOrStopMusic() {
 		if(menuMuteButton.isSelected()) {
 			backgroundMP.stop();
@@ -237,21 +339,29 @@ public class SceneManager extends Pane {
 		}
 	}
 	
-	public void addMedia() {
-		String musicFile = "resource/backgroundMusic.mp3";
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		backgroundMP = new MediaPlayer(sound);
-		backgroundMP.play();
-	}
-	
+
+	/**
+	 * This function changes the state of all toggle buttons in the game
+	 * @precondition a mute button is pressed 
+	 * @postcondition all mute buttons in the game has changed its state
+	 * @param sceneName: current scene
+	 */
 	public void muteScene(String sceneName) {
+		ToggleButton mute = null;
 		for(Entry<String, Scene> entry: scenes.entrySet()) {
-			ToggleButton mute = null;
+			
+			//ignore mute button in the current scene and in the winning scene
 			if(entry.getKey().equals(sceneName) || entry.getKey().equals("WIN")) {
 				continue;
 			}
+			
+			//get the scene
 			Scene scene = entry.getValue();
+			
+			//get the layout
 			AnchorPane layout = (AnchorPane) scene.getRoot();
+			
+			//get the mute button in the layout
 			if(entry.getKey().equals("MENU")) {
 				mute = (ToggleButton) layout.getChildren().get(3);
 				
@@ -259,6 +369,7 @@ public class SceneManager extends Pane {
 				mute = (ToggleButton) layout.getChildren().get(4);
 			}
 			
+			//change the state of the mute button 
 			if(mute.isSelected()) {
 				mute.setSelected(false);
 				mute.setText("MUTE");
@@ -269,47 +380,89 @@ public class SceneManager extends Pane {
 		}
 	}
 	
+	/**
+	 * This function undo a move made by the player in the back end and display the changed in the front end
+	 * @precondition the player has pressed on the undo button 
+	 * @postcondition if the player has made at least one move before pressing the undo, the game will undo the move in the back
+	 *				end and front end. Otherwise, no changes is made. 
+	 *
+	 */
 	public void undo() {
+		//get the front end view of the board
 		Grid grid = sceneView.getGrid();
+		
+		//get the board from back end
 		Board board = grid.getBoard();
+		
+		//undo the move in back end
 		Move m = board.undo();
+		
+		//if there is no move made previous
 		if(m == null) {
 			return;
 		}
+		
+		//get the block that is previously move
 		Vehicle v = m.getVehicle();
+		
+		//get the block's id
 		int id = v.getId();
+		
+		//get the direction of move 
 		int direction = m.getDirection();
+		
+		//get the group of blocks from front end 
 		ArrayList<Group> vehicles = grid.getBlockGroups();
 		Group vehicle = (Group) vehicles.get(id-1);
 		Sprite s = (Sprite) vehicle.getChildren().get(0);
-		int gridLength = sceneView.getBlockLength();
-		System.out.println("length " + (direction*gridLength));
+		//the length of each block in the grid
+		int blockLength = sceneView.getBlockLength();
+		
+		//horizontal blocks
 		if(v.getOrient() == 1) {
-			double value = s.getTranslateX() - direction*gridLength;
-//			System.out.println(s.getTranslateX());
+			double value = s.getTranslateX() - direction*blockLength;
+			//set its new position
 			s.setTranslateX(value);
-//			System.out.println("previous position: " + s.getTranslateX());
-			
+		
 		} else {
-			double value =  s.getTranslateY() - direction*gridLength; 
-//			System.out.println(s.getTranslateY());
+			double value =  s.getTranslateY() - direction*blockLength;
+			//set its new position
 			s.setTranslateY(value);	
-//			System.out.println("previous position: " + s.getTranslateY());
+
 		}
+		
+		//update the number of moves
 		sceneView.updateMove(board);
-		board.printBoard();
-//		System.out.println("");
+//		board.printBoard();
+
 	}
 	
+	/**
+	 * This function reset the board in the front end and back end
+	 * @precondition the player clicks on the reset button 
+	 * @postcondition the front end view of the board restore its original state and the back end board return its original state
+	 * @param sceneName: the name of the game scene (ie. the hardness of a level)
+	 */
 	public void resetBoard(String sceneName) {
+		//get the front end view of the puzzle
 		Grid grid = sceneView.getGrid();
+		
+		//get the back end view of the puzzle
 		Board board = grid.getBoard();
+		
+		//reset the board in the back end
 		int[][] b = board.resetBoard();
 		board.setMatrix(b);
-		board.printBoard();
+//		board.printBoard();
+		
+		//reset the display for moves
 		sceneView.updateMove(board);
+		
+		//restore the front end puzzle to its original state
 		Group root = sceneView.createPuzzle(sceneName, board);
 		root.setOnMouseReleased(OnMouseReleasedEventHandler);
+		
+		//determine the position of the puzzle in a scene based on the scene size 
 		if(sceneWidth >= 900  && sceneHeight  >= 700) {
 			sceneView.bigGrid();
 		}else {
@@ -317,44 +470,69 @@ public class SceneManager extends Pane {
 		}	
 	}
 	
+	//event handler for mouse released
 	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
 			new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent t) {
+				//get the front end board
 				Grid grid = sceneView.getGrid();
 				Pair<String, AnchorPane> currentGameLayout = sceneView.getCurrentGameLayout();
 				AnchorPane gameLayout = currentGameLayout.getValue();
-				String difficulty = currentGameLayout.getKey();
+				String hardness = currentGameLayout.getKey();
+				
+				//get the back end board
 				Board board = grid.getBoard();
 				Vehicle v = board.getVehiclesList().get(0);
+				
+				//add sound effect for a button click 
 				String musicFile = "resource/click.mp3";    
 				Media sound = new Media(new File(musicFile).toURI().toString());
 				MediaPlayer effectMP = new MediaPlayer(sound);
+				
+				//get the mute button in a scene
 				ToggleButton mute = (ToggleButton) gameLayout.getChildren().get(4);
+				
+				//play or stop the sound effect
 				if(mute.isSelected()) {
 					effectMP.stop();
 				}else {
 					effectMP.play();
 				}
+				
+				//update the display of the move
 				sceneView.updateMove(board);
+				
+				//check if the red car is at the goal
 				if(board.fin(v)) {
-					win(board, difficulty);
-				}
-							
+					win(board, hardness);
+				}							
 			}
 		};
-		
-	public void win(Board board, String difficulty) {
+	
+	/**
+	 * This function creates the winning scene for the game
+	 * @precondition the red car has reached the goal
+	 * @postcondition the winning scene is displayed 
+	 * @param board: the puzzle for a level
+	 * @param hardness: the hardness of a level
+	 */
+	public void win(Board board, String hardness) {
+		//get the layout of the winning scene
 		AnchorPane winLayout = sceneView.winningScene(board);
+		
+		//get all the buttons in the winning scene
 		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		
+		//add functionality to each button
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
 			Button b = (Button) buttons.getChildren().get(i);
 			String btnText = b.getText();
 			switch(btnText) {
 				case("RESET"):
 					b.setOnAction(e->{
-						resetBoard(difficulty);
-						Scene scene = scenes.get(difficulty);
+						resetBoard(hardness);
+						Scene scene = scenes.get(hardness);
 						stage.setScene(scene);
 					});
 					break;
@@ -362,39 +540,58 @@ public class SceneManager extends Pane {
 					b.setOnAction(e->changeScene("MENU", b));
 					break;
 				case("NEXT"):
-					b.setOnAction(e->changeScene(difficulty, b));
+					b.setOnAction(e->changeScene(hardness, b));
 					break;
 	        }	
 		}
+		
+		//create the scene
 		Scene scene = new Scene(winLayout, sceneWidth, sceneHeight);
+		
+		//choose the layout of the scene based on the scene size
 		if(sceneWidth >= 900 && sceneHeight >= 700) {
 			sceneView.bigWinningScene(winLayout);
 		}else {
 			sceneView.smallWiningScene(winLayout);
 		}
+		
+		//add sound effect for the winning scene
 		String musicFile = "resource/win.mp3";    
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		MediaPlayer effectMP = new MediaPlayer(sound);
 		
+		//play the sound effect 
 		if(menuMuteButton.isSelected()) {
 			effectMP.stop();
 		}else {
 			effectMP.play();
 		}
 		
+		//add the scene to the hash map
 		scenes.put("WIN", scene);
-		sceneListener(scene);
-		stage.setScene(scene);
-
 		
+		//add listener to the scene
+		sceneListener(scene);
+		
+		//display the scene 
+		stage.setScene(scene);	
 	}
 
+	/**
+	 * This function acts as the listener for the scene. It listens to changes in the scene's width and scene's height
+	 * @precondition a scene is created
+	 * @postcondition any changes in the scene size is detected and changes the layout
+	 * @param scene: current scene
+	 */
 	public void sceneListener(Scene scene) {
 		scene.widthProperty().addListener(new ChangeListener<Number>() {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
+		    	//change the scene width in this class
 		    	sceneWidth = (double) newWidth;
+		    	//change the scene width in the scene view class
 		    	sceneView.setSceneWidth((double)newWidth);
+		    	//resize current scene
 		        resizeScene(scene);
 		    }
 		});
@@ -402,8 +599,11 @@ public class SceneManager extends Pane {
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 		    @Override 
 		    public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
+		    	//change the scene height in this class
 		    	sceneHeight = (double) newHeight;
-		        sceneView.setSceneHeight((double) newHeight);
+		        //changes the scene height in the scene view class
+		    	sceneView.setSceneHeight((double) newHeight);
+		        //resize current scene
 		        resizeScene(scene);
 		    }
 		});
