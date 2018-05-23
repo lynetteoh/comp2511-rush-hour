@@ -57,7 +57,6 @@ public class Generator {
 			currentEasyBoardIndex = easyBoards.size();
 			easyBoards.add(RandomEasyGenerator());
 		}
-		System.out.println("Hidahfidsaf\n\n" + currentEasyBoardIndex + " what? " + easyBoards.size());
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetPreviousMediumBoard() {
@@ -82,14 +81,14 @@ public class Generator {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
 			current.resetBoard();			
 		}
+		currentMediumBoardIndex++;
 		if (currentMediumBoardIndex < mediumBoards.size()) {
 			return mediumBoards.get(currentMediumBoardIndex);
 		} 
-		currentMediumBoardIndex++;
-		if (currentMediumBoardIndex > mediumBoards.size()) {
+		if (currentMediumBoardIndex >= mediumBoards.size()) {
 			currentMediumBoardIndex = mediumBoards.size();
+			mediumBoards.add(RandomMediumGenerator());
 		}	
-		mediumBoards.add(RandomMediumGenerator());
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
 	public Board GetPreviousHardBoard() {
@@ -114,14 +113,14 @@ public class Generator {
 			Board current = hardBoards.get(currentHardBoardIndex);
 			current.resetBoard();			
 		}
+		currentHardBoardIndex++;
 		if (currentHardBoardIndex < hardBoards.size()) {
 			return hardBoards.get(currentHardBoardIndex);
 		} 
-		currentHardBoardIndex++;
-		if (currentHardBoardIndex > hardBoards.size()) {
+		if (currentHardBoardIndex >= hardBoards.size()) {
 			currentHardBoardIndex = hardBoards.size();
+			hardBoards.add(RandomHardGenerator());
 		}
-		hardBoards.add(RandomHardGenerator());
 		return hardBoards.get(currentHardBoardIndex);
 	}
 	
