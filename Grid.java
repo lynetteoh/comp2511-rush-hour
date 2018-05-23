@@ -70,7 +70,8 @@ public class Grid {
 			Rectangle r = new Rectangle(xPos, yPos, this.sLength, this.sLength);
 			//Image background = new Image("file:resource/background.jpg");
 			//r.setFill(new ImagePattern(background));
-			r.setFill(Color.web("rgba(0,0,255, 0.1)"));
+//			r.setFill(Color.web("rgba(0,0, 255, 0.1)"));
+			r.setFill(Color.web("rgba(254, 247, 205, 0.2)"));
 			r.setStroke(Color.BLACK);
 			this.gridSquares.add(r);
 			xPos += sLength;

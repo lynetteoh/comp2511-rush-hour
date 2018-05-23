@@ -53,6 +53,7 @@ public class SceneManager extends Pane {
 				menuMuteButton.setText("MUTE");
 			}
 			playOrStopMusic();
+			muteScene("MENU");
 			
 		});
 		VBox buttons = sceneView.getMenuButtons();
@@ -91,8 +92,7 @@ public class SceneManager extends Pane {
 			}else {
 				mute.setText("MUTE");
 			}
-			muteMenu();
-			muteGame(difficulty);
+			muteScene(difficulty);
 		});
 		VBox buttons = sceneView.getGameButtons();
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
@@ -244,15 +244,21 @@ public class SceneManager extends Pane {
 		backgroundMP.play();
 	}
 	
-	public void muteGame(String sceneName) {
-		HashMap<String, AnchorPane> gameLayout = sceneView.getGameLayout();
-		for(Entry<String, AnchorPane> entry: gameLayout.entrySet()) {
-			if(entry.getKey().equals(sceneName)) {
+	public void muteScene(String sceneName) {
+		for(Entry<String, Scene> entry: scenes.entrySet()) {
+			ToggleButton mute = null;
+			if(entry.getKey().equals(sceneName) || entry.getKey().equals("WIN")) {
 				continue;
 			}
-			AnchorPane layout = entry.getValue();
+			Scene scene = entry.getValue();
+			AnchorPane layout = (AnchorPane) scene.getRoot();
+			if(entry.getKey().equals("MENU")) {
+				mute = (ToggleButton) layout.getChildren().get(3);
+				
+			}else {
+				mute = (ToggleButton) layout.getChildren().get(4);
+			}
 			
-			ToggleButton mute = (ToggleButton) layout.getChildren().get(4);
 			if(mute.isSelected()) {
 				mute.setSelected(false);
 				mute.setText("MUTE");
@@ -260,16 +266,6 @@ public class SceneManager extends Pane {
 				mute.setSelected(true);
 				mute.setText("UNMUTE");
 			}
-		}
-	}
-	
-	public void muteMenu() {
-		if(menuMuteButton.isSelected()) {
-			menuMuteButton.setSelected(false);
-			menuMuteButton.setText("MUTE");
-		}else {
-			menuMuteButton.setSelected(true);
-			menuMuteButton.setText("UNMUTE");
 		}
 	}
 	
@@ -376,9 +372,21 @@ public class SceneManager extends Pane {
 		}else {
 			sceneView.smallWiningScene(winLayout);
 		}
+		String musicFile = "resource/win.mp3";    
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		MediaPlayer effectMP = new MediaPlayer(sound);
+		
+		if(menuMuteButton.isSelected()) {
+			effectMP.stop();
+		}else {
+			effectMP.play();
+		}
+		
 		scenes.put("WIN", scene);
 		sceneListener(scene);
 		stage.setScene(scene);
+
+		
 	}
 
 	public void sceneListener(Scene scene) {
