@@ -178,7 +178,7 @@ public class SceneManager extends Pane {
 						b.setOnAction(e->changeScene(hardness, b));
 						break;
 					
-	            }	
+				}	
 			}
 		}
 		

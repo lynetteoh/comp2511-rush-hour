@@ -231,11 +231,11 @@ public class SceneView {
 			TranslateTransition tt = new TranslateTransition(Duration.seconds(1.15 + i*0.2), b);
 			
 			//set starting position
-    		tt.setToX(0);
+			tt.setToX(0);
     		
     		//set ending position
-    		tt.setOnFinished(e->b.translateXProperty().negate());
-    		tt.play();
+			tt.setOnFinished(e->b.translateXProperty().negate());
+			tt.play();
 		} 
 	}
 	
@@ -324,9 +324,9 @@ public class SceneView {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
-	            Button b = (Button) buttons.getChildren().get(j);
-	            b.setFont(Font.font(18));
-	            b.setPrefSize(150,30);
+				Button b = (Button) buttons.getChildren().get(j);
+				b.setFont(Font.font(18));
+				b.setPrefSize(150,30);
 			}
 			
 		}
@@ -371,9 +371,9 @@ public class SceneView {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
-	            Button b = (Button) buttons.getChildren().get(j);
-	            b.setFont(Font.font(16));
-	            b.setPrefSize(120, 20);			
+				Button b = (Button) buttons.getChildren().get(j);
+				b.setFont(Font.font(16));
+				b.setPrefSize(120, 20);			
 			}
 		}
 		
@@ -426,7 +426,7 @@ public class SceneView {
 				200, 0,
 				200, 30,
 				0, 30
-        );
+		);
 		
 		//create buttons
 		Button homeBtn = createBtn("HOME", polygon);
@@ -495,7 +495,7 @@ public class SceneView {
 				200, 0,
 				200, 30,
 				0, 30
-        );
+		);
 		
 		//create buttons
 		Button homeBtn = createBtn("HOME", polygon);
