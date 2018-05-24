@@ -38,7 +38,6 @@ public class GridLock extends Application {
 			});
 
 
-
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -48,7 +47,6 @@ public class GridLock extends Application {
 	public static void main(String[] args) {
 		Generator g = new Generator(6);
 		g.RandomHardGenerator();
-		
 		launch(args);
 	}
 

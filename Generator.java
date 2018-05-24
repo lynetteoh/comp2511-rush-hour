@@ -125,9 +125,7 @@ public class Generator {
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
 		do {
-			System.out.println("Easy Generator 4");
 			int k = randNoCarsEasy();
-			System.out.println("The number of cars to TRY to set down: " +k);
 			b.clearVehicles();
 			b = new Board(n);
 			// set down most important car
@@ -137,67 +135,24 @@ public class Generator {
 				placeRandCar(b);
 				set++;
 			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
-			
+
 			b.solve();
-			System.out.println("Solution: " + b.getSolution());
 			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps:");
-			b.printBoard();
+			//System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps:");
 			AttemptNo++;
 		} while (!b.solve() || !(MIN < nMoves && nMoves <= EASY));
-		System.out.println("AttemptNo " + AttemptNo);
 		return b;
 	}
 
-	// ok Medium Generator : can produce a board in 1 - 20 Attempts
 	public Board RandomMediumGenerator() { 
-		int AttemptNo = 0; 
-		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
-		do {
-			System.out.println("Medium Generator 4");
-			int k = randNoCarsMedium();
-			System.out.println("The number of cars to TRY to set down: " + k);
-			b.clearVehicles();
-			b = new Board(n);
-			// set down most important car
-			placeFirstVehicle(b);
-			int set = 0; // the number of cars set down
-			while (set < k) { // try k times 
-				placeRandCar2(b);
-				set++;
-			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
-			
-			b.solve();
-			nMoves = b.getSolution().size();
-			System.out.println("Solution: " + b.getSolution());
-			System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps");
-			AttemptNo++;
-		} while (!b.solve() || !(EASY < nMoves && nMoves <= MEDIUM));
-		System.out.println("AttemptNo " + AttemptNo);
-		return b;
-	}
-
-	// Crappy Hard Generator: may take over 100 steps
-	/**
-	 * New method of placing cars. 
-	 * Abandone board early if unsolvable.
-	 * @return
-	 */
-	public Board RandomHardGenerator() { 
+		long startTime = System.currentTimeMillis();
 		boolean bIsSolvable = true;
 		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0; // the number of moves required to solve b
 		do {
 			b.clearVehicles(); b = new Board(n);
-			placeFirstVehicle2(b); // set down most important car
+			placeFirstVehicle(b); // set down most important car
 			Vehicle First = b.getLastVehicle(); 
 			int leftBorder = First.getPosition()[1];
 			
@@ -212,42 +167,108 @@ public class Generator {
 				}
 				j++;
 			}
-			System.out.println("wait after verticals?");
-			// b is solvable by definition.
 
+			
 			int set = 0; // no. of car-setting attempts
-			while (set < 14) { // try 10 times 
+			while (set < 9) { // try 10 times 
 				placeRandCar3(b); set++;
 			}
-			System.out.println("wait after randoms?");
 			if (!bIsSolvable) continue;
+			nMoves = b.getSolution().size();
+			//System.out.println("After Random " + b.getSolution().size() + " Steps");
 
 			rowCrawler(b);
 			nMoves = b.getSolution().size();
-			System.out.println("AfterCrawlRow " + b.getSolution().size() + " Steps");
-			if (MEDIUM < nMoves) { // early finish
+			//System.out.println("AfterCrawlRow " + b.getSolution().size() + " Steps");
+			if (EASY < nMoves && nMoves <= MEDIUM) { // early finish
 				break;
 			}
-			
 			colCrawler(b);
-			System.out.println("AfterCrawlCol " + b.getSolution().size() + " Steps");
-			if (MEDIUM < nMoves) { 
+			nMoves = b.getSolution().size();
+			//System.out.println("AfterCrawlCol " + b.getSolution().size() + " Steps");
+			if (EASY < nMoves && nMoves <= MEDIUM) { 
 				break;
 			}
 			
 			nMoves = b.getSolution().size();
-			System.out.println("AttemptNo " + AttemptNo);
-			System.out.println("Solution: " + b.getSolution());
-			System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps: ");
-			b.printBoard();
+//			System.out.println("AttemptNo " + AttemptNo);
+//			System.out.println("Solution: " + b.getSolution());
+//			System.out.println("This puzzle is solvable in " + b.getSolution().size() + " Steps: ");
+			//b.printBoard();
 			AttemptNo++;
-		} while (!b.solve() || !(MEDIUM < nMoves));
-		System.out.println("AttemptNo " + AttemptNo);
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
+			if (duration > 1000) { 
+				//System.out.println("takes too long: " + duration);
+				break;
+			}
+		} while (!b.solve() || !(EASY < nMoves && nMoves <= MEDIUM));
+		//System.out.println("AttemptNo " + AttemptNo);
+		//b.printBoard();
+		//System.out.println("Solution: " + b.getSolution());
+		return b;
+	}
+	
+	// May take over 9000 milliseconds
+	/**
+	 * New method of placing cars. 
+	 * Abandone board early if unsolvable.
+	 * @return
+	 */
+	public Board RandomHardGenerator() { 
+		long startTime = System.currentTimeMillis();
+		Board b = new Board(n); // create new board with dimension n
+		int nMoves = 0; // the number of moves required to solve b
+		do {
+			b.clearVehicles(); b = new Board(n);
+			placeFirstVehicle2(b); // set down most important car
+			Vehicle First = b.getLastVehicle(); 
+			int leftBorder = First.getPosition()[1];
+			
+			int j = 0; //number of vertical cars set down
+			while (leftBorder+1+j < n) { 
+				int orient = 2; // vertical
+				int path = leftBorder+1+j;
+				int length = randomCarLength();
+				int[] position = randomPosition2(length);
+				b.placeVehicle(orient, path, position); // no need to check; board is blank
+				j++;
+			}
+			// b is solvable 
+			
+			int set = 0; // no. of car-setting attempts
+			while (set < 14) {
+				placeRandCar3(b); set++;
+			}
+			// b is solvable 
+
+			rowCrawler(b);
+			nMoves = b.getSolution().size();
+			//System.out.println("AfterCrawlRow " + b.getSolution().size() + " Steps");
+			if (MEDIUM < nMoves) { // early finish
+				break;
+			} 
+			
+			colCrawler(b);
+			nMoves = b.getSolution().size();
+			//System.out.println("AfterCrawlCol " + b.getSolution().size() + " Steps");
+			if (MEDIUM < nMoves) { 
+				break;
+			} 
+			
+			nMoves = b.getSolution().size();
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
+			if (duration > 1000) break;
+
+		} while (!(MEDIUM < nMoves));
 		b.printBoard();
 		System.out.println("Solution: " + b.getSolution());
 		return b;
 	}
 	
+	
+
 	/**
 	 * Systematically goes row by row and places a single car down.
 	 * @param b
@@ -301,36 +322,28 @@ public class Generator {
 			for (int r = 0; r < b.getN()-2; r++) { 
 				if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r+1][c] == 0 && b.getMatrix()[r+2][c] == 0) { 
 					int position[] = {r, r+1, r+2}; 
-					if (b.canPlaceVehicle(2, c, position)) { 
-						b.placeVehicle(2, c, position);
-					} else { 
-						System.out.println("never");
-					}
-					b.printBoard();
+					b.placeVehicle(2, c, position); // no need to check
+					//b.printBoard();
 					bIsSolvable = b.solve(); b.clearMoves();
 					if (!bIsSolvable) { 
-						System.out.println("Not solvable");
-						b.printBoard();
+						//System.out.println("Not solvable");
+						//b.printBoard();
 						b.unplaceVehicle(2, c, position);
-						System.out.println("unplaced vehicle now");
-						b.printBoard();
+						//System.out.println("unplaced vehicle now");
+						//b.printBoard();
 					}
 					continue;
 				}
 				else if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r+1][c] == 0) { 
 					int position[] = {r, r+1}; 
-					if (b.canPlaceVehicle(2, c, position)) { 
-						b.placeVehicle(2, c, position);
-					} else { 
-						System.out.println("never");
-					}
+					b.placeVehicle(2, c, position); // no need to check
 					bIsSolvable = b.solve(); b.clearMoves();
 					if (!bIsSolvable) { 
-						System.out.println("Not solvable");
-						b.printBoard();
+						//System.out.println("Not solvable");
+						//b.printBoard();
 						b.unplaceVehicle(2, c, position);
-						System.out.println("unplaced vehicle now");
-						b.printBoard();
+						//System.out.println("unplaced vehicle now");
+						//b.printBoard();
 					}
 					continue;
 				}
@@ -537,12 +550,7 @@ public class Generator {
 			boolean bIsSolvable = b.solve();
 			b.clearMoves();
 			if (!bIsSolvable) { 
-				System.out.println("not solvable");
-				//b.printBoard();
 				b.unplaceVehicle(randOrient, randPath, position);
-				//System.out.println("unplaced vehicle now");
-				//b.printBoard();
-				bIsSolvable = true;
 			}
 		}
 		
