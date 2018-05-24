@@ -47,7 +47,7 @@ public class GridLock extends Application {
 
 	public static void main(String[] args) {
 		Generator g = new Generator(6);
-		g.RandomEasyGenerator();
+		g.RandomHardGenerator();
 		
 		launch(args);
 	}

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 public class Board {
@@ -15,6 +16,7 @@ public class Board {
 	public static ArrayList<Board> boards = new ArrayList<Board>();
 	private int level;
 	private int[][] initialBoard;
+	private boolean solvable;
 
 
 	public Board(int size) {
@@ -31,6 +33,7 @@ public class Board {
 		this.level = boards.indexOf(this);
 		setInitialBoard(this.matrix);
 		boards.add(this);
+		solvable = false;
 	}
 
 	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
@@ -43,6 +46,7 @@ public class Board {
 		this.level = boards.indexOf(this);
 		setInitialBoard(this.matrix);
 	}
+	
 	public Board(Board b)
 	{
 		this.size = b.getSize();
@@ -61,6 +65,10 @@ public class Board {
 		boards.add(this);
 		this.level = boards.indexOf(this);
 		setInitialBoard(this.matrix);
+	}
+	
+	public boolean getSolvable() { 
+		return solvable;
 	}
 
 	public int[][] resetBoard()
@@ -146,15 +154,27 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public boolean solve2() {
+		Solver s = new Solver(this);
+		ArrayList<Move> solution = s.solve2();
+		if (solution != null) {
+			this.solution = solution;
+			return true;
+		}
+		return false;
+	}
+	
 	public void printBoard() {
 		System.out.println("== Board ==");
 		for(int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				System.out.print(this.matrix[i][j] + " ");
+				System.out.print(this.matrix[i][j] + "\t");
 			}
 			System.out.println("");
 		}
 	}
+	
 	public boolean clearVehicles() {
 		if (vehiclesList.isEmpty()) {
 			return false;
@@ -191,7 +211,34 @@ public class Board {
 		setInitialBoard(matrix);
 		
 	}
+	
+	/**
+	 * take back the last vehicle place
+	 * @param orient
+	 * @param path
+	 * @param position
+	 */
+	public void unplaceVehicle(int orient, int path, int[] position) {
 
+		// set down the given car into matrix
+		int p = path;
+		int start = position[0];
+		int end = position[position.length-1];
+
+		if (orient == 1) { // horizontal; path represents row
+			for (int i = start; i <= end; i++) {
+				matrix[p][i] = 0;
+			}
+		}
+		else { // vertical; path represents column
+			for (int i = start; i <= end; i++) {
+				matrix[i][p] = 0;
+			}
+		}
+		vehiclesList.remove(vehiclesList.size()-1);
+		
+	}
+	
 	public void setInitialBoard(int[][] matrix)
 	{
 		this.initialBoard = copyMatrix(this.matrix);
@@ -205,6 +252,7 @@ public class Board {
 	public ArrayList<Move> getSolution() {
 		return solution;
 	}
+	
 	public Stack<Move> getMoves() {
 		return moves;
 	}
@@ -337,7 +385,7 @@ public class Board {
 						array[i + 2] = v.getId();
 						if(v.getLength() == 3)
 						{
-							array[i + 3] = v.getId();
+							array[i + 3] = v.getId(); 
 						}
 //						nMoves++;
 //						moves.add(new Move(v,1));
@@ -383,7 +431,7 @@ public class Board {
 		if(movesBackwards > 0)
 		{
 			if(v.getOrient() == 1)
-			{
+			{ // horizontal
 				int[] array = getArray(v);
 
 				for(int i = array.length - 1; i > 0; i--)
@@ -452,7 +500,7 @@ public class Board {
 			System.out.println("Invalid Orient");
 			return false;
 		} else if (!(0 <= path && path < size)) {
-			System.out.println("Path out of bounds");
+			//System.out.println("Path out of bounds");
 			return false;
 		} else {
 			for (int i = 0; i < position.length; i++) {

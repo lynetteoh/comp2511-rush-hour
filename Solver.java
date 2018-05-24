@@ -35,33 +35,32 @@ public class Solver  {
 
 
             if (solved(b)) {
-
-            	return new ArrayList<Move>(b.getMoves());
+            		return new ArrayList<Move>(b.getMoves());
             }
 
 
             for (Vehicle v: b.getVehiclesList()) {
-            	for (int i = 1; i <= b.canMoveForward(v); i++) {
-            		if (b.moveNSpaces(v, i) > 0) {
-                        if (!previousMoves.containsKey(b.toString())) {
-    	                    Board newBoard = new Board(b);
-    	                    if (solver.compare(b,newBoard) >= 0) {
-    		                    q.add(newBoard);
-    		                    previousMoves.put(newBoard.toString(), newBoard);
-    	                    }
-                        }
-            		}
-            		b.undo();
-            		
+	            	for (int i = 1; i <= b.canMoveForward(v); i++) {
+	            		if (b.moveNSpaces(v, i) > 0) {
+	                        if (!previousMoves.containsKey(b.toString())) {
+		    	                    Board newBoard = new Board(b);
+		    	                    if (solver.compare(b,newBoard) >= 0) {
+		    		                    q.add(newBoard);
+		    		                    previousMoves.put(newBoard.toString(), newBoard);
+		    	                    }
+	                        }
+	            		}
+	            		b.undo();
             	}
+	            	
             	for (int i = 1; i <= b.canMoveBackward(v); i++) {
             		if (b.moveNSpaces(v, -i) > 0) {
                         if (!previousMoves.containsKey(b.toString())) {
-    	                    Board newBoard = new Board(b);
-    	                    if (solver.compare(b,newBoard) >= 0) {
-    		                    q.add(newBoard);
-    		                    previousMoves.put(newBoard.toString(), newBoard);
-    	                    }
+	    	                    Board newBoard = new Board(b);
+	    	                    if (solver.compare(b,newBoard) >= 0) {
+	    		                    q.add(newBoard);
+	    		                    previousMoves.put(newBoard.toString(), newBoard);
+	    	                    }
                         }
                     }
                     b.undo();
@@ -75,6 +74,64 @@ public class Solver  {
         return null;
     }
 
+    /** 
+     * A New solver method for Hard Generator
+     * @return
+     */
+    public ArrayList<Move> solve2() {
+        PriorityQueue<Board> q = new PriorityQueue<Board>(10, solver);
+        HashMap<String, Board> previousMoves = new HashMap<String, Board>();
+        q.add(board);
+        previousMoves.put(board.toString(), board);
+
+        Board b;
+        while (!q.isEmpty()) {
+            b = q.remove();
+
+
+            if (solved(b)) {
+            		return new ArrayList<Move>(b.getMoves());
+            }
+
+
+            for (Vehicle v: b.getVehiclesList()) {
+	            	for (int i = 1; i <= b.canMoveForward(v); i++) {
+	            		if (b.moveNSpaces(v, i) > 0) {
+	                        if (!previousMoves.containsKey(b.toString())) {
+		    	                    Board newBoard = new Board(b);
+		    	                    if (solver.compare(b,newBoard) >= 0) {
+		    		                    q.add(newBoard);
+		    		                    previousMoves.put(newBoard.toString(), newBoard);
+		    	                    }
+	                        }
+	            		}
+	            		b.undo();
+            	}
+	            	
+            	for (int i = 1; i <= b.canMoveBackward(v); i++) {
+            		if (b.moveNSpaces(v, -i) > 0) {
+                        if (!previousMoves.containsKey(b.toString())) {
+	    	                    Board newBoard = new Board(b);
+	    	                    if (solver.compare(b,newBoard) >= 0) {
+	    		                    q.add(newBoard);
+	    		                    previousMoves.put(newBoard.toString(), newBoard);
+	    	                    }
+                        }
+                    }
+                    b.undo();
+            	}
+            		
+            		
+            	
+
+            }
+        }
+        return null;
+    }
+
+    
+    
+    
     private void print(Object x) {
     		System.out.println(x.toString());
     }
