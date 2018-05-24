@@ -39,7 +39,7 @@ public class SceneView {
 	private int mediumLevel;
 	private int hardLevel;
 	private ToggleButton menuMuteButton;
-	private Pair currentGameLayout;
+	private Pair<String, AnchorPane> currentGameLayout;
 	
 	/**
 	 * Class constructor for SceneView
@@ -93,7 +93,7 @@ public class SceneView {
 	 * Getter method to  get the current game layout pane 
 	 * @return  currentGameLayout: the current game layout pane
 	 */
-	public Pair getCurrentGameLayout() {
+	public Pair<String, AnchorPane> getCurrentGameLayout() {
 		return currentGameLayout;
 	}
 	
@@ -120,7 +120,6 @@ public class SceneView {
 		//set the font of the game title
 		gameTitle.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 48));
 		
-		double titleWidth = gameTitle.getLayoutBounds().getWidth();
 		
 		//align the text
 		gameTitle.setTextAlignment(TextAlignment.CENTER);
@@ -231,11 +230,11 @@ public class SceneView {
 			TranslateTransition tt = new TranslateTransition(Duration.seconds(1.15 + i*0.2), b);
 			
 			//set starting position
-    		tt.setToX(0);
+			tt.setToX(0);
     		
     		//set ending position
-    		tt.setOnFinished(e->b.translateXProperty().negate());
-    		tt.play();
+			tt.setOnFinished(e->b.translateXProperty().negate());
+			tt.play();
 		} 
 	}
 	
@@ -324,9 +323,9 @@ public class SceneView {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
-	            Button b = (Button) buttons.getChildren().get(j);
-	            b.setFont(Font.font(18));
-	            b.setPrefSize(150,30);
+				Button b = (Button) buttons.getChildren().get(j);
+				b.setFont(Font.font(18));
+				b.setPrefSize(150,30);
 			}
 			
 		}
@@ -371,9 +370,9 @@ public class SceneView {
 		for(int i = 0; i < gameButtons.getChildren().size(); i++) {
 			HBox buttons = (HBox) gameButtons.getChildren().get(i);
 			for (int j = 0; j < buttons.getChildren().size(); j++) {
-	            Button b = (Button) buttons.getChildren().get(j);
-	            b.setFont(Font.font(16));
-	            b.setPrefSize(120, 20);			
+				Button b = (Button) buttons.getChildren().get(j);
+				b.setFont(Font.font(16));
+				b.setPrefSize(120, 20);			
 			}
 		}
 		
@@ -426,7 +425,7 @@ public class SceneView {
 				200, 0,
 				200, 30,
 				0, 30
-        );
+		);
 		
 		//create buttons
 		Button homeBtn = createBtn("HOME", polygon);
@@ -495,7 +494,7 @@ public class SceneView {
 				200, 0,
 				200, 30,
 				0, 30
-        );
+		);
 		
 		//create buttons
 		Button homeBtn = createBtn("HOME", polygon);
@@ -613,13 +612,14 @@ public class SceneView {
 		Text levelBoard = (Text) layout.getChildren().get(1);
 		Text score = (Text) layout.getChildren().get(2);
 		score.setText(move);
-		Group root = new Group();
+		Group root = null;
 		
 		//if the function is called from pressing previous button 
 		if(buttonText.equals("PREVIOUS")) {
 			switch(hardness) {
 				case("EASY"):
 					if(easyLevel > 1) { 
+						root = new Group();
 						easyLevel--;
 						level = level + easyLevel;
 						levelBoard.setText(level);
@@ -630,6 +630,7 @@ public class SceneView {
 					break;
 				case("MEDIUM"):
 					if(mediumLevel > 1) {
+						root = new Group();
 						mediumLevel--;
 						puzzle = g.GetPreviousMediumBoard();
 						root = createPuzzle(hardness, puzzle);
@@ -640,6 +641,7 @@ public class SceneView {
 					break;
 				case("HARD"):
 					if(hardLevel > 1) {
+						root = new Group();
 						hardLevel--;
 						puzzle = g.GetPreviousHardBoard();
 						root = createPuzzle(hardness, puzzle);
@@ -656,6 +658,7 @@ public class SceneView {
 					level = level + easyLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextEasyBoard();
+					root = new Group();
 					root = createPuzzle(hardness, puzzle);
 					break;
 				case("MEDIUM"):
@@ -663,6 +666,7 @@ public class SceneView {
 					level = level + mediumLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextMediumBoard();
+					root = new Group();
 					root = createPuzzle(hardness, puzzle);
 					break;
 				case("HARD"):
@@ -670,6 +674,7 @@ public class SceneView {
 					level = level + hardLevel;
 					levelBoard.setText(level);
 					puzzle = g.GetNextHardBoard();
+					root = new Group();
 					root = createPuzzle(hardness, puzzle);
 					break;			
 			}		
