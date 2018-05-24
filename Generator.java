@@ -263,13 +263,13 @@ public class Generator {
 	
 	public void placeFirstVehicle(Board b) { 
 		int orient = 1; // horizontal
-		int path = (b.getN()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
+		int path = (b.getSize()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
 		// we need to generate a randomposition - an int array[]
 		// if we have n=6 squares, the indices may range from {0,1} to {3,4}
 		// but not {4,5}. Hence, we want the start to be 3, or n-3.
 		// int index = ThreadLocalRandom.current().nextInt(0, b.getN()-2);
 		// but maybe lets make it safe and go from {0,1} to {2,3}
-		int index = ThreadLocalRandom.current().nextInt(0, b.getN()-3);
+		int index = ThreadLocalRandom.current().nextInt(0, b.getSize()-3);
 		int[] position = {index, index+1};
 		b.placeVehicle(orient, path, position);
 	}
@@ -365,8 +365,8 @@ public class Generator {
 		int[] possiblePaths = v.getAdjPath();
 		System.out.println("Possible Path " + Arrays.toString(possiblePaths));
 		if (randOrient == 1) { // we cannot be on a possible path of (n-1)/2
-			if (possiblePaths[0] == (b.getN()-1)/2) possiblePaths[0] = -1;
-			if (possiblePaths[1] == (b.getN()-1)/2) possiblePaths[1] = -1;
+			if (possiblePaths[0] == (b.getSize()-1)/2) possiblePaths[0] = -1;
+			if (possiblePaths[1] == (b.getSize()-1)/2) possiblePaths[1] = -1;
 		}
 		int randLen = randomCarLength();
 		int position[] = randomPosition(randLen);

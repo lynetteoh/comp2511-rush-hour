@@ -57,13 +57,13 @@ public class Grid {
 	public Grid(Board b, int sLength){
 		this.board = b;
 		this.sLength = sLength; // grid square side length
-		this.gridLength = b.getN()*sLength;
+		this.gridLength = b.getSize()*sLength;
 		double xPos = 0;
 		double yPos = 0;
 		// creates grid
 		int i = 0;
-		for (i=0; i < b.getN()*b.getN(); i++){
-			if (i % b.getN() == 0 && i != 0){
+		for (i=0; i < b.getSize()*b.getSize(); i++){
+			if (i % b.getSize() == 0 && i != 0){
 				xPos = 0;
 				yPos += sLength;
 			}
@@ -307,7 +307,7 @@ public class Grid {
 	}
 
 	public int getBoardSize() {
-		return board.getN();
+		return board.getSize();
 	}
 
 	public int getsLength() {
