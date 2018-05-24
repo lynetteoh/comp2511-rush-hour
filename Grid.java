@@ -12,6 +12,9 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import java.lang.*;
 
@@ -54,20 +57,21 @@ public class Grid {
 	public Grid(Board b, int sLength){
 		this.board = b;
 		this.sLength = sLength; // grid square side length
-		this.gridLength = b.getN()*sLength;
+		this.gridLength = b.getSize()*sLength;
 		double xPos = 0;
 		double yPos = 0;
 		// creates grid
 		int i = 0;
-		for (i=0; i < b.getN()*b.getN(); i++){
-			if (i % b.getN() == 0 && i != 0){
+		for (i=0; i < b.getSize()*b.getSize(); i++){
+			if (i % b.getSize() == 0 && i != 0){
 				xPos = 0;
 				yPos += sLength;
 			}
 			Rectangle r = new Rectangle(xPos, yPos, this.sLength, this.sLength);
 			//Image background = new Image("file:resource/background.jpg");
 			//r.setFill(new ImagePattern(background));
-			r.setFill(Color.web("rgba(0,0,255, 0.1)"));
+//			r.setFill(Color.web("rgba(0,0, 255, 0.1)"));
+			r.setFill(Color.web("rgba(254, 247, 205, 0.2)"));
 			r.setStroke(Color.BLACK);
 			this.gridSquares.add(r);
 			xPos += sLength;
@@ -292,19 +296,18 @@ public class Grid {
 			dragTranslate = 0;
 			dragOffset = 0;
 			board.printBoard();
-			if (board.fin(v)){
+			if (board.fin(v)) {
 				System.out.println(ANSI_BLUE + "\tYOU WIN!!" + ANSI_RESET);
 			}
 		}
 	};
-
 
 	public int getMoves() {
 		return board.getnMoves();
 	}
 
 	public int getBoardSize() {
-		return board.getN();
+		return board.getSize();
 	}
 
 	public int getsLength() {

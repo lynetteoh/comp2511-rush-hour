@@ -27,8 +27,10 @@ public class Generator {
 	private int currentHardBoardIndex;
 	
 	public Board GetPreviousEasyBoard() {
-		Board current = easyBoards.get(currentEasyBoardIndex);
-		current.resetBoard();
+		if (easyBoards.size()>currentEasyBoardIndex) {
+			Board current = easyBoards.get(currentEasyBoardIndex);
+			current.resetBoard();			
+		}
 		if (easyBoards.isEmpty()) {
 			return null;
 		}
@@ -43,8 +45,10 @@ public class Generator {
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetNextEasyBoard() {
-		Board current = easyBoards.get(currentEasyBoardIndex);
-		current.resetBoard();
+		if (easyBoards.size()>currentEasyBoardIndex) {
+			Board current = easyBoards.get(currentEasyBoardIndex);
+			current.resetBoard();			
+		}
 		currentEasyBoardIndex++;
 		if (currentEasyBoardIndex < easyBoards.size()) {
 			return easyBoards.get(currentEasyBoardIndex);
@@ -53,12 +57,13 @@ public class Generator {
 			currentEasyBoardIndex = easyBoards.size();
 			easyBoards.add(RandomEasyGenerator());
 		}
-		System.out.println("Hidahfidsaf\n\n" + currentEasyBoardIndex + " what? " + easyBoards.size());
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetPreviousMediumBoard() {
-		Board current = easyBoards.get(currentMediumBoardIndex);
-		current.resetBoard();
+		if (mediumBoards.size()>currentMediumBoardIndex) {
+			Board current = mediumBoards.get(currentMediumBoardIndex);
+			current.resetBoard();			
+		}
 		if (mediumBoards.isEmpty()) {
 			return null;
 		}
@@ -72,21 +77,25 @@ public class Generator {
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
 	public Board GetNextMediumBoard() {
-		Board current = easyBoards.get(currentMediumBoardIndex);
-		current.resetBoard();
+		if (mediumBoards.size()>currentMediumBoardIndex) {
+			Board current = mediumBoards.get(currentMediumBoardIndex);
+			current.resetBoard();			
+		}
+		currentMediumBoardIndex++;
 		if (currentMediumBoardIndex < mediumBoards.size()) {
 			return mediumBoards.get(currentMediumBoardIndex);
 		} 
-		currentMediumBoardIndex++;
-		if (currentMediumBoardIndex > mediumBoards.size()) {
+		if (currentMediumBoardIndex >= mediumBoards.size()) {
 			currentMediumBoardIndex = mediumBoards.size();
+			mediumBoards.add(RandomMediumGenerator());
 		}	
-		mediumBoards.add(RandomMediumGenerator());
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
 	public Board GetPreviousHardBoard() {
-		Board current = easyBoards.get(currentHardBoardIndex);
-		current.resetBoard();
+		if (hardBoards.size()>currentHardBoardIndex) {
+			Board current = hardBoards.get(currentHardBoardIndex);
+			current.resetBoard();			
+		}
 		if (hardBoards.isEmpty()) {
 			return null;
 		}
@@ -100,16 +109,18 @@ public class Generator {
 		return hardBoards.get(currentHardBoardIndex);
 	}
 	public Board GetNextHardBoard() {
-		Board current = easyBoards.get(currentHardBoardIndex);
-		current.resetBoard();
+		if (hardBoards.size()>currentHardBoardIndex) {
+			Board current = hardBoards.get(currentHardBoardIndex);
+			current.resetBoard();			
+		}
+		currentHardBoardIndex++;
 		if (currentHardBoardIndex < hardBoards.size()) {
 			return hardBoards.get(currentHardBoardIndex);
 		} 
-		currentHardBoardIndex++;
-		if (currentHardBoardIndex > hardBoards.size()) {
+		if (currentHardBoardIndex >= hardBoards.size()) {
 			currentHardBoardIndex = hardBoards.size();
+			hardBoards.add(RandomHardGenerator());
 		}
-		hardBoards.add(RandomHardGenerator());
 		return hardBoards.get(currentHardBoardIndex);
 	}
 	
@@ -363,11 +374,12 @@ public class Generator {
 	
 	public void placeFirstVehicle(Board b) { 
 		int orient = 1; // horizontal
-		int path = (b.getN()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
+		int path = (b.getSize()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
 		// we need to generate a randomposition - an int array[]
 		// if we have n=6 square
 		// lets make it safe and let the car be at: {0,1}, {1,2} or {2,3}
 		int index = ThreadLocalRandom.current().nextInt(0, b.getN()-3);
+
 		int[] position = {index, index+1};
 		b.placeVehicle(orient, path, position);
 	}
@@ -459,7 +471,6 @@ public class Generator {
 	}
 
 	
-
 	public boolean fin(Vehicle v, int[] door) {
 
 		if (v.getOrient() == 1) { //horizontal car

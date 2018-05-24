@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
+/***
+ * The Board class is responsible for manipulating the matrix and any vehicles within it.
+ * @author gretaritchard
+ *
+ */
 public class Board {
 	// int[][] b = new int[6][6]
 	public static int boardId = 1;
@@ -19,6 +24,10 @@ public class Board {
 	private boolean solvable;
 
 
+	/***
+	 * Board constructor in the Generator class
+	 * @param size : int the size of the Board to be created (6 by default)
+	 */
 	public Board(int size) {
 
 		this.size = size;
@@ -36,17 +45,7 @@ public class Board {
 		solvable = false;
 	}
 
-	public Board(int[][] matrix, ArrayList<Vehicle> vehicles, int size)
-	{
-		this.matrix = matrix;
-		this.size = size;
-		this.vehiclesList = vehicles;
-		this.nMoves = 0;
-		boards.add(this);
-		this.level = boards.indexOf(this);
-		setInitialBoard(this.matrix);
-	}
-	
+
 	public Board(Board b)
 	{
 		this.size = b.getSize();
@@ -71,12 +70,21 @@ public class Board {
 		return solvable;
 	}
 
+	/***
+	 * Resets the board to it's initial state
+	 * @return matrix : int[][] 	the matrix representation of the initial board
+	 */
 	public int[][] resetBoard()
 	{
 		this.nMoves = 0;
 		return this.getInitialBoard();
 	}
 	
+	/***
+	 * Creates a copy of the given matrix (used to overcome any pass by reference issues)
+	 * @param matrix : int[][] the matrix to be copied
+	 * @return int[][] 
+	 */
 	public int[][] copyMatrix(int[][] matrix)
 	{
 		int[][] newMatrix = new int[matrix.length][matrix.length];
@@ -91,60 +99,27 @@ public class Board {
 		return newMatrix;
 	}
 
-	public Board getPreviousBoard()
-	{
-		if(this.level > 0)
-		{
-			return getBoards().get(this.level - 1);
-		}
-		else
-			return null;
-	}
-	
+	/***
+	 * Returns a hint for the next optimal move for the user
+	 * @return Move
+	 */
 	public Move getHint()
 	{
 		Solver s = new Solver(this);
 		ArrayList<Move> solution = s.solve();
 		if (solution != null) {
 			Move move = solution.get(0);
+			System.out.println("Vehicle: " + move.getVehicle().getId() + " move: " + move.getDirection());
 			return move;
 		}
 		return null;
 		
-		/*
-		if(move.getDirection() > 0)
-		{
-			this.moveForward(move.getVehicle());
-		}
-		else if(move.getDirection() < 0)
-		{
-			this.moveBackward(move.getVehicle());
-		}
-		return this;
-		*/
-		
 	}
 	
-	public Board getNextBoard()
-	{
-		if(this.level < getBoards().size() + 1)
-		{
-			return getBoards().get(this.level + 1);
-		}
-		else
-			return null;
-	}
-	
-	public int getLevel()
-	{
-		return this.level;
-	}
-	
-	public ArrayList<Board> getBoards()
-	{
-		return boards;
-	}
-	
+	/***
+	 * Sets the current Board solution using the Solver, or returns false (unsolveable)
+	 * @return boolean
+	 */
 	public boolean solve() {
 		Solver s = new Solver(this);
 		ArrayList<Move> solution = s.solve();
@@ -155,6 +130,10 @@ public class Board {
 		return false;
 	}
 	
+
+	/***
+	 * 
+	 */
 	public void printBoard() {
 		System.out.println("== Board ==");
 		for(int i = 0; i < size; i++) {
@@ -165,6 +144,11 @@ public class Board {
 		}
 	}
 	
+
+	/***
+	 * Clears the current Board vehicle list for the board
+	 * @return boolean
+	 */
 	public boolean clearVehicles() {
 		if (vehiclesList.isEmpty()) {
 			return false;
@@ -173,9 +157,12 @@ public class Board {
 		return true;
 	}
 
-
-	// creates a new vehicle from the data passed in
-	// places the vehicle on current board
+	/***
+	 * Creates a new vehicle from the data passed in and places the vehicle on the current board
+	 * @param orient : int
+	 * @param path : int
+	 * @param position : int[]
+	 */
 	public void placeVehicle(int orient, int path, int[] position) {
 		// create the vehicle
 		Vehicle v = new Vehicle(orient, path, position);
@@ -229,85 +216,161 @@ public class Board {
 		
 	}
 	
+	/***
+	 * Sets the initial board state
+	 * @param matrix : int[][]
+	 */
 	public void setInitialBoard(int[][] matrix)
 	{
 		this.initialBoard = copyMatrix(this.matrix);
 	}
-	
+	/***
+	 * Returns the initial board state of the board
+	 * @return int[][]
+	 */
 	public int[][] getInitialBoard()
 	{
 		return this.initialBoard;
 	}
 
+	/***
+	 * Returns the Arraylist of Moves that comprises the solution to the board
+	 * @return ArrayList<Move>
+	 */
 	public ArrayList<Move> getSolution() {
 		return solution;
 	}
-	
+
+	/***
+	 * Returns the moves made on the Board
+	 * @return Stack<Move>
+	 */
+
 	public Stack<Move> getMoves() {
 		return moves;
 	}
 
+	/***
+	 * Clears the stack of Moves stored in the Board
+	 */
 	public void clearMoves() {
 		moves.clear();
 	}
+	/***
+	 * Returns the Board Id
+	 * @return int
+	 */
 	public static int getBoardId() {
 		return boardId;
 	}
 
+	/***
+	 * Sets the Board Id (static counter for the board's ids)
+	 * @param boardId : int
+	 */
 	public static void setBoardId(int boardId) {
 		Board.boardId = boardId;
 	}
 
+	/***
+	 * Returns the id of the current Board
+	 * @return int
+	 */
 	public int getId() {
 		return id;
 	}
+	/***
+	 * Returns the number of moves that have been made on the Board
+	 * @return int
+	 */
 	public int getnMoves() {
 		return nMoves;
 	}
 
+	/***
+	 * Sets the id of the Board
+	 * @param id : int
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/***
+	 * Returns the Vehicle Id Counter (the number of vehicles placed so far/id for the next vehicle)
+	 * @return int
+	 */
 	public int getVehicleIdCounter() {
 		return vehicleIdCounter;
 	}
 
+	/***
+	 * Sets the Vehicle Id Counter (the number of vehicles placed so far/id for the next vehicle)
+	 * @param vehicleIdCounter : int
+	 */
 	public void setVehicleIdCounter(int vehicleIdCounter) {
 		this.vehicleIdCounter = vehicleIdCounter;
 	}
 
+	/***
+	 * Returns the Board matrix
+	 * @return int[][]
+	 */
 	public int[][] getMatrix() {
 		return matrix;
 	}
 
+	/***
+	 * Sets the Board matrix
+	 * @param matrix : int[][]
+	 */
 	public void setMatrix(int[][] matrix) {
 		this.matrix = matrix;
 	}
 
-	public int getN() {
-		return size;
-	}
+	/***
+	 * Returns the Size of the Board  (width/height)
+	 * @return int
+	 */
 	public int getSize() {
 		return size;
 	}
 
-	public void setN(int size) {
+	/***
+	 * Sets the size of the Board
+	 * @param size : int
+	 */
+	public void setSize(int size) {
 		this.size = size;
 	}
 
+	/***
+	 * Returns the list of Vehicles on the Board
+	 * @return ArrayList<Vehicle>
+	 */
 	public ArrayList<Vehicle> getVehiclesList() {
 		return vehiclesList;
 	}
 
+	/***
+	 * Returns the last placed vehicle on the Board
+	 * @return Vehicle
+	 */
 	public Vehicle getLastVehicle() {
 		return vehiclesList.get(vehiclesList.size()-1);
 	}
 
+	/***
+	 * Sets the list of vehicles on the Board
+	 * @param vehiclesList : ArrayList<Vehicle>
+	 */
 	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
 		this.vehiclesList = vehiclesList;
 	}
-	// undo the last move taken by the board
+	
+	/***
+	 * Undos the last move taken by the board 
+	 * @return Move
+	 */
 	public Move undo () {
 		if(moves.size() < 1) {
 			return null;
@@ -318,8 +381,7 @@ public class Board {
 		}
 		Vehicle v = lastMove.getVehicle();
 		int direction = lastMove.getDirection();
-//		System.out.println("lastMove: " + lastMove + "\n" + direction);
-//		printBoard();
+
 		if (direction > 0) {   // it moved forward hence move backward
 			moveNSpaces(v, -direction);
 			moves.pop();
@@ -329,10 +391,15 @@ public class Board {
 		} else {
 			return null;
 		}
-//		printBoard();
 		nMoves-= 2;
 		return lastMove;
 	}
+	/***
+	 * Moves a Vehicle N spaces forward or backward, returns the amount moved
+	 * @param v : Vehicle 
+	 * @param nSpaces : int 
+	 * @return int 
+	 */
 	public int moveNSpaces(Vehicle v, int nSpaces) {
 		if (nSpaces == 0) {
 			return 0;
@@ -355,6 +422,11 @@ public class Board {
 			return -nSpaces;
 		}
 	}
+	/***
+	 * Moves the Vehicle forward one space on the Board (vertical moves down one, and horizontal moves right one)
+	 * @param v : Vehicle
+	 * @return boolean
+	 */
 	public boolean moveForward(Vehicle v)
 	{
 		int movesForwards = canMoveForward(v);
@@ -377,8 +449,6 @@ public class Board {
 						{
 							array[i + 3] = v.getId(); 
 						}
-//						nMoves++;
-//						moves.add(new Move(v,1));
 						return true;
 					}
 				}
@@ -405,8 +475,6 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
-//				nMoves++;
-//				moves.add(new Move(v,1));
 				return true;
 			}
 
@@ -414,10 +482,14 @@ public class Board {
 		return false;
 	}
 
+	/***
+	 * Moves the Vehicle backward one space on the Board (vertical moves up one, and horizontal moves left one)
+	 * @param v : Vehicle
+	 * @return boolean
+	 */
 	public boolean moveBackward(Vehicle v)
 	{
 		int movesBackwards = canMoveBackward(v);
-		//System.out.print("moves backward = " + movesBackwards + " ");
 		if(movesBackwards > 0)
 		{
 			if(v.getOrient() == 1)
@@ -428,7 +500,6 @@ public class Board {
 				{
 					if(array[i] == v.getId() && v.getLength() > 0)
 					{
-						//System.out.println("array[i]")
 						array[i] = 0;
 						array[i - 1] = v.getId();
 						array[i - 2] = v.getId();
@@ -436,14 +507,7 @@ public class Board {
 						{
 							array[i - 3] = v.getId();
 						}
-						/*int[] pos = v.getPosition();
-						for(int j = 0; j < v.getLength(); j++)
-						{
-							pos[j] = v.getPosition()[j] - 1;
-						}
-						v.setPosition(pos); */
-//						nMoves++;
-//						moves.add(new Move(v,-1));
+					
 						return true;
 					}
 				}
@@ -473,8 +537,6 @@ public class Board {
 				}
 				this.setMatrix(matrix);
 
-//				moves.add(new Move(v,-1));
-//				nMoves++;
 				return true;
 			}
 
@@ -482,10 +544,17 @@ public class Board {
 		return false;
 	}
 
+	/***
+	 * Checks if a vehicle can be placed in a specified position on the board
+	 * @param orient : int
+	 * @param path : int
+	 * @param position : int[][]
+	 * @return boolean
+	 */
 	public boolean canPlaceVehicle(int orient, int path, int[] position)
 	{
 
-		// initial check to make sure all paramters are correct
+		// initial check to make sure all parameters are correct
 		if (!(orient == 1 || orient == 2)) {
 			System.out.println("Invalid Orient");
 			return false;
@@ -505,10 +574,6 @@ public class Board {
 
 		if(orient == 1)
 		{ // horizontal
-			for(int i : matrix[path])
-			{
-				//System.out.print(i + " ");
-			}
 			if(matrix[path][position[0]] == 0 && matrix[path][position[1]] == 0)
 			{
 				if(position.length == 3)
@@ -540,16 +605,15 @@ public class Board {
 
 		return false;
 	}
-
+	/***
+	 * Returns the number of spaces a vehicle can move forward on the board
+	 * @param v : Vehicle
+	 * @return int
+	 */
 	public int canMoveForward(Vehicle v) {
 
 		int counter = 0;
 		int[] array = getArray(v);
-
-		//System.out.print("\tForward: ");
-		//for(int i : array)
-		//	System.out.print(i + ", ");
-		//System.out.println();
 
 		boolean startCounter = false;
 		for(int i = 0; i < array.length; i++)
@@ -567,20 +631,19 @@ public class Board {
 				startCounter = false;
 			}
 		}
-		//System.out.println("\t\t\tSteps forward: " + counter);
 		return counter;
 		// returns max no. of steps the car can move forward
 	}
 
+	/***
+	 * Returns the number of moves a vehicle can move backward on the board
+	 * @param v : Vehicle 
+	 * @return int
+	 */
 	public int canMoveBackward(Vehicle v) {
 
 		int counter = 0;
 		int[] array = getArray(v);
-
-		//System.out.print("\tBackward: ");
-		//for(int i : array)
-		//	System.out.print(i + ", ");
-		//System.out.println();
 
 		boolean startCounter = false;
 		for(int i = array.length - 1; i >= 0; i--)
@@ -604,6 +667,11 @@ public class Board {
 		// returns max no. of steps the car can move backward
 	}
 
+	/***
+	 * Returns the array that the vehicle can move along (ie the path that the Vehicle travels on the Board)
+	 * @param v : Vehicle
+	 * @return int[]
+	 */
 	public int[] getArray(Vehicle v )
 	{
 		int[] array = new int[this.matrix[0].length];
@@ -618,12 +686,10 @@ public class Board {
 		       array[i] = this.matrix[i][v.getPath()];
 		    }
 		}
-		//for (int i = 0; i < array.length; i++) {
-		//	System.out.print(array[i] + " ");
-		//}
-		//System.out.println("");
+		
 		return array;
 	}
+	
 	@Override
 	public String toString() {
 		String str = "";
@@ -636,23 +702,22 @@ public class Board {
 		return str;
 	}
 
-	public void setnMoves(int i) {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	// gives the coordinates of the door in (x,y)
+	/***
+	 * Returns the position (x, y) of the Door/Goal position on the board (depending on the Board size)
+	 * @return int[]
+	 */
 	public int[] getGoalPosition() { // n is the side of the board
 		int l = size-2; // left cell of goal position
 		int r = size-1; // right cell of goal position (cell adjacent to exit)
-		//int y = (n-1)/2;
 		int[] coord = new int[] {l,r};
 		return coord;
 	}
 
-	// function receives a vehicle and a Board
-	// if v and board's door are overlapping, then player has finished the game.
+	/***
+	 * Checks whether the Vehicle has reached the Goal position on the Board (if the vehicle and the "door" are overlapping, the player has completed the game.
+	 * @param v : Vehicle
+	 * @return boolean
+	 */
 	public boolean fin(Vehicle v) {
 		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
 			int[] goalPosition = getGoalPosition(); // the two cells the red car has to occupy (right next to the exit)
