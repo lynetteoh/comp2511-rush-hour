@@ -452,6 +452,7 @@ public class SceneManager extends Pane {
 		
 		//reset the board in the back end
 		int[][] b = board.resetBoard();
+		b = board.copyMatrix(b);
 		board.setMatrix(b);
 //		board.printBoard();
 		
