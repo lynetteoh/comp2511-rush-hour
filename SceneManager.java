@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -17,11 +16,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.AudioClip;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+
 
 /**
  * This class acts as the controller between the model and the view
@@ -34,8 +33,7 @@ public class SceneManager extends Pane {
 	private Stage stage;
 	private HashMap<String, Scene> scenes;
 	private SceneView sceneView;
-	private MediaPlayer backgroundMP;
-	private boolean playMusic;
+	private AudioClip backgroundClip;
 	private ToggleButton menuMuteButton;
 	private final int BOARDSIZE = 6; 
 	private Generator g;
@@ -103,12 +101,9 @@ public class SceneManager extends Pane {
 		}
 		
 		//add background music for the game
-		String musicFile = "resource/backgroundMusic.mp3";
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		backgroundMP = new MediaPlayer(sound);
-		
-		//play the music
-		backgroundMP.play();
+		String soundName = "resource/backgroundMusic.mp3";
+		backgroundClip = new AudioClip(getClass().getResource(soundName).toString());	
+		backgroundClip.play();
 		
 		//create the scene object for menu page
 		Scene menuScene = new Scene(menuLayout, sceneWidth, sceneHeight);
@@ -239,7 +234,7 @@ public class SceneManager extends Pane {
 		}else {
 			
 			//stop the background music in menu scene
-			backgroundMP.stop();
+			backgroundClip.stop();
 		}
 		
 		//display the scene
@@ -334,9 +329,9 @@ public class SceneManager extends Pane {
 	 */
 	public void playOrStopMusic() {
 		if(menuMuteButton.isSelected()) {
-			backgroundMP.stop();
+			backgroundClip.stop();
 		}else {
-			backgroundMP.play();
+			backgroundClip.play();
 		}
 	}
 	
@@ -489,17 +484,17 @@ public class SceneManager extends Pane {
 				
 				//add sound effect for a button click 
 				String musicFile = "resource/click.mp3";    
-				Media sound = new Media(new File(musicFile).toURI().toString());
-				MediaPlayer effectMP = new MediaPlayer(sound);
+				AudioClip gameClip = new AudioClip(getClass().getResource(musicFile).toString());	
+				
 				
 				//get the mute button in a scene
 				ToggleButton mute = (ToggleButton) gameLayout.getChildren().get(4);
 				
 				//play or stop the sound effect
 				if(mute.isSelected()) {
-					effectMP.stop();
+					gameClip.stop();
 				}else {
-					effectMP.play();
+					gameClip.play();
 				}
 				
 				//update the display of the move
@@ -569,14 +564,13 @@ public class SceneManager extends Pane {
 		
 		//add sound effect for the win scene
 		String musicFile = "resource/win.mp3";    
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		MediaPlayer effectMP = new MediaPlayer(sound);
-		
+		AudioClip effectClip = new AudioClip(getClass().getResource(musicFile).toString());
+	
 		//play the sound effect 
 		if(menuMuteButton.isSelected()) {
-			effectMP.stop();
+			effectClip.stop();
 		}else {
-			effectMP.play();
+			effectClip.play();
 		}
 		
 		//add the scene to the hash map
