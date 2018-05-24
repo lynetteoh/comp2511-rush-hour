@@ -13,9 +13,9 @@ public class Generator {
 	public final int MIN = 2; 
 	// an easy puzzle is solvable from 3 - 5 steps inclusive
 	public final int EASY = 5;  
-	//a medium puzzle is solvable from 6 steps to 15 steps inclusive
-	public final int MEDIUM = 10;  
-	// a hard puzzle is solvable from 16 steps up 
+	//a medium puzzle is solvable from 6 steps to 9 steps inclusive
+	public final int MEDIUM = 9;  
+	// a hard puzzle is solvable from 9 steps up 
 	
 	private int n;
 
@@ -124,7 +124,6 @@ public class Generator {
 		return hardBoards.get(currentHardBoardIndex);
 	}
 	
-	
 	public Generator(int size) {
 		this.n = size;
 		this.currentEasyBoardIndex = 0;
@@ -132,96 +131,210 @@ public class Generator {
 		this.currentMediumBoardIndex = 0;
 	}	
 	// Ok generator : can produce a board in 1-5 Attempts
+	
 	public Board RandomEasyGenerator() { 
-		int AttemptNo = 0; 
 		Board b = new Board(n); // create new board with dimension n
 		int nMoves = 0;
-		do {
-			System.out.println("Easy Generator 4");
+		do { 
 			int k = randNoCarsEasy();
-			System.out.println("The number of cars to TRY to set down: " +k);
 			b.clearVehicles();
 			b = new Board(n);
 			// set down most important car
 			placeFirstVehicle(b);
-			int set = 0; // the number of cars set down
+			int set = 0; // the number of cars to try to set down
 			while (set < k) {
-				placeRandCar(b);
-				set++;
+				placeRandCar(b); set++;
 			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
-			
-			b.solve();
 			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
-			AttemptNo++;
-		} while (!b.solve() || !(MIN < nMoves && nMoves <= EASY));
-		System.out.println("AttemptNo " + AttemptNo);
+		} while (!(MIN < nMoves && nMoves <= EASY));
 		return b;
 	}
 
-	// ok Medium Generator : can produce a board in 1 - 20 Attempts
 	public Board RandomMediumGenerator() { 
-		int AttemptNo = 0; 
+		long startTime = System.currentTimeMillis();
+
 		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
+		int nMoves = 0; // the number of moves required to solve b
 		do {
-			System.out.println("Medium Generator 4");
-			int k = randNoCarsMedium();
-			System.out.println("The number of cars to TRY to set down: " + k);
-			b.clearVehicles();
-			b = new Board(n);
-			// set down most important car
-			placeFirstVehicle(b);
-			int set = 0; // the number of cars set down
-			while (set < k) { // try k times 
-				placeRandCar2(b);
-				set++;
-			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
+			b.clearVehicles(); b = new Board(n);
+			placeFirstVehicle(b); // set down most important car
+			Vehicle First = b.getLastVehicle(); 
+			int leftBorder = First.getPosition()[1];
 			
-			b.solve();
+			int j = 0; //number of vertical cars set down
+			while (leftBorder+1+j < n) { 
+				int orient = 2; // vertical
+				int path = leftBorder+1+j;
+				int length = randomCarLength();
+				int[] position = blockPosition(length);
+				if (b.canPlaceVehicle(orient, path, position)) { 
+					b.placeVehicle(orient, path, position);
+				}
+				j++;
+			}
+
+			int set = 0; // no. of car-setting attempts
+			while (set < 9) { // try 10 times 
+				placeRandCar(b); set++;
+			}
 			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
-			AttemptNo++;
-		} while (!b.solve() || !(EASY < nMoves && nMoves <= MEDIUM));
-		System.out.println("AttemptNo " + AttemptNo);
+			if (EASY < nMoves && nMoves <= MEDIUM) break;
+			
+			rowCrawler(b);
+			nMoves = b.getSolution().size();
+			if (EASY < nMoves && nMoves <= MEDIUM) break;
+			
+			colCrawler(b);
+			nMoves = b.getSolution().size();
+			if (EASY < nMoves && nMoves <= MEDIUM) break;
+			
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
+			if (duration > 1000) { 
+				//System.out.println("takes too long: " + duration);
+				break;
+			}
+		} while (!(EASY < nMoves && nMoves <= MEDIUM));
+		//System.out.println("AttemptNo " + AttemptNo);
+		//b.printBoard();
+		//System.out.println("Solution: " + b.getSolution());
 		return b;
 	}
-
-	// Crappy Hard Generator: may take over 100 steps
+	
+	// May take over 9000 milliseconds
+	/**
+	 * New method of placing cars. 
+	 * Abandone board early if unsolvable.
+	 * @return
+	 */
 	public Board RandomHardGenerator() { 
-		int AttemptNo = 0; 
+		long startTime = System.currentTimeMillis();
 		Board b = new Board(n); // create new board with dimension n
-		int nMoves = 0;
+		int nMoves = 0; // the number of moves required to solve b
 		do {
-			System.out.println("Hard Generator 4");
-			int k = randNoCarsHard();
-			System.out.println("The number of cars to TRY to set down: " + k);
-			b.clearVehicles();
-			b = new Board(n);
-			// set down most important car
-			placeFirstVehicle(b);
-			int set = 0; // the number of cars set down
-			while (set < k) { // try k times 
-				placeRandCar2(b);
-				set++;
-			}
-			b.printBoard();
-			System.out.println("Random Board:");
-			b.printBoard();
+			b.clearVehicles(); b = new Board(n);
+			placeFirstVehicleEnd(b); // set down most important car
 			
-			b.solve();
+			int j = 0; //number of vertical cars set down
+			while (j+2 < n) { 
+				int orient = 2; // vertical
+				int path = j+2;
+				int length = randomCarLength();
+				int[] position = blockPosition(length);
+				b.placeVehicle(orient, path, position); // no need to check; board is blank
+				j++;
+			}
+			// b is solvable 
+			
+			int set = 0; // no. of car-setting attempts
+			while (set < 14) {
+				placeRandCar(b); set++;
+			}
+			// b is solvable 
+
+			rowCrawler(b);
 			nMoves = b.getSolution().size();
-			System.out.println("This puzzle is solvable in" + b.getSolution().size() + "Steps");
-			AttemptNo++;
-		} while (!b.solve() || !(MEDIUM < nMoves));
-		System.out.println("AttemptNo " + AttemptNo);
+			//System.out.println("AfterCrawlRow " + b.getSolution().size() + " Steps");
+			if (MEDIUM < nMoves) break;
+
+			colCrawler(b);
+			nMoves = b.getSolution().size();
+			//System.out.println("AfterCrawlCol " + b.getSolution().size() + " Steps");
+			if (MEDIUM < nMoves) break;
+			
+			long endTime = System.currentTimeMillis();
+			long duration = (endTime - startTime);
+			if (duration > 1000) break;
+
+		} while (!(MEDIUM < nMoves));
+		b.printBoard();
+		System.out.println("Solution: " + b.getSolution());
 		return b;
+	}
+	
+	
+
+	/**
+	 * Systematically goes row by row and places a single car down.
+	 * @param b
+	 */
+	public void rowCrawler(Board b) { 
+
+		boolean bIsSolvable = true;
+		
+		for (int r = 0; r < b.getN(); r++) { // start from first column
+			for (int c = 0; c < b.getN()-2; c++) { 
+				
+				if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r][c+1] == 0 && b.getMatrix()[r][c+2] == 0) 
+				{ 
+					// place down a truck 
+					int[] position = {c, c+1, c+2};
+					b.placeVehicle(1, r, position); // no need to check
+					bIsSolvable = b.solve(); b.clearMoves();
+					if (!bIsSolvable) { 
+						b.unplaceVehicle(1, r, position);
+					}
+					continue;
+				}
+				
+				else if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r][c+1] == 0) { 
+					
+					// place down a car 
+					int[] position = {c, c+1};
+					b.placeVehicle(1, r, position);
+					bIsSolvable = b.solve(); b.clearMoves();
+					if (!bIsSolvable) { 
+						b.unplaceVehicle(1, r, position);
+					}
+					continue;
+				}
+			}
+		}
+		
+		return;
+		
+	}
+
+	/**
+	 * Systematically goes row by row and places a single car down.
+	 * @param b
+	 */
+	public void colCrawler(Board b) { 
+
+		boolean bIsSolvable = true;
+		
+		for (int c = 0; c < b.getN(); c++) { // start from first column
+			for (int r = 0; r < b.getN()-2; r++) { 
+				if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r+1][c] == 0 && b.getMatrix()[r+2][c] == 0) { 
+					int position[] = {r, r+1, r+2}; 
+					b.placeVehicle(2, c, position); // no need to check
+					//b.printBoard();
+					bIsSolvable = b.solve(); b.clearMoves();
+					if (!bIsSolvable) { 
+						//System.out.println("Not solvable");
+						//b.printBoard();
+						b.unplaceVehicle(2, c, position);
+						//System.out.println("unplaced vehicle now");
+						//b.printBoard();
+					}
+					continue;
+				}
+				else if (b.getMatrix()[r][c] == 0 && b.getMatrix()[r+1][c] == 0) { 
+					int position[] = {r, r+1}; 
+					b.placeVehicle(2, c, position); // no need to check
+					bIsSolvable = b.solve(); b.clearMoves();
+					if (!bIsSolvable) { 
+						//System.out.println("Not solvable");
+						//b.printBoard();
+						b.unplaceVehicle(2, c, position);
+						//System.out.println("unplaced vehicle now");
+						//b.printBoard();
+					}
+					continue;
+				}
+			}
+		}
+		return;
 	}
 
 	
@@ -230,53 +343,60 @@ public class Generator {
 		return k;
 	}
 	
-	// also used for hard
-	public int randNoCarsMedium() { // return a random number of cars to set down
-		int k = ThreadLocalRandom.current().nextInt(12, 17);
-		return k;
-	}
-	
-	public int randNoCarsHard() { // return a random number of cars to set down
-		int k = ThreadLocalRandom.current().nextInt(17, 25);
-		return k;
-	}
-	
-	// Calls the random-number functions below to generate a random car
+	// also tests if it is possible to solve. If not, unplaces the car.
 	public boolean placeRandCar(Board b) {
+
 		if (b.getSize() != this.n) {
 			System.out.println("Generator board size does not match board size");
 			return false;
 		}
-		int randOrient = randomCarOrient();
+		
+		Vehicle v = b.getLastVehicle(); 
+		int randOrient = (v.getOrient() == 2) ? 1 : 2; // switch the Orientation
 		int randPath = randomCarPath(randOrient);
 		int randLen = randomCarLength();
 		int position[] = randomPosition(randLen);
-
+		
 		if (b.canPlaceVehicle(randOrient, randPath, position)) { 
-			// check if putting down car is going to be allowed
 			b.placeVehicle(randOrient, randPath, position);
-			return true;
+			boolean bIsSolvable = b.solve();
+			b.clearMoves();
+			if (!bIsSolvable) { 
+				b.unplaceVehicle(randOrient, randPath, position);
+			}
 		}
-		return false;
+		
+		return true;
+
 	}
+	
 	
 	
 	public void placeFirstVehicle(Board b) { 
 		int orient = 1; // horizontal
 		int path = (b.getSize()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
 		// we need to generate a randomposition - an int array[]
-		// if we have n=6 squares, the indices may range from {0,1} to {3,4}
-		// but not {4,5}. Hence, we want the start to be 3, or n-3.
-		// int index = ThreadLocalRandom.current().nextInt(0, b.getN()-2);
-		// but maybe lets make it safe and go from {0,1} to {2,3}
-		int index = ThreadLocalRandom.current().nextInt(0, b.getSize()-3);
+		// if we have n=6 square
+		// lets make it safe and let the car be at: {0,1}, {1,2} or {2,3}
+		int index = ThreadLocalRandom.current().nextInt(0, b.getN()-3);
+
 		int[] position = {index, index+1};
 		b.placeVehicle(orient, path, position);
 	}
 	
-	// note that we should only be able to place the red car has a horizontal on the door path. 
-	// hence if 
-
+	/**
+	 * Places the first vehicle on the Left hand side.
+	 * @param b
+	 */
+	public void placeFirstVehicleEnd(Board b) { 
+		int orient = 1; // horizontal
+		int path = (b.getN()-1)/2;// (6-1)/2 = 2; (7-1)/2 = 3 --> all good 
+		// we need to generate a randomposition - an int array[]
+		// if we have n=6 square
+		// lets make it safe and let the car be at: {0,1}, {1,2} or {2,3}
+		int[] position = {0, 1};
+		b.placeVehicle(orient, path, position);
+	}
 	// randomly generates 1 or 2 as ints (horizontal or vertical)
 	public int randomCarOrient() {
 		int randomNum = ThreadLocalRandom.current().nextInt(1, 3);
@@ -323,6 +443,23 @@ public class Generator {
 //		System.out.println("position: " + Arrays.toString(position));
 		return position;
 	}
+	
+	// generates a random array of integers for car to lie on.
+	// takes in arguments len = length of car; n = dimension of board
+	public int[] blockPosition(int len) {
+		int position[]; 
+		// no matter what, the car must align to block the (n-1)/2 th row. i.e. 2.
+		int cars[][] = {{1,2}, {2,3}};
+		int trucks[][] = {{0,1,2}, {1,2,3}, {2,3,4}};
+		if (len == 2) { // cars 
+			position = cars[ThreadLocalRandom.current().nextInt(0, 2)];
+		} else { // trucks
+			position = trucks[ThreadLocalRandom.current().nextInt(0, 3)];
+		}
+
+//		System.out.println("position: " + Arrays.toString(position));
+		return position;
+	}
 
 	// gives the coordinates of the door in (x,y)
 	public int[] getDoor() { // n is the side of the board
@@ -333,61 +470,6 @@ public class Generator {
 		return coord;
 	}
 
-	// function receives a vehicle and a Board
-	// if v and board's door are overlapping, then player has finished the game.
-	
-	
-	public int getRandomArray(int[] array) {
-	    int rnd = new Random().nextInt(array.length);
-	    return array[rnd];
-	}
-	
-	// Based on the previous car, places vehicles.
-	public boolean placeRandCar2(Board b) {
-
-		if (b.getSize() != this.n) {
-			System.out.println("Generator board size does not match board size");
-			return false;
-		}
-		Vehicle v = b.getLastVehicle(); 
-		System.out.println("The previous car: " + v);
-		// based on the last vehicle placed on the board, place the next vechicle
-		System.out.println("Initial Board: ");
-		b.printBoard();
-		
-		int randOrient = (v.getOrient() == 2) ? 1 : 2; // switch the Orientation
-		// we want to path to directly block v. 
-		// e.g. if v is horizontal, path=2, position = {0,1}: 
-		// we want w to be vertical, path = 2
-		// this 2 is one more than {0,1}. 
-		// hence get the position array 
-		// be one of less/more 
-		int[] possiblePaths = v.getAdjPath();
-		System.out.println("Possible Path " + Arrays.toString(possiblePaths));
-		if (randOrient == 1) { // we cannot be on a possible path of (n-1)/2
-			if (possiblePaths[0] == (b.getSize()-1)/2) possiblePaths[0] = -1;
-			if (possiblePaths[1] == (b.getSize()-1)/2) possiblePaths[1] = -1;
-		}
-		int randLen = randomCarLength();
-		int position[] = randomPosition(randLen);
-		
-		if (b.canPlaceVehicle(randOrient, possiblePaths[0], position)) { // place in first paht
-			b.placeVehicle(randOrient, possiblePaths[0], position);
-			return true;
-		}
-		else if (b.canPlaceVehicle(randOrient, possiblePaths[1], position)){ 
-			b.placeVehicle(randOrient, possiblePaths[1], position);
-			return true;
-		}
-		else { // try anywhere else 
-			int randPath = randomCarPath(randOrient);
-			if (b.canPlaceVehicle(randOrient, randPath, position)) { 
-				b.placeVehicle(randOrient, randPath, position);
-				return true;
-			}
-			return false;
-		}
-	}
 	
 	public boolean fin(Vehicle v, int[] door) {
 

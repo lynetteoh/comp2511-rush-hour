@@ -47,12 +47,12 @@ public class GridLock extends Application {
 			});
 
 
-
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 
 	}
+
 	
 	/**
 	 * Main function of the gridLock game
