@@ -155,16 +155,6 @@ public class Board {
 		return false;
 	}
 	
-	public boolean solve2() {
-		Solver s = new Solver(this);
-		ArrayList<Move> solution = s.solve2();
-		if (solution != null) {
-			this.solution = solution;
-			return true;
-		}
-		return false;
-	}
-	
 	public void printBoard() {
 		System.out.println("== Board ==");
 		for(int i = 0; i < size; i++) {
