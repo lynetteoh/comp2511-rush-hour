@@ -478,13 +478,13 @@ public class SceneView {
 	}
 	
 	/**
-	 * This function creates the winning scene after the red car has reached the goal
+	 * This function creates the win scene after the red car has reached the goal
 	 * @precondition Given the board is valid and the player has solved the puzzle
 	 * @postcondition the layout of the scene is defined
 	 * @param board: the puzzle of a level
 	 * @return winLayout: the layout of the scene
 	 */
-	public AnchorPane winningScene(Board board) {
+	public AnchorPane winScene(Board board) {
 		AnchorPane winLayout = new AnchorPane();
 		String Moves = "Moves made: " + board.getnMoves();
 		HBox hbox = new HBox(30);
@@ -508,6 +508,9 @@ public class SceneView {
 		//create text to display moves
 		Text moves = new Text(Moves);
 		
+		//display message when user made least number of moves to solve the puzzle
+		Text perfect = new Text();
+		
 		//create text to display message
 		Text win = new Text("Congratulations! You Win."); 
 		
@@ -515,7 +518,7 @@ public class SceneView {
 		ImageView background = getBackground("file:resource/background.jpg", 1.0);
 		
 		//add items to pane
-		winLayout.getChildren().addAll(background, win, moves, hbox);
+		winLayout.getChildren().addAll(background, win, moves, hbox, perfect);
 		return winLayout;
 	}
 	
@@ -523,12 +526,13 @@ public class SceneView {
 	 * This function changes the position and size of the items in win layout when scene width < 900 and scene height < 700
 	 * @precondition scene width < 900, scene height < 700 and the win layout has been created
 	 * @postcondition the items in the win layout has changed its position and size
-	 * @param winLayout: the layout of the winning scene
+	 * @param winLayout: the layout of the win scene
 	 */
-	public void smallWiningScene(AnchorPane winLayout) {
+	public void smallWinScene(AnchorPane winLayout) {
 		Text win = (Text) winLayout.getChildren().get(1);
 		Text moves = (Text) winLayout.getChildren().get(2);
 		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		Text perfect = (Text) winLayout.getChildren().get(4);
 		
 		//set buttons size
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
@@ -539,29 +543,34 @@ public class SceneView {
 		//set font style and size
 		win.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 26));
 		moves.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 26));
+		perfect.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 40));
 		
 		double winPosition = sceneWidth - win.getLayoutBounds().getWidth();
 		double movesPosition = sceneWidth - moves.getLayoutBounds().getWidth();
+		double perfectPosition = sceneWidth - perfect.getLayoutBounds().getWidth();
 		
 		//set position
+		perfect.setTranslateX(perfectPosition/2);
+		perfect.setTranslateY(sceneHeight/4);
 		win.setTranslateX(winPosition/2);
-		win.setTranslateY(sceneHeight/3);
+		win.setTranslateY(sceneHeight/3 + 20);
 		moves.setTranslateX(movesPosition/2);
-		moves.setTranslateY(sceneHeight/3 + 50);
+		moves.setTranslateY(sceneHeight/3 + 70);
 		buttons.setTranslateX(sceneWidth/2 + 100);
-		buttons.setTranslateY(sceneHeight/2 + 50);
+		buttons.setTranslateY(sceneHeight/2 + 100);
 	}
 	
 	/**
 	 * This function changes the position and size of the items in win layout when scene width >= 900 and scene Height >= 700
 	 * @precondition scene width > 900, scene height > 700 and the win layout has been created
 	 * @postcondition the items in the win layout has changed its position and size
-	 * @param winLayout: layout for the winning scene
+	 * @param winLayout: layout for the win scene
 	 */
-	public void bigWinningScene(AnchorPane winLayout) {
+	public void bigWinScene(AnchorPane winLayout) {
 		Text win = (Text) winLayout.getChildren().get(1);
 		Text moves = (Text) winLayout.getChildren().get(2);
 		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		Text perfect = (Text) winLayout.getChildren().get(4);
 		
 		//set buttons size
 		for(int i = 0; i < buttons.getChildren().size(); i++) {
@@ -572,11 +581,15 @@ public class SceneView {
 		//change the font style and size
 		win.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 36));
 		moves.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 36));
+		perfect.setFont(Font.font("Verdana", FontWeight.SEMI_BOLD, 50));
 		
 		double winPosition = sceneWidth - win.getLayoutBounds().getWidth();
-		double movesPosition = sceneWidth - moves.getLayoutBounds().getWidth();
+		double movesPosition = sceneWidth - moves.getLayoutBounds().getWidth(); 
+		double perfectPosition = sceneWidth - perfect.getLayoutBounds().getWidth();
 		
-		//set position 
+		//set position
+		perfect.setTranslateX(perfectPosition/2);
+		perfect.setTranslateY(sceneHeight/4);
 		win.setTranslateX(winPosition/2);
 		win.setTranslateY(sceneHeight/3);
 		moves.setTranslateX(movesPosition/2);

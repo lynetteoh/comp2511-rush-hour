@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -294,7 +295,7 @@ public class SceneManager extends Pane {
 					break;
 				case("WIN"):
 					AnchorPane winLayout = (AnchorPane) scene.getRoot();
-					sceneView.bigWinningScene(winLayout);
+					sceneView.bigWinScene(winLayout);
 					break;
 			}
 			
@@ -317,7 +318,7 @@ public class SceneManager extends Pane {
 					break;
 				case("WIN"):
 					AnchorPane winLayout = (AnchorPane) scene.getRoot();
-					sceneView.smallWiningScene(winLayout);
+					sceneView.smallWinScene(winLayout);
 					break;
 			}
 	
@@ -350,7 +351,7 @@ public class SceneManager extends Pane {
 		ToggleButton mute = null;
 		for(Entry<String, Scene> entry: scenes.entrySet()) {
 			
-			//ignore mute button in the current scene and in the winning scene
+			//ignore mute button in the current scene and in the win scene
 			if(entry.getKey().equals(sceneName) || entry.getKey().equals("WIN")) {
 				continue;
 			}
@@ -512,18 +513,28 @@ public class SceneManager extends Pane {
 		};
 	
 	/**
-	 * This function creates the winning scene for the game
+	 * This function creates the win scene for the game
 	 * @precondition the red car has reached the goal
-	 * @postcondition the winning scene is displayed 
+	 * @postcondition the win scene is displayed 
 	 * @param board: the puzzle for a level
 	 * @param hardness: the hardness of a level
 	 */
 	public void win(Board board, String hardness) {
-		//get the layout of the winning scene
-		AnchorPane winLayout = sceneView.winningScene(board);
+		//get the minimum number of moves to complete the puzzle
+		int perfectMoves = board.getSolution().size();
 		
-		//get all the buttons in the winning scene
+		//get the layout of the win scene
+		AnchorPane winLayout = sceneView.winScene(board);
+		
+		//get the text in the layout 
+		Text perfect = (Text) winLayout.getChildren().get(4);
+		
+		//get all the buttons in the win scene
 		HBox buttons = (HBox) winLayout.getChildren().get(3);
+		
+		if(board.getnMoves() == perfectMoves) {
+			perfect.setText("PERFECT !");
+		}
 		
 		//add functionality to each button
 		for (int i = 0; i < buttons.getChildren().size(); i++) {
@@ -551,12 +562,12 @@ public class SceneManager extends Pane {
 		
 		//choose the layout of the scene based on the scene size
 		if(sceneWidth >= 900 && sceneHeight >= 700) {
-			sceneView.bigWinningScene(winLayout);
+			sceneView.bigWinScene(winLayout);
 		}else {
-			sceneView.smallWiningScene(winLayout);
+			sceneView.smallWinScene(winLayout);
 		}
 		
-		//add sound effect for the winning scene
+		//add sound effect for the win scene
 		String musicFile = "resource/win.mp3";    
 		Media sound = new Media(new File(musicFile).toURI().toString());
 		MediaPlayer effectMP = new MediaPlayer(sound);
