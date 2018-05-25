@@ -352,7 +352,7 @@ public class Generator {
 		return k;
 	}
 	
-	// also tests if it is possible to solve. If not, unplaces the car.
+	
 	/**
 	 * Places a single vehicle onto the board B, returns true if successfully placed, false otherwise.
 	 * After placing, checks if board is still solvable. If not, it unplaces the vehicle.
