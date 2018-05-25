@@ -165,7 +165,7 @@ public class SceneManager {
 					case("HOME"):
 						b.setOnAction(e->changeScene("MENU", b));
 						break;
-					case("HINTS"):
+					case("HINT"):
 						b.setOnAction(e->{
 							b.setDisable(true);
 							getHint();
@@ -477,8 +477,8 @@ public class SceneManager {
 
 	/**
 	 * This function gives a hint to the user for the next move
-	 * @precondition user clicks on the hints button
-	 * @postcondition hints is shown
+	 * @precondition user clicks on the hint button
+	 * @postcondition hint is shown
 	 */
 	public void getHint(){
 		if(hint > 1) {
@@ -529,7 +529,7 @@ public class SceneManager {
 					gameClip.play();
 				}
 
-				//remove hints 
+				//remove hint 
 				if(hint == 1) {
 					Group root = (Group) gameLayout.getChildren().get(5);
 					int index = root.getChildren().size();

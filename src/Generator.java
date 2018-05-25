@@ -35,6 +35,12 @@ public class Generator {
 		this.currentMediumBoardIndex = 0;
 	}
 	
+	/**
+	 * This function gets the previous easy puzzle
+	 * @precondition previous easy puzzle exists
+	 * @postcondition  previous easy puzzle is given to caller
+	 * @return previous easy puzzle
+	 */
 	public Board GetPreviousEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
@@ -55,6 +61,12 @@ public class Generator {
 //		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
 		return easyBoards.get(currentEasyBoardIndex);
 	}
+	
+	/**
+	 * This function gets the next easy puzzle in the array. 
+	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
+	 * @return the next easy puzzle
+	 */
 	public Board GetNextEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
@@ -72,6 +84,13 @@ public class Generator {
 		}
 		return easyBoards.get(currentEasyBoardIndex);
 	}
+	
+	/**
+	 * This function gets the previous medium puzzle
+	 * @precondition previous medium puzzle exists
+	 * @postcondition  previous medium puzzle is given to caller
+	 * @return previous medium puzzle
+	 */
 	public Board GetPreviousMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
@@ -91,6 +110,12 @@ public class Generator {
 		} 
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
+	
+	/**
+	 * This function gets the next medium puzzle in the array. 
+	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
+	 * @return the next medium puzzle
+	 */
 	public Board GetNextMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
@@ -108,6 +133,13 @@ public class Generator {
 		}	
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
+	
+	/**
+	 * This function gets the previous hard puzzle
+	 * @precondition previous hard puzzle exists
+	 * @postcondition  previous hard puzzle is given to caller
+	 * @return previous easy puzzle
+	 */
 	public Board GetPreviousHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
 			Board current = hardBoards.get(currentHardBoardIndex);
@@ -127,6 +159,12 @@ public class Generator {
 		} 
 		return hardBoards.get(currentHardBoardIndex);
 	}
+	
+	/**
+	 * This function gets the next hard puzzle in the array. 
+	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
+	 * @return the next hard puzzle
+	 */
 	public Board GetNextHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
 			Board current = hardBoards.get(currentHardBoardIndex);
