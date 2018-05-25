@@ -8,7 +8,7 @@ import java.util.Stack;
  *
  */
 public class Board {
-	// int[][] b = new int[6][6]
+	
 	public static int boardId = 1;
 	private int id;
 	private int vehicleIdCounter;
@@ -46,6 +46,7 @@ public class Board {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public Board(Board b)
 	{
 		this.size = b.getSize();
