@@ -439,7 +439,6 @@ public class SceneManager {
 
 		//update the number of moves
 		sceneView.updateMove(board);
-//		board.printBoard();
 
 	}
 
@@ -460,7 +459,6 @@ public class SceneManager {
 		int[][] b = board.resetBoard();
 		b = board.copyMatrix(b);
 		board.setMatrix(b);
-//		board.printBoard();
 
 		//reset the display for moves
 		sceneView.updateMove(board);
@@ -497,7 +495,6 @@ public class SceneManager {
 		Group root = (Group) gameLayout.getChildren().get(5);
 		root.getChildren().add(g);
 		hint = 1;
-		System.out.println("=== GET HINTS ===");
 	}
 
 	/**
@@ -535,7 +532,6 @@ public class SceneManager {
 				//remove hints 
 				if(hint == 1) {
 					Group root = (Group) gameLayout.getChildren().get(5);
-					System.out.println(root.getChildren().size());
 					int index = root.getChildren().size();
 					root.getChildren().remove(index-1);
 					hint = 2;

@@ -34,7 +34,7 @@ public class Vehicle {
 	}
 	
 	/***
-	 * 
+	 * This is the to String method to print out the vehicle id, orientation and length
 	 */
 	@Override 
 	public String toString() { 
@@ -42,6 +42,7 @@ public class Vehicle {
 		s += "Orient " + orient +"| Path:  " + path + "| Position: " + Arrays.toString(position) + "| Length: " + length + "\n";
 		return s;
 	}
+	
 	/***
 	 * Resets the counter for the ids for the Vehicles (reset for each new Board)
 	 * @return
@@ -50,6 +51,7 @@ public class Vehicle {
 		count = new AtomicInteger(0);
 		return true;
 	}
+	
 	/***
 	 * Returns the id of the vehicle
 	 * @return int

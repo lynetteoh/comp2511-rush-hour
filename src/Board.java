@@ -88,7 +88,6 @@ public class Board {
 		ArrayList<Move> solution = s.solve();
 		if (solution != null) {
 			Move move = solution.get(0);
-			System.out.println("Vehicle: " + move.getVehicle().getId() + " move: " + move.getDirection());
 			return move;
 		}
 		return null;
@@ -156,7 +155,6 @@ public class Board {
 		int end = v.getPosition()[v.getPosition().length-1];
 
 		if (v.getOrient() == 1) { // horizontal; path represents row
-			//System.out.println("end: " + end);
 			for (int i = start; i <= end; i++) {
 				matrix[p][i] = id;
 			}
@@ -379,7 +377,6 @@ public class Board {
 	 */
 	public boolean moveForward(Vehicle v) {
 		int movesForwards = canMoveForward(v);
-		//System.out.println("moves forward = " + movesForwards);
 		if(movesForwards > 0) {
 			if(v.getOrient() == 1) {
 				int[] array = getArray(v);
@@ -484,15 +481,12 @@ public class Board {
 
 		// initial check to make sure all parameters are correct
 		if (!(orient == 1 || orient == 2)) {
-//			System.out.println("Invalid Orient");
 			return false;
 		} else if (!(0 <= path && path < size)) {
-			//System.out.println("Path out of bounds");
 			return false;
 		} else {
 			for (int i = 0; i < position.length; i++) {
 				if (!(0 <= position[i] && position[i] < size)) {
-//					System.out.println("Position index out of bounds");
 					return false;
 				}
 			}
@@ -634,10 +628,7 @@ public class Board {
 		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
 			int[] goalPosition = getGoalPosition(); // the two cells the red car has to occupy (right next to the exit)
 			int[][] matrix = this.matrix;
-//			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
-//			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
 			if (matrix[v.getPath()][goalPosition[0]] == 1 && matrix[v.getPath()][goalPosition[1]] == 1) {
-//				System.out.println("Car is touching the exit");
 				return true;
 			}
 		}

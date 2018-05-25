@@ -37,7 +37,6 @@ public class GridLock extends Application {
 			primaryStage.setMaxWidth(screenMaxWidth);
 			sceneManager = new SceneManager(screenMinWidth, screenMinHeight, primaryStage);
 			scene = sceneManager.createMenuScene();
-			//scene.getStylesheets().add("style.css");
 			primaryStage.setScene(scene);
 			stageListener(primaryStage);
 			primaryStage.show();
