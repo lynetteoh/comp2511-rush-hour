@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-enum orient {
-    HORIZONTAL, VERTICAL
-}// just let the horizontal be 1, vertical be 2, and unset be 0
 /**
  * A Class which contains 3 Generators: Easy, Medium and Hard, along with their required helper functions.
  * @author rubybie
@@ -26,6 +23,17 @@ public class Generator {
 	private int currentEasyBoardIndex;
 	private int currentMediumBoardIndex;
 	private int currentHardBoardIndex;
+	
+	/**
+	 * Constructs a new Generator Object.
+	 * @param size
+	 */
+	public Generator(int size) {
+		this.n = size;
+		this.currentEasyBoardIndex = 0;
+		this.currentHardBoardIndex = 0;
+		this.currentMediumBoardIndex = 0;
+	}
 	
 	public Board GetPreviousEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
@@ -135,17 +143,6 @@ public class Generator {
 			hardBoards.add(RandomHardGenerator());
 		}
 		return hardBoards.get(currentHardBoardIndex);
-	}
-	
-	/**
-	 * Constructs a new Generator Object.
-	 * @param size
-	 */
-	public Generator(int size) {
-		this.n = size;
-		this.currentEasyBoardIndex = 0;
-		this.currentHardBoardIndex = 0;
-		this.currentMediumBoardIndex = 0;
 	}	
 	
 	/**
@@ -468,8 +465,6 @@ public class Generator {
 		return position;
 	}
 	
-	// generates a random array of integers for car to lie on.
-	// takes in arguments len = length of car; n = dimension of board
 	/**
 	 * Generates randomly from a special set of vertical positions which would block the first car.
 	 * @param len The length of the vehicle.
