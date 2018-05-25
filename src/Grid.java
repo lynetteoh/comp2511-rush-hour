@@ -313,4 +313,25 @@ public class Grid {
 	public Board getBoard() {
 		return board;
 	}
+	
+	/**
+	 * This function create a opaque block to be displayed as hint
+	 * @param m: hints from the solver 
+	 * @return g: the opaque block
+	 */
+	public Group createHint(Move m) {
+		Vehicle v = m.getVehicle();
+		Sprite s;
+		if (v.getOrient() == 1){
+			s = new Sprite((v.getPosition()[0] + m.getDirection())*this.getsLength()+1, v.getPath()*this.getsLength()+1, v.getLength()*this.getsLength()-2, this.getsLength()-2);
+		}
+		else {
+			s = new Sprite(v.getPath()*this.getsLength()+1, (v.getPosition()[0] + m.getDirection())*this.getsLength()+1, this.getsLength()-2, v.getLength()*this.getsLength()-2);
+		}
+		s.setFill(Color.GREEN);
+		s.setOpacity(0.2);
+		Group g = new Group();
+		g.getChildren().add(s);
+		return g;
+	}
 }

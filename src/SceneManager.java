@@ -216,6 +216,7 @@ public class SceneManager {
 
 		//if the scene is a game scene
 		if(name.equals("EASY") || name.equals("MEDIUM") || name.equals("HARD")) {
+			hint = 0;
 			String buttonText = button.getText();
 			//create the puzzle
 			AnchorPane currentGameLayout = sceneView.renderPuzzle(name, g, buttonText);
@@ -469,6 +470,11 @@ public class SceneManager {
 		}
 	}
 
+	/**
+	 * This function gives a hint to the user for the next move
+	 * @precondition user clicks on the hints button
+	 * @postcondition hints is shown
+	 */
 	public void getHint(){
 		if(hint > 1) {
 			return;
@@ -479,20 +485,7 @@ public class SceneManager {
 		if(m == null) {
 			return;
 		}
-		Vehicle v = m.getVehicle();
-		Sprite s;
-		if (v.getOrient() == 1){
-			s = new Sprite((v.getPosition()[0] + m.getDirection())*grid.getsLength()+1, v.getPath()*grid.getsLength()+1, v.getLength()*grid.getsLength()-2, grid.getsLength()-2);
-		}
-		else {
-			s = new Sprite(v.getPath()*grid.getsLength()+1, (v.getPosition()[0] + m.getDirection())*grid.getsLength()+1, grid.getsLength()-2, v.getLength()*grid.getsLength()-2);
-		}
-		s.setFill(Color.GREEN);
-		s.setOpacity(0.2);
-		Group g = new Group();
-		g.getChildren().add(s);
-		System.out.println(m.toString());
-		System.out.println("Orient: " + v.getOrient() + " | path: " + v.getPath() + " | fPos: " + v.getPosition()[0] + " | length: " + v.getLength());
+		Group g = grid.createHint(m);
 		AnchorPane gameLayout = (AnchorPane) sceneView.getCurrentGameLayout().getValue();
 		Group root = (Group) gameLayout.getChildren().get(5);
 		root.getChildren().add(g);
