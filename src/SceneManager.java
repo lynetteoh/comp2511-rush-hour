@@ -486,12 +486,9 @@ public class SceneManager {
 		s.setOpacity(0.2);
 		Group g = new Group();
 		g.getChildren().add(s);
-		System.out.println(m.toString());
-		System.out.println("Orient: " + v.getOrient() + " | path: " + v.getPath() + " | fPos: " + v.getPosition()[0] + " | length: " + v.getLength());
 		AnchorPane gameLayout = (AnchorPane) sceneView.getCurrentGameLayout().getValue();
 		Group root = (Group) gameLayout.getChildren().get(5);
 		root.getChildren().add(g);
-		System.out.println("=== GET HINTS ===");
 	}
 
 	/**

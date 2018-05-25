@@ -6,7 +6,7 @@ import java.util.Stack;
  * @author gretaritchard
  */
 public class Board {
-	
+
 	private int vehicleIdCounter;
 	private int nMoves;
 	private int[][] matrix;
@@ -34,7 +34,7 @@ public class Board {
 	}
 
 	/***
-	 * Constructs a new Board as a copy of the one passed in, used for the Solver 
+	 * Constructs a new Board as a copy of the one passed in, used for the Solver
 	 * @param b : Board
 	 */
 	@SuppressWarnings("unchecked")
@@ -62,11 +62,11 @@ public class Board {
 		this.nMoves = 0;
 		return this.getInitialBoard();
 	}
-	
+
 	/***
 	 * Creates a copy of the given matrix (used to overcome any pass by reference issues)
 	 * @param matrix : int[][] the matrix to be copied
-	 * @return int[][] 
+	 * @return int[][]
 	 */
 	public int[][] copyMatrix(int[][] matrix) {
 		int[][] newMatrix = new int[matrix.length][matrix.length];
@@ -75,7 +75,7 @@ public class Board {
 				newMatrix[i][j] = matrix[i][j];
 			}
 		}
-		
+
 		return newMatrix;
 	}
 
@@ -92,9 +92,9 @@ public class Board {
 			return move;
 		}
 		return null;
-		
+
 	}
-	
+
 	/***
 	 * Sets the current Board solution using the Solver, or returns false (unsolveable)
 	 * @return boolean
@@ -108,7 +108,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 
 	/***
 	 * Prints the current board to the terminal (used for testing)
@@ -122,7 +122,7 @@ public class Board {
 			System.out.println("");
 		}
 	}
-	
+
 
 	/***
 	 * Clears the current Board vehicle list for the board
@@ -156,7 +156,6 @@ public class Board {
 		int end = v.getPosition()[v.getPosition().length-1];
 
 		if (v.getOrient() == 1) { // horizontal; path represents row
-			//System.out.println("end: " + end);
 			for (int i = start; i <= end; i++) {
 				matrix[p][i] = id;
 			}
@@ -168,9 +167,9 @@ public class Board {
 		}
 		vehiclesList.add(v);
 		setInitialBoard(matrix);
-		
+
 	}
-	
+
 	/**
 	 * take back the last vehicle place
 	 * @param orient
@@ -195,9 +194,9 @@ public class Board {
 			}
 		}
 		vehiclesList.remove(vehiclesList.size()-1);
-		
+
 	}
-	
+
 	/***
 	 * Sets the initial board state
 	 * @param matrix : int[][]
@@ -316,9 +315,9 @@ public class Board {
 	public void setVehiclesList(ArrayList<Vehicle> vehiclesList) {
 		this.vehiclesList = vehiclesList;
 	}
-	
+
 	/***
-	 * Undos the last move taken by the board 
+	 * Undos the last move taken by the board
 	 * @return Move
 	 */
 	public Move undo () {
@@ -346,9 +345,9 @@ public class Board {
 	}
 	/***
 	 * Moves a Vehicle N spaces forward or backward, returns the amount moved
-	 * @param v : Vehicle 
-	 * @param nSpaces : int 
-	 * @return int 
+	 * @param v : Vehicle
+	 * @param nSpaces : int
+	 * @return int
 	 */
 	public int moveNSpaces(Vehicle v, int nSpaces) {
 		if (nSpaces == 0) {
@@ -391,7 +390,7 @@ public class Board {
 						array[i + 1] = v.getId();
 						array[i + 2] = v.getId();
 						if(v.getLength() == 3) {
-							array[i + 3] = v.getId(); 
+							array[i + 3] = v.getId();
 						}
 						return true;
 					}
@@ -441,7 +440,7 @@ public class Board {
 						if(v.getLength() == 3) {
 							array[i - 3] = v.getId();
 						}
-					
+
 						return true;
 					}
 				}
@@ -484,15 +483,12 @@ public class Board {
 
 		// initial check to make sure all parameters are correct
 		if (!(orient == 1 || orient == 2)) {
-//			System.out.println("Invalid Orient");
 			return false;
 		} else if (!(0 <= path && path < size)) {
-			//System.out.println("Path out of bounds");
 			return false;
 		} else {
 			for (int i = 0; i < position.length; i++) {
 				if (!(0 <= position[i] && position[i] < size)) {
-//					System.out.println("Position index out of bounds");
 					return false;
 				}
 			}
@@ -553,7 +549,7 @@ public class Board {
 
 	/***
 	 * Returns the number of moves a vehicle can move backward on the board
-	 * @param v : Vehicle 
+	 * @param v : Vehicle
 	 * @return int
 	 */
 	public int canMoveBackward(Vehicle v) {
@@ -595,10 +591,10 @@ public class Board {
 		       array[i] = this.matrix[i][v.getPath()];
 		    }
 		}
-		
+
 		return array;
 	}
-	
+
 	@Override
 	/**
 	* Prints the matrix of the board, with ids' of vehicles occupying positions.
@@ -634,10 +630,7 @@ public class Board {
 		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
 			int[] goalPosition = getGoalPosition(); // the two cells the red car has to occupy (right next to the exit)
 			int[][] matrix = this.matrix;
-//			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
-//			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
 			if (matrix[v.getPath()][goalPosition[0]] == 1 && matrix[v.getPath()][goalPosition[1]] == 1) {
-//				System.out.println("Car is touching the exit");
 				return true;
 			}
 		}

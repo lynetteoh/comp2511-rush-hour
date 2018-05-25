@@ -17,7 +17,7 @@ public class GridLock extends Application {
 	private double screenMaxWidth;
 	private double screenMaxHeight;
 	private Scene scene;
-	
+
 	/**
 	 * This function is the entry point for the view. It sets up the window and display the first scene on screen
 	 * @param primaryStage: the window of the game
@@ -37,7 +37,6 @@ public class GridLock extends Application {
 			primaryStage.setMaxWidth(screenMaxWidth);
 			sceneManager = new SceneManager(screenMinWidth, screenMinHeight, primaryStage);
 			scene = sceneManager.createMenuScene();
-			//scene.getStylesheets().add("style.css");
 			primaryStage.setScene(scene);
 			stageListener(primaryStage);
 			primaryStage.show();
@@ -53,15 +52,15 @@ public class GridLock extends Application {
 
 	}
 
-	
+
 	/**
 	 * Main function of the gridLock game
 	 * @param args
 	 */
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	/**
 	 * This function listen to the changes made on the window and updates the width and height of the window accordingly
 	 * @param stage: the window of the gridLock game
