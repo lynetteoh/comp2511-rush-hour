@@ -430,11 +430,11 @@ public class SceneView {
 		//create buttons
 		Button homeBtn = createBtn("HOME", polygon);
 		Button resetBtn = createBtn("RESET", polygon);	
-		Button hintsBtn = createBtn("HINTS", polygon);
+		Button hintBtn = createBtn("HINT", polygon);
 		Button undoBtn = createBtn("UNDO", polygon);
 		Button nextBtn = createBtn("NEXT", polygon);
 		Button previousBtn = createBtn("PREVIOUS", polygon);
-		gameButtonsHolder.getChildren().addAll(hintsBtn, undoBtn);
+		gameButtonsHolder.getChildren().addAll(hintBtn, undoBtn);
 		gameButtonsHolder1.getChildren().addAll(resetBtn, homeBtn);
 		gameButtonsHolder2.getChildren().addAll(previousBtn, nextBtn);
 		
