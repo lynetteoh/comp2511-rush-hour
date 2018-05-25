@@ -42,7 +42,7 @@ public class Generator {
 		if (currentEasyBoardIndex < 0) {
 			currentEasyBoardIndex = 0;
 		} 
-		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
+//		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	public Board GetNextEasyBoard() {
@@ -170,7 +170,7 @@ public class Generator {
 		do {
 			b.clearVehicles(); b = new Board(n);
 			placeFirstVehicle(b); // set down most important car
-			b.printBoard();
+//			b.printBoard();
 			Vehicle First = b.getLastVehicle(); 
 			int leftBorder = First.getPosition()[1];
 			
@@ -207,7 +207,7 @@ public class Generator {
 			}
 		} while (!(EASY < nMoves && nMoves <= MEDIUM));
 		//System.out.println("AttemptNo " + AttemptNo);
-		//b.printBoard();
+//		b.printBoard();
 		//System.out.println("Solution: " + b.getSolution());
 		return b;
 	}
@@ -253,8 +253,8 @@ public class Generator {
 			if (duration > 1000) break;
 
 		} while (!(MEDIUM < nMoves));
-		b.printBoard();
-		System.out.println("Solution: " + b.getSolution());
+//		b.printBoard();
+//		System.out.println("Solution: " + b.getSolution());
 		return b;
 	}
 	

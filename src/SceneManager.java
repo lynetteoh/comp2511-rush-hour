@@ -27,7 +27,7 @@ import javafx.util.Pair;
  * @author lean lynn oh
  *
  */
-public class SceneManager extends Pane {
+public class SceneManager {
 	private double sceneWidth;
 	private double sceneHeight;
 	private Stage stage;

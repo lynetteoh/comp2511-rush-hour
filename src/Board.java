@@ -17,10 +17,7 @@ public class Board {
 	private ArrayList<Vehicle> vehiclesList = new ArrayList<Vehicle>();
 	private ArrayList<Move> solution = new ArrayList<Move>();
 	private Stack<Move> moves = new Stack<Move>();
-	public static ArrayList<Board> boards = new ArrayList<Board>();
-	private int level;
 	private int[][] initialBoard;
-	private boolean solvable;
 
 
 	/***
@@ -38,15 +35,11 @@ public class Board {
 		}
 		this.id = boardId;
 		boardId += 1;
-		this.level = boards.indexOf(this);
 		setInitialBoard(this.matrix);
-		boards.add(this);
-		solvable = false;
 	}
 
 	@SuppressWarnings("unchecked")
-	public Board(Board b)
-	{
+	public Board(Board b) {
 		this.size = b.getSize();
 		int [][] matrix = b.getMatrix();
 		this.matrix = new int[size][size];
@@ -60,21 +53,14 @@ public class Board {
 		this.nMoves = b.getnMoves();
 		this.vehiclesList = b.getVehiclesList();
 		this.moves = (Stack<Move>) b.getMoves().clone();
-		boards.add(this);
-		this.level = boards.indexOf(this);
 		setInitialBoard(this.matrix);
-	}
-	
-	public boolean getSolvable() { 
-		return solvable;
 	}
 
 	/***
 	 * Resets the board to it's initial state
 	 * @return matrix : int[][] 	the matrix representation of the initial board
 	 */
-	public int[][] resetBoard()
-	{
+	public int[][] resetBoard() {
 		this.nMoves = 0;
 		return this.getInitialBoard();
 	}
@@ -84,13 +70,10 @@ public class Board {
 	 * @param matrix : int[][] the matrix to be copied
 	 * @return int[][] 
 	 */
-	public int[][] copyMatrix(int[][] matrix)
-	{
+	public int[][] copyMatrix(int[][] matrix) {
 		int[][] newMatrix = new int[matrix.length][matrix.length];
-		for(int i = 0; i < matrix.length; i++)
-		{
-			for(int j = 0; j < matrix.length; j++)
-			{
+		for(int i = 0; i < matrix.length; i++) {
+			for(int j = 0; j < matrix.length; j++) {
 				newMatrix[i][j] = matrix[i][j];
 			}
 		}
@@ -102,8 +85,7 @@ public class Board {
 	 * Returns a hint for the next optimal move for the user
 	 * @return Move
 	 */
-	public Move getHint()
-	{
+	public Move getHint() {
 		Solver s = new Solver(this);
 		ArrayList<Move> solution = s.solve();
 		if (solution != null) {
@@ -150,7 +132,6 @@ public class Board {
 	 */
 	public boolean clearVehicles() {
 		if (vehiclesList.isEmpty()) {
-
 			int[] position = {0,1};
 			Vehicle v = new Vehicle(0,0, position);
 			v.resetCount();
@@ -223,16 +204,14 @@ public class Board {
 	 * Sets the initial board state
 	 * @param matrix : int[][]
 	 */
-	public void setInitialBoard(int[][] matrix)
-	{
+	public void setInitialBoard(int[][] matrix) {
 		this.initialBoard = copyMatrix(this.matrix);
 	}
 	/***
 	 * Returns the initial board state of the board
 	 * @return int[][]
 	 */
-	public int[][] getInitialBoard()
-	{
+	public int[][] getInitialBoard() {
 		return this.initialBoard;
 	}
 
@@ -430,47 +409,37 @@ public class Board {
 	 * @param v : Vehicle
 	 * @return boolean
 	 */
-	public boolean moveForward(Vehicle v)
-	{
+	public boolean moveForward(Vehicle v) {
 		int movesForwards = canMoveForward(v);
 		//System.out.println("moves forward = " + movesForwards);
-		if(movesForwards > 0)
-		{
-			if(v.getOrient() == 1)
-			{
+		if(movesForwards > 0) {
+			if(v.getOrient() == 1) {
 				int[] array = getArray(v);
 
-				for(int i = 0; i < array.length; i++)
-				{
+				for(int i = 0; i < array.length; i++) {
 
-					if(array[i] == v.getId() && v.getLength() > 0)
-					{
+					if(array[i] == v.getId() && v.getLength() > 0) {
 						array[i] = 0;
 						array[i + 1] = v.getId();
 						array[i + 2] = v.getId();
-						if(v.getLength() == 3)
-						{
+						if(v.getLength() == 3) {
 							array[i + 3] = v.getId(); 
 						}
 						return true;
 					}
 				}
 			}
-			else if(v.getOrient() == 2)
-			{
+			else if(v.getOrient() == 2) {
 				int id = v.getId();
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
 
-				for(int i = 0; i < this.size; i++)
-				{
-					if(matrix[i][path] == id)
-					{
+				for(int i = 0; i < this.size; i++) {
+					if(matrix[i][path] == id) {
 						matrix[i][path] = 0;
 						matrix[i + 1][path] = id;
 						matrix[i + 2][path] = id;
-						if(v.getLength() == 3)
-						{
+						if(v.getLength() == 3) {
 							matrix[i + 3][path] = id;
 						}
 						break;
@@ -490,24 +459,18 @@ public class Board {
 	 * @param v : Vehicle
 	 * @return boolean
 	 */
-	public boolean moveBackward(Vehicle v)
-	{
+	public boolean moveBackward(Vehicle v) {
 		int movesBackwards = canMoveBackward(v);
-		if(movesBackwards > 0)
-		{
-			if(v.getOrient() == 1)
-			{ // horizontal
+		if(movesBackwards > 0) {
+			if(v.getOrient() == 1) { // horizontal
 				int[] array = getArray(v);
 
-				for(int i = array.length - 1; i > 0; i--)
-				{
-					if(array[i] == v.getId() && v.getLength() > 0)
-					{
+				for(int i = array.length - 1; i > 0; i--) {
+					if(array[i] == v.getId() && v.getLength() > 0) {
 						array[i] = 0;
 						array[i - 1] = v.getId();
 						array[i - 2] = v.getId();
-						if(v.getLength() == 3)
-						{
+						if(v.getLength() == 3) {
 							array[i - 3] = v.getId();
 						}
 					
@@ -515,24 +478,19 @@ public class Board {
 					}
 				}
 			}
-			else if(v.getOrient() == 2)
-			{
+			else if(v.getOrient() == 2) {
 				int id = v.getId();
 
 				int path = v.getPath();
 				int[][] matrix = this.getMatrix();
 
-				for(int i = 0; i < this.size; i++)
-				{
-					if(matrix[i][path] == id)
-					{
+				for(int i = 0; i < this.size; i++) {
+					if(matrix[i][path] == id) {
 						matrix[i - 1][path] = id;
-						if(v.getLength() == 3)
-						{
+						if(v.getLength() == 3) {
 							matrix[i + 2][path] = 0;
 						}
-						else if (v.getLength() == 2)
-						{
+						else if (v.getLength() == 2) {
 							matrix[i + 1][path] = 0;
 						}
 						break;
@@ -554,8 +512,7 @@ public class Board {
 	 * @param position : int[][]
 	 * @return boolean
 	 */
-	public boolean canPlaceVehicle(int orient, int path, int[] position)
-	{
+	public boolean canPlaceVehicle(int orient, int path, int[] position) {
 
 		// initial check to make sure all parameters are correct
 		if (!(orient == 1 || orient == 2)) {
@@ -575,14 +532,10 @@ public class Board {
 
 		int[][] matrix = this.matrix;
 
-		if(orient == 1)
-		{ // horizontal
-			if(matrix[path][position[0]] == 0 && matrix[path][position[1]] == 0)
-			{
-				if(position.length == 3)
-				{
-					if(matrix[path][position[2]] == 0)
-					{
+		if(orient == 1) { // horizontal
+			if(matrix[path][position[0]] == 0 && matrix[path][position[1]] == 0) {
+				if(position.length == 3) {
+					if(matrix[path][position[2]] == 0) {
 						return true;
 					}
 					return false;
@@ -590,14 +543,10 @@ public class Board {
 				return true;
 			}
 		}
-		else if(orient == 2)
-		{
-			if(matrix[position[0]][path] == 0 && matrix[position[1]][path] == 0)
-			{
-				if(position.length == 3)
-				{
-					if(matrix[position[2]][path] == 0)
-					{
+		else if(orient == 2) {
+			if(matrix[position[0]][path] == 0 && matrix[position[1]][path] == 0) {
+				if(position.length == 3) {
+					if(matrix[position[2]][path] == 0) {
 						return true;
 					}
 					return false;
@@ -619,18 +568,14 @@ public class Board {
 		int[] array = getArray(v);
 
 		boolean startCounter = false;
-		for(int i = 0; i < array.length; i++)
-		{
-			if(array[i] == v.getId() && !startCounter)
-			{
+		for(int i = 0; i < array.length; i++) {
+			if(array[i] == v.getId() && !startCounter) {
 				startCounter = true;
 			}
-			if(startCounter && array[i] == 0)
-			{
+			if(startCounter && array[i] == 0) {
 				counter++;
 			}
-			if(startCounter && array[i] != 0 && array[i] != v.getId())
-			{
+			if(startCounter && array[i] != 0 && array[i] != v.getId()) {
 				startCounter = false;
 			}
 		}
@@ -649,19 +594,15 @@ public class Board {
 		int[] array = getArray(v);
 
 		boolean startCounter = false;
-		for(int i = array.length - 1; i >= 0; i--)
-		{
-			if(array[i] == v.getId() && !startCounter)
-			{
+		for(int i = array.length - 1; i >= 0; i--) {
+			if(array[i] == v.getId() && !startCounter) {
 				startCounter = true;
 			}
 
-			if(startCounter && array[i] == 0)
-			{
+			if(startCounter && array[i] == 0) {
 				counter++;
 			}
-			if(startCounter && array[i] != 0 && array[i] != v.getId())
-			{
+			if(startCounter && array[i] != 0 && array[i] != v.getId()) {
 				startCounter = false;
 			}
 		}
@@ -675,16 +616,13 @@ public class Board {
 	 * @param v : Vehicle
 	 * @return int[]
 	 */
-	public int[] getArray(Vehicle v )
-	{
+	public int[] getArray(Vehicle v ) {
 		int[] array = new int[this.matrix[0].length];
 
-		if(v.getOrient() == 1)		// horizontal
-		{
+		if(v.getOrient() == 1) {	// horizontal
 			array = this.matrix[v.getPath()];
 		}
-		else if(v.getOrient() == 2)		// vertical
-		{
+		else if(v.getOrient() == 2) {	// vertical
 		    for(int i = 0; i < array.length; i++){
 		       array[i] = this.matrix[i][v.getPath()];
 		    }
