@@ -1,6 +1,13 @@
 import java.util.Comparator;
 
+/**
+* An interface for comparing how easy it is to solve 2 Boards, based on position of red car.
+*/
 public interface SolverMethod extends Comparator<Board> {
+    /**
+    * The default heuristic for comparing how easy it is to solve 2 boards.
+    * @return an integer indicating is b1 or b2 closer.
+    */
     public default int compare(Board b1, Board b2) {
     	int [][] m1 = b1.getMatrix();
     	int [][] m2 = b2.getMatrix();
