@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Stack;
 
 /***
@@ -45,7 +44,7 @@ public class Board {
 		solvable = false;
 	}
 
-
+	@SuppressWarnings("unchecked")
 	public Board(Board b)
 	{
 		this.size = b.getSize();
@@ -151,6 +150,10 @@ public class Board {
 	 */
 	public boolean clearVehicles() {
 		if (vehiclesList.isEmpty()) {
+
+			int[] position = {0,1};
+			Vehicle v = new Vehicle(0,0, position);
+			v.resetCount();
 			return false;
 		}
 		vehiclesList.get(0).resetCount();
