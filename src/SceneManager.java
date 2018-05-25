@@ -166,7 +166,10 @@ public class SceneManager {
 						b.setOnAction(e->changeScene("MENU", b));
 						break;
 					case("HINTS"):
-						b.setOnAction(e->getHint());
+						b.setOnAction(e->{
+							b.setDisable(true);
+							getHint();
+						});
 						break;
 					case("NEXT"):
 						b.setOnAction(e->changeScene(hardness, b));
@@ -220,6 +223,10 @@ public class SceneManager {
 			String buttonText = button.getText();
 			//create the puzzle
 			AnchorPane currentGameLayout = sceneView.renderPuzzle(name, g, buttonText);
+			VBox vbox = (VBox) currentGameLayout.getChildren().get(3);
+			HBox hbox = (HBox) vbox.getChildren().get(0);
+			Button hintBtn = (Button) hbox.getChildren().get(0);
+			hintBtn.setDisable(false);
 			Group root = (Group) currentGameLayout.getChildren().get(5);
 			root.setOnMouseReleased(OnMouseReleasedEventHandler);
 			if(sceneWidth >= 900  && sceneHeight  >= 700) {
