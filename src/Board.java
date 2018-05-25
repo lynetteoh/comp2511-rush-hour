@@ -516,7 +516,7 @@ public class Board {
 
 		// initial check to make sure all parameters are correct
 		if (!(orient == 1 || orient == 2)) {
-			System.out.println("Invalid Orient");
+//			System.out.println("Invalid Orient");
 			return false;
 		} else if (!(0 <= path && path < size)) {
 			//System.out.println("Path out of bounds");
@@ -524,7 +524,7 @@ public class Board {
 		} else {
 			for (int i = 0; i < position.length; i++) {
 				if (!(0 <= position[i] && position[i] < size)) {
-					System.out.println("Position index out of bounds");
+//					System.out.println("Position index out of bounds");
 					return false;
 				}
 			}

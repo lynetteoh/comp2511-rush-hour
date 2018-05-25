@@ -30,7 +30,9 @@ public class Generator {
 	public Board GetPreviousEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);
 		}
 		if (easyBoards.isEmpty()) {
 			return null;
@@ -48,7 +50,9 @@ public class Generator {
 	public Board GetNextEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);			
 		}
 		currentEasyBoardIndex++;
 		if (currentEasyBoardIndex < easyBoards.size()) {
@@ -63,7 +67,9 @@ public class Generator {
 	public Board GetPreviousMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);			
 		}
 		if (mediumBoards.isEmpty()) {
 			return null;
@@ -80,7 +86,9 @@ public class Generator {
 	public Board GetNextMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);		
 		}
 		currentMediumBoardIndex++;
 		if (currentMediumBoardIndex < mediumBoards.size()) {
@@ -95,7 +103,9 @@ public class Generator {
 	public Board GetPreviousHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
 			Board current = hardBoards.get(currentHardBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);			
 		}
 		if (hardBoards.isEmpty()) {
 			return null;
@@ -112,7 +122,9 @@ public class Generator {
 	public Board GetNextHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
 			Board current = hardBoards.get(currentHardBoardIndex);
-			current.resetBoard();			
+			int[][] initialBoard = current.resetBoard();
+			initialBoard = current.copyMatrix(initialBoard);
+			current.setMatrix(initialBoard);			
 		}
 		currentHardBoardIndex++;
 		if (currentHardBoardIndex < hardBoards.size()) {
