@@ -4,7 +4,6 @@ import java.util.Stack;
 /***
  * The Board class is responsible for manipulating the matrix and any vehicles within it.
  * @author gretaritchard
- *
  */
 public class Board {
 	
@@ -601,6 +600,9 @@ public class Board {
 	}
 	
 	@Override
+	/**
+	* Prints the matrix of the board, with ids' of vehicles occupying positions.
+	*/
 	public String toString() {
 		String str = "";
 		for(int i = 0; i < size; i++) {
