@@ -17,7 +17,8 @@ public class Move {
         this.direction = direction;
     }
     /***
-     * 
+     * Gets the Id of the vehicle, and its direction of movement.
+     * @return String
      */
     public String toString() {
 	    	String str = "";
