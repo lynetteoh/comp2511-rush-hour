@@ -1,22 +1,9 @@
 import javafx.scene.shape.Rectangle;
-import javafx.scene.Cursor;
-import javafx.stage.Screen;
-
 import java.util.ArrayList;
-import java.util.Stack;
-
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import java.lang.*;
 
 /**
  * @author Emily Kim Ngo (z5164090)
