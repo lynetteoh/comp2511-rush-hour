@@ -598,7 +598,7 @@ public class SceneView {
 	}
 	
 	/**
-	 * This function 
+	 * This function updates the game scene for new board
 	 * @param hardness: hardness of a level
 	 * @param g: the generator
 	 * @param buttonText: name of a button to determine its functionality

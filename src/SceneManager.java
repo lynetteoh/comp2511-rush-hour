@@ -466,7 +466,9 @@ public class SceneManager {
 		}	
 	}
 	
-	//event handler for mouse released
+	/**
+	 * This event handler keeps track of the mouse clicks and update the moves in the game scene and plays the sound effect
+	 */
 	EventHandler<MouseEvent> OnMouseReleasedEventHandler =
 			new EventHandler<MouseEvent>() {
 			@Override
