@@ -49,34 +49,34 @@ public class Solver  {
         while (!q.isEmpty()) {
             b = q.remove();
             if (solved(b)) {
-            	return new ArrayList<Move>(b.getMoves());
+            		return new ArrayList<Move>(b.getMoves());
             }
 
 		    for (Vehicle v: b.getVehiclesList()) {
-	        	for (int i = 1; i <= b.canMoveForward(v); i++) {
-	        		if (b.moveNSpaces(v, i) > 0) {
-    	                if (!previousMoves.containsKey(b.toString())) {
-    	                    Board newBoard = new Board(b);
-    		                if (solver.compare(b,newBoard) >= 0) {
-    			                q.add(newBoard);
-    			                previousMoves.put(newBoard.toString(), newBoard);
-    		                }
-    	                }
-	        		}
-	        		b.undo();
-	        	}
-	        	for (int i = 1; i <= b.canMoveBackward(v); i++) {
-	        		if (b.moveNSpaces(v, -i) > 0) {
-    	                if (!previousMoves.containsKey(b.toString())) {
-    		                Board newBoard = new Board(b);
-    		                if (solver.compare(b,newBoard) >= 0) {
-    			                q.add(newBoard);
-    			                previousMoves.put(newBoard.toString(), newBoard);
-    		                }
-    	                }
-	                }
-		            b.undo();
-		         }
+		        	for (int i = 1; i <= b.canMoveForward(v); i++) {
+		        		if (b.moveNSpaces(v, i) > 0) {
+	    	                if (!previousMoves.containsKey(b.toString())) {
+	    	                    Board newBoard = new Board(b);
+	    		                if (solver.compare(b,newBoard) >= 0) {
+	    			                q.add(newBoard);
+	    			                previousMoves.put(newBoard.toString(), newBoard);
+	    		                }
+	    	                }
+		        		}
+		        		b.undo();
+		        	}
+		        	for (int i = 1; i <= b.canMoveBackward(v); i++) {
+		        		if (b.moveNSpaces(v, -i) > 0) {
+	    	                if (!previousMoves.containsKey(b.toString())) {
+	    		                Board newBoard = new Board(b);
+	    		                if (solver.compare(b,newBoard) >= 0) {
+	    			                q.add(newBoard);
+	    			                previousMoves.put(newBoard.toString(), newBoard);
+	    		                }
+	    	                }
+		             }
+			         b.undo();
+			    }
 		    }
         }
         return null;

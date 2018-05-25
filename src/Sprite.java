@@ -38,7 +38,7 @@ public class Sprite extends Rectangle {
 
 	/**
 	 * This function returns a random colour used to fill in the block's colour
-	 * @return: a random colour
+	 * @return a random colour : String
 	 */
 	public String getColor()
 	{

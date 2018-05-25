@@ -34,7 +34,7 @@ public class Vehicle {
 	}
 	
 	/***
-	 * This is the to String method to print out the vehicle id, orientation and length
+	 * This is the to String method to print out the vehicle id, orientation and length (used for testing)
 	 */
 	@Override 
 	public String toString() { 
@@ -45,7 +45,7 @@ public class Vehicle {
 	
 	/***
 	 * Resets the counter for the ids for the Vehicles (reset for each new Board)
-	 * @return
+	 * @return boolean
 	 */
 	public boolean resetCount() {
 		count = new AtomicInteger(0);

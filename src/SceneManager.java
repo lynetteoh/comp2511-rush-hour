@@ -40,7 +40,7 @@ public class SceneManager {
 	private int hint;
 
 	/**
-	 * class constructor
+	 * Class constructor
 	 * @param width: sceneWidth
 	 * @param height: sceneHeight
 	 * @param stage: the stage to show the scene

@@ -121,7 +121,6 @@ public class Board {
 			System.out.println("");
 		}
 	}
-	
 
 	/***
 	 * Clears the current Board vehicle list for the board
@@ -170,10 +169,10 @@ public class Board {
 	}
 	
 	/**
-	 * take back the last vehicle place
-	 * @param orient
-	 * @param path
-	 * @param position
+	 * Remove the last Vehicle placed on the board
+	 * @param orient : int
+	 * @param path : int
+	 * @param position : int[]
 	 */
 	public void unplaceVehicle(int orient, int path, int[] position) {
 
@@ -223,7 +222,6 @@ public class Board {
 	 * Returns the moves made on the Board
 	 * @return Stack<Move>
 	 */
-
 	public Stack<Move> getMoves() {
 		return moves;
 	}
@@ -342,6 +340,7 @@ public class Board {
 		nMoves-= 2;
 		return lastMove;
 	}
+	
 	/***
 	 * Moves a Vehicle N spaces forward or backward, returns the amount moved
 	 * @param v : Vehicle 
@@ -595,7 +594,7 @@ public class Board {
 	
 	@Override
 	/**
-	* Prints the matrix of the board, with ids' of vehicles occupying positions.
+	* Prints the matrix of the board, with ids of vehicles occupying positions. (used for testing)
 	*/
 	public String toString() {
 		String str = "";

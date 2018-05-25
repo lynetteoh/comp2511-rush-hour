@@ -39,7 +39,7 @@ public class Generator {
 	 * This function gets the previous easy puzzle
 	 * @precondition previous easy puzzle exists
 	 * @postcondition  previous easy puzzle is given to caller
-	 * @return previous easy puzzle
+	 * @return previous : Board 
 	 */
 	public Board GetPreviousEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
@@ -65,7 +65,7 @@ public class Generator {
 	/**
 	 * This function gets the next easy puzzle in the array. 
 	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
-	 * @return the next easy puzzle
+	 * @return next : Board 
 	 */
 	public Board GetNextEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
@@ -89,7 +89,7 @@ public class Generator {
 	 * This function gets the previous medium puzzle
 	 * @precondition previous medium puzzle exists
 	 * @postcondition  previous medium puzzle is given to caller
-	 * @return previous medium puzzle
+	 * @return previous : Board 
 	 */
 	public Board GetPreviousMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
@@ -114,7 +114,7 @@ public class Generator {
 	/**
 	 * This function gets the next medium puzzle in the array. 
 	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
-	 * @return the next medium puzzle
+	 * @return next : Board 
 	 */
 	public Board GetNextMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
@@ -138,7 +138,7 @@ public class Generator {
 	 * This function gets the previous hard puzzle
 	 * @precondition previous hard puzzle exists
 	 * @postcondition  previous hard puzzle is given to caller
-	 * @return previous easy puzzle
+	 * @return previous : Board
 	 */
 	public Board GetPreviousHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
@@ -163,7 +163,7 @@ public class Generator {
 	/**
 	 * This function gets the next hard puzzle in the array. 
 	 * If the current puzzle is the latest puzzle, it will generate a new puzzle
-	 * @return the next hard puzzle
+	 * @return next : Board
 	 */
 	public Board GetNextHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
@@ -185,7 +185,7 @@ public class Generator {
 	
 	/**
 	 * Non-deterministic generator which produces a board that can be solved in 3-5 steps inclusive.
-	 * @return An Easy-to-solve board.
+	 * @return Board : An Easy-to-solve Board.
 	 */
 	public Board RandomEasyGenerator() { 
 		Board b = new Board(n); // create new board with dimension n
@@ -207,7 +207,7 @@ public class Generator {
 
 	/**
 	 * Non-deterministic generator which produces a board that can be solved in 6-9 steps inclusive. 
-	 * @return A moderately-hard board.
+	 * @return Board : A moderately-hard board.
 	 */
 	public Board RandomMediumGenerator() { 
 		long startTime = System.currentTimeMillis(); // Abort if time taken is too long.
@@ -257,7 +257,7 @@ public class Generator {
 	
 	/**
 	 * Non-deterministic generator which produces a board that can be solved in above 10 steps.
-	 * @return A hard board.
+	 * @return Board : A hard board.
 	 */
 	public Board RandomHardGenerator() { 
 		long startTime = System.currentTimeMillis();
@@ -492,8 +492,8 @@ public class Generator {
 	
 	/**
 	 * Generates randomly from a special set of vertical positions which would block the first car.
-	 * @param len The length of the vehicle.
-	 * @return an Integer Array representing position of vertical vehicle.
+	 * @param len : int The length of the vehicle.
+	 * @return int[] :  Integer Array representing position of vertical vehicle.
 	 */
 	public int[] blockPosition(int len) {
 		int position[]; 

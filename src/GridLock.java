@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 /**
  *
  * @author lean lynn oh
+ * The Gridlock class launches the Applications and contains the main function.
  *
  */
 public class GridLock extends Application {
