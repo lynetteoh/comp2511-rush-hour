@@ -722,10 +722,10 @@ public class Board {
 		if (v.getOrient() == 1 && v.getId() == 1) { //horizontal car
 			int[] goalPosition = getGoalPosition(); // the two cells the red car has to occupy (right next to the exit)
 			int[][] matrix = this.matrix;
-			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
-			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
+//			System.out.println(goalPosition[0] + " , " + goalPosition[1] + " | y_coord: " + v.getPath());
+//			System.out.println("\t L: " + matrix[goalPosition[0]][v.getPath()] + " | R: " + matrix[goalPosition[1]][v.getPath()]); // it is other numbers for some reason?
 			if (matrix[v.getPath()][goalPosition[0]] == 1 && matrix[v.getPath()][goalPosition[1]] == 1) {
-				System.out.println("Car is touching the exit");
+//				System.out.println("Car is touching the exit");
 				return true;
 			}
 		}
