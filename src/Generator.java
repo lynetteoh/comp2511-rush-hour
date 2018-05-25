@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 enum orient {
@@ -172,6 +170,7 @@ public class Generator {
 		do {
 			b.clearVehicles(); b = new Board(n);
 			placeFirstVehicle(b); // set down most important car
+			b.printBoard();
 			Vehicle First = b.getLastVehicle(); 
 			int leftBorder = First.getPosition()[1];
 			
