@@ -8,8 +8,6 @@ import java.util.Stack;
  */
 public class Board {
 	
-	public static int boardId = 1;
-	private int id;
 	private int vehicleIdCounter;
 	private int nMoves;
 	private int[][] matrix;
@@ -33,11 +31,13 @@ public class Board {
 				this.matrix[i][j] = 0;
 			}
 		}
-		this.id = boardId;
-		boardId += 1;
 		setInitialBoard(this.matrix);
 	}
 
+	/***
+	 * Constructs a new Board as a copy of the one passed in, used for the Solver 
+	 * @param b : Board
+	 */
 	@SuppressWarnings("unchecked")
 	public Board(Board b) {
 		this.size = b.getSize();
@@ -48,7 +48,6 @@ public class Board {
 				this.matrix[i][j] = matrix[i][j];
 			}
 		}
-		this.id = b.getId();
 		this.vehicleIdCounter = b.getVehicleIdCounter();
 		this.nMoves = b.getnMoves();
 		this.vehiclesList = b.getVehiclesList();
@@ -113,7 +112,7 @@ public class Board {
 	
 
 	/***
-	 * 
+	 * Prints the current board to the terminal (used for testing)
 	 */
 	public void printBoard() {
 		System.out.println("== Board ==");
@@ -238,43 +237,13 @@ public class Board {
 	public void clearMoves() {
 		moves.clear();
 	}
-	/***
-	 * Returns the Board Id
-	 * @return int
-	 */
-	public static int getBoardId() {
-		return boardId;
-	}
 
-	/***
-	 * Sets the Board Id (static counter for the board's ids)
-	 * @param boardId : int
-	 */
-	public static void setBoardId(int boardId) {
-		Board.boardId = boardId;
-	}
-
-	/***
-	 * Returns the id of the current Board
-	 * @return int
-	 */
-	public int getId() {
-		return id;
-	}
 	/***
 	 * Returns the number of moves that have been made on the Board
 	 * @return int
 	 */
 	public int getnMoves() {
 		return nMoves;
-	}
-
-	/***
-	 * Sets the id of the Board
-	 * @param id : int
-	 */
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	/***
