@@ -45,8 +45,8 @@ public class Sprite extends Rectangle {
 		String[] colors = {
 				"#B1F7EC", "#BCFEDA", "#BCE9FE", "#E7D1F7", "#BECBD4",
 				"#B0ECE0", "#BAF3D3", "#BAE0F7", "#E3C8F1", "#BBC6CA",
-				"#FEFBAE", "#FFDFB8", "#FECCC5", "#FFFFFF", "#E6EEF0",
-				"#FEE9B1", "#FCCEAC", "#F7C4C0", "#F4F9FD", "#DBE7E7"
+				"#FEFBAE", "#FFDFB8", "#FECCC5", "#FFD3BD", "#E6EEF0",
+				"#FEE9B1", "#FCCEAC", "#F7C4C0", "#E5F1FA", "#DBE7E7"
 		};
 
 		return colors[(int)(Math.random() * 20)];
