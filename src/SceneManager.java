@@ -37,6 +37,7 @@ public class SceneManager {
 	private ToggleButton menuMuteButton;
 	private final int BOARDSIZE = 6;
 	private Generator g;
+	private int hint;
 
 	/**
 	 * class constructor
@@ -51,6 +52,7 @@ public class SceneManager {
 		this.scenes = new HashMap<String, Scene>();
 		this.sceneView = new SceneView(sceneWidth, sceneHeight);
 		this.g = new Generator(BOARDSIZE);
+		this.hint = 0;
 	}
 
 	/**
@@ -468,6 +470,9 @@ public class SceneManager {
 	}
 
 	public void getHint(){
+		if(hint > 1) {
+			return;
+		}
 		Grid grid = sceneView.getGrid();
 		Board puzzle = grid.getBoard();
 		Move m = puzzle.getHint();
@@ -491,6 +496,7 @@ public class SceneManager {
 		AnchorPane gameLayout = (AnchorPane) sceneView.getCurrentGameLayout().getValue();
 		Group root = (Group) gameLayout.getChildren().get(5);
 		root.getChildren().add(g);
+		hint = 1;
 		System.out.println("=== GET HINTS ===");
 	}
 
@@ -526,6 +532,17 @@ public class SceneManager {
 					gameClip.play();
 				}
 
+				//remove hints 
+				if(hint == 1) {
+					Group root = (Group) gameLayout.getChildren().get(5);
+					System.out.println(root.getChildren().size());
+					int index = root.getChildren().size();
+					root.getChildren().remove(index-1);
+					hint = 2;
+				}
+				
+				
+				
 				//update the display of the move
 				sceneView.updateMove(board);
 
