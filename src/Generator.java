@@ -58,7 +58,7 @@ public class Generator {
 		if (currentEasyBoardIndex < 0) {
 			currentEasyBoardIndex = 0;
 		} 
-//		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
+
 		return easyBoards.get(currentEasyBoardIndex);
 	}
 	
@@ -249,13 +249,9 @@ public class Generator {
 			long endTime = System.currentTimeMillis();
 			long duration = (endTime - startTime);
 			if (duration > 1000) { 
-				//System.out.println("takes too long: " + duration);
 				break;
 			}
 		} while (!(EASY < nMoves && nMoves <= MEDIUM));
-		//System.out.println("AttemptNo " + AttemptNo);
-//		b.printBoard();
-		//System.out.println("Solution: " + b.getSolution());
 		return b;
 	}
 	
@@ -284,15 +280,12 @@ public class Generator {
 				placeRandCar(b); 
 			}
 			// b is solvable 
-
 			rowCrawler(b);
 			nMoves = b.getSolution().size();
-			//System.out.println("AfterCrawlRow " + b.getSolution().size() + " Steps");
 			if (MEDIUM < nMoves) break;
 
 			colCrawler(b);
 			nMoves = b.getSolution().size();
-			//System.out.println("AfterCrawlCol " + b.getSolution().size() + " Steps");
 			if (MEDIUM < nMoves) break;
 			
 			long endTime = System.currentTimeMillis();
@@ -300,8 +293,7 @@ public class Generator {
 			if (duration > 1000) break;
 
 		} while (!(MEDIUM < nMoves));
-//		b.printBoard();
-//		System.out.println("Solution: " + b.getSolution());
+
 		return b;
 	}
 	
@@ -400,7 +392,6 @@ public class Generator {
 	public boolean placeRandCar(Board b) {
 
 		if (b.getSize() != this.n) {
-			System.out.println("Generator board size does not match board size");
 			return false;
 		}
 		
@@ -481,8 +472,6 @@ public class Generator {
 		return randomNum;
 	}
 
-	// 
-	// 
 	/**
 	 * Generates a random array of integers for car to lie on.
 	 * @param len Length of vehicle, either 2 or 3.
@@ -492,14 +481,12 @@ public class Generator {
 		int[] position = new int[len];
 		int i = 0;
 		int rangeIndex = n-len;
-//		System.out.println("beginIndex: " + Integer.toString(rangeIndex));
 		// e.g. n = 6; len = 2, so you are allowed to have beginIndex from 0..4
 		int beginIndex = ThreadLocalRandom.current().nextInt(0, rangeIndex+1);
 		for (i = 0; i < len; i ++) {
 			position[i] = beginIndex;
 			beginIndex++;
 		}
-//		System.out.println("position: " + Arrays.toString(position));
 		return position;
 	}
 	
@@ -518,8 +505,6 @@ public class Generator {
 		} else { // trucks
 			position = trucks[ThreadLocalRandom.current().nextInt(0, 3)];
 		}
-
-//		System.out.println("position: " + Arrays.toString(position));
 		return position;
 	}
 
