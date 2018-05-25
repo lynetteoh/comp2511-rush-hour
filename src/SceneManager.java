@@ -101,8 +101,8 @@ public class SceneManager extends Pane {
 		}
 		
 		//add background music for the game
-		String soundName = "resource/backgroundMusic.mp3";
-		backgroundClip = new AudioClip(getClass().getResource(soundName).toString());	
+		String soundName = "file:resource/backgroundMusic.mp3";
+		backgroundClip = new AudioClip(soundName);	
 		backgroundClip.play();
 		
 		//create the scene object for menu page
@@ -483,8 +483,8 @@ public class SceneManager extends Pane {
 				Vehicle v = board.getVehiclesList().get(0);
 				
 				//add sound effect for a button click 
-				String musicFile = "resource/click.mp3";    
-				AudioClip gameClip = new AudioClip(getClass().getResource(musicFile).toString());	
+				String musicFile = "file:resource/click.mp3";    
+				AudioClip gameClip = new AudioClip(musicFile);	
 				
 				
 				//get the mute button in a scene
@@ -563,8 +563,8 @@ public class SceneManager extends Pane {
 		}
 		
 		//add sound effect for the win scene
-		String musicFile = "resource/win.mp3";    
-		AudioClip effectClip = new AudioClip(getClass().getResource(musicFile).toString());
+		String musicFile = "file:resource/win.mp3";    
+		AudioClip effectClip = new AudioClip(musicFile);
 	
 		//play the sound effect 
 		if(menuMuteButton.isSelected()) {
