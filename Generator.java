@@ -47,7 +47,7 @@ public class Generator {
 		System.out.println("asdfjkal\n\n" + currentEasyBoardIndex);
 		return easyBoards.get(currentEasyBoardIndex);
 	}
-	public Board getSizeNextEasyBoard() {
+	public Board GetNextEasyBoard() {
 		if (easyBoards.size()>currentEasyBoardIndex) {
 			Board current = easyBoards.get(currentEasyBoardIndex);
 			current.resetBoard();			
@@ -79,7 +79,7 @@ public class Generator {
 		} 
 		return mediumBoards.get(currentMediumBoardIndex);
 	}
-	public Board getSizeNextMediumBoard() {
+	public Board GetNextMediumBoard() {
 		if (mediumBoards.size()>currentMediumBoardIndex) {
 			Board current = mediumBoards.get(currentMediumBoardIndex);
 			current.resetBoard();			
@@ -111,7 +111,7 @@ public class Generator {
 		} 
 		return hardBoards.get(currentHardBoardIndex);
 	}
-	public Board getSizeextHardBoard() {
+	public Board GetNextHardBoard() {
 		if (hardBoards.size()>currentHardBoardIndex) {
 			Board current = hardBoards.get(currentHardBoardIndex);
 			current.resetBoard();			
